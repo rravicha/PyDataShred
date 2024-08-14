@@ -3,6 +3,7 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+
 # C extensions
 *.so
 
@@ -10,7 +11,7 @@ __pycache__/
 .Python
 build/
 develop-eggs/
-dist/
+*.egg-info
 downloads/
 eggs/
 .eggs/
