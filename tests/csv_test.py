@@ -1,5 +1,19 @@
+import sys
+sys.path.append('/workspaces/PyDataShred')
+
+import pytest
 from datashredpy.helper.data import Data
 from datashredpy.helper.enums import FileType
-# from ..PyDataShred.datashredpy.data import Data
+import pandas as pd
+import numpy as np
+def test_read_csv():
+    df = Data.read('tests_data/a.csv', FileType.CSV)
+    assert isinstance(df, pd.DataFrame)
+    assert list(df.columns) == ['empid','empname','salary']
+    assert df.shape == (6, 3)
+    assert df.loc[0, 'empid'] == 1
+    assert df.loc[5,'empname'] == 'Hitesh'
 
-df=Data.read('/workspaces/PyDataShred/tests_data/a.csv',FileType.CSV)
+if __name__=='__main__':
+    test_read_csv()
+
