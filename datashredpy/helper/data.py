@@ -15,4 +15,3 @@ class Data:
                 return cls._read_csv(rel_path, file_type, **options)
     
 
-    
