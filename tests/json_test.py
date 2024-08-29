@@ -8,3 +8,4 @@ from datashredpy.helper.enums import FileType
 
 
 df=Data.read('/workspaces/PyDataShred/tests_data/emp.json',FileType.JSON)
+print(df)
