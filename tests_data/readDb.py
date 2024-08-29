@@ -1,5 +1,5 @@
 import sqlite3
-conn=sqlite3.connect('tests_data/employees.db')
+conn=sqlite3.connect('employees.db')
 
 cur=conn.cursor()
 
