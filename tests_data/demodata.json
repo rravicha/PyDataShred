@@ -1,0 +1,28 @@
+
+
+[
+{
+    "Emp_id":1,
+    "Emp_name": "Hitesh",
+    "salary":100000  
+    
+},
+{
+    "Emp_id":2,
+    "Emp_name": "Aditya",
+    "salary":200000  
+    
+},
+{
+    "Emp_id":3,
+    "Emp_name": "Ayush",
+    "salary":300000  
+    
+},
+{
+    "Emp_id":2,
+    "Emp_name": "netki",
+    "salary":15000  
+    
+}
+]
