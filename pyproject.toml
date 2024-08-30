@@ -16,6 +16,3 @@ dependencies = {file = ["requirements.txt"]}
 [tool.setuptools.dynamic.optional-dependencies]
 test = { file = ["requirements-opt.txt"] }
 
-[pypi]
-  username = __token__
-  password = pypi-AgEIcHlwaS5vcmcCJGE5YjZiN2YzLTIzMjAtNGNiNS04YjIzLWZiMjMzOWFlNDdlNwACKlszLCI3ODkyNjNiYy1mN2ZhLTQ3MWEtYmU0NS05OTA0YmFmMjJlMmQiXQAABiBm_qTLMqY8Zsu_u0kRBYeTEerBvzifgBqXTo4E5y5RbQ
