@@ -13,5 +13,15 @@ class Data:
         if file_type==FileType.CSV:
             if use_pandas:
                 return cls._read_csv(rel_path, file_type, **options)
+
+    @classmethod
+    def _read_xml(cls,rel_path:str, file_type: FileType, **options) ->  Pandas.DataFrame:
+        return Pandas.read_xml(rel_path,**options)
+
+    @classmethod
+    def read(cls, rel_path: str, file_type: FileType, use_pandas: bool = True, use_spark: Optional[bool] = True, **options):
+        if file_type==FileType.XML:
+            if use_pandas:
+                return cls._read_xml(rel_path, file_type, **options)            
     
 
