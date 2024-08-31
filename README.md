@@ -7,7 +7,7 @@ install mysql : sudo apt install mysql-server
 start mysql :  | codespace wont support systemctl so using service
 
 >>> sudo su
->>> sudo service mysql.service start
+>>> sudo service mysql start
 >>> mysql -u scott -p <-login
 
 what is pydantic??
