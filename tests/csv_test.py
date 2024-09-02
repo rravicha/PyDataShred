@@ -9,7 +9,8 @@ import numpy as np
 # write pytest for data.py
 
 def test_read_csv():
-    df = Data.read('tests_data/a.csv', FileType.CSV)
+    df = Data.read('tests_data/emp.csv', FileType.CSV)
+    print(df)
     assert isinstance(df, pd.DataFrame)
     assert list(df.columns) == ['empid','empname','salary']
     assert df.shape == (6, 3)

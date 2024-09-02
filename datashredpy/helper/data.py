@@ -5,21 +5,55 @@ import pandas as Pandas
 class Data:
 
     @classmethod
-    def _read_csv(cls,rel_path:str, file_type: FileType, **options) ->  Pandas.DataFrame:
-        print(f"options:{options}")
+    def _read_csv_pandas(cls, rel_path:str, **options) ->  Pandas.DataFrame:
         return Pandas.read_csv(rel_path,**options)
+    
+    @classmethod
+    def _read_json_pandas(cls, rel_path:str, **options) ->  Pandas.DataFrame:
+        return Pandas.read_json(rel_path,**options)
 
     @classmethod
-    def read(cls, rel_path: str, file_type: FileType, use_pandas: bool = True,
-             use_spark: Optional[bool] = True, **options):
-        if file_type==FileType.CSV:
-            if use_pandas:
-                return cls._read_csv(rel_path, file_type, **options)
+    def _read_xlsx_pandas(cls, rel_path:str, **options) ->  Pandas.DataFrame:
+        return Pandas.read_excel(rel_path, engine='openpyxl')
     
-        if file_type==FileType.TXT:
-            if use_pandas:
-                return cls._read_csv(rel_path, file_type, **options)
+    @classmethod
+    def _read_parquet_pandas(cls, rel_path:str, **options) ->  Pandas.DataFrame:
+        return Pandas.read_parquet(rel_path)
 
-        if file_type==FileType.TSV:
-            if use_pandas:
-                return cls._read_csv(rel_path, file_type, **options)
+    @classmethod
+    def _read_delta_pandas(cls, rel_path:str, **options) ->  Pandas.DataFrame:
+        return None
+#
+    @classmethod
+    def _read_csv_spark(cls, rel_path:str, **options) ->  Pandas.DataFrame:
+        return None
+    
+    @classmethod
+    def _read_json_spark(cls, rel_path:str, **options) ->  Pandas.DataFrame:
+        return None
+
+    @classmethod
+    def _read_xlsx_spark(cls, rel_path:str, **options) ->  Pandas.DataFrame:
+        return None
+    
+    @classmethod
+    def _read_parquet_spark(cls, rel_path:str, **options) ->  Pandas.DataFrame:
+        return None
+    
+    @classmethod
+    def read(cls, rel_path: str, file_type: FileType, use_pandas: bool = True, use_spark: Optional[bool] = False, **options):
+        if use_pandas:
+            if file_type==FileType.CSV:
+                    return cls._read_csv_pandas(rel_path, **options)
+            if file_type==FileType.TSV:
+                    return cls._read_csv_pandas(rel_path, **options)
+            if file_type ==FileType.JSON:
+                    return cls._read_json_pandas(rel_path, **options)
+            if file_type == FileType.EXCEL:
+                    return cls._read_xlsx_pandas(rel_path, **options)
+            if file_type == FileType.PARQUET:
+                    return cls._read_parquet_pandas(rel_path, **options)
+            if file_type == FileType.DELTA:
+                    return cls._read_delta_pandas(rel_path, **options)
+        if use_spark:
+              pass
