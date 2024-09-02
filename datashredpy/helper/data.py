@@ -6,7 +6,8 @@ class Data:
 
     @classmethod
     def _read_csv(cls,rel_path:str, file_type: FileType, **options) ->  Pandas.DataFrame:
-        return Pandas.read_csv(rel_path,**options,header=0)
+        print(f"options:{options}")
+        return Pandas.read_csv(rel_path,**options)
 
     @classmethod
     def read(cls, rel_path: str, file_type: FileType, use_pandas: bool = True, use_spark: Optional[bool] = True, **options):
