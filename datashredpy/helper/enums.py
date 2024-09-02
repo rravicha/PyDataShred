@@ -4,4 +4,3 @@ from aenum import Enum as AEnum, MultiValueEnum
 
 class FileType(MultiValueEnum):
     CSV = 'csv'
-    PARQUET='parquet'
