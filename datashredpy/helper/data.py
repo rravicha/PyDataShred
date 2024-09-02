@@ -6,6 +6,7 @@ class Data:
 
     @classmethod
     def _read_csv(cls,rel_path:str, file_type: FileType, **options) ->  Pandas.DataFrame:
+        print(f"options:{options}")
         return Pandas.read_csv(rel_path,**options)
 
     @classmethod
@@ -15,4 +16,10 @@ class Data:
             if use_pandas:
                 return cls._read_csv(rel_path, file_type, **options)
     
+        if file_type==FileType.TXT:
+            if use_pandas:
+                return cls._read_csv(rel_path, file_type, **options)
 
+        if file_type==FileType.TSV:
+            if use_pandas:
+                return cls._read_csv(rel_path, file_type, **options)
