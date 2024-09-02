@@ -6,6 +6,8 @@ from datashredpy.helper.data import Data
 from datashredpy.helper.enums import FileType
 import pandas as pd
 import numpy as np
+# write pytest for data.py
+
 def test_read_csv():
     df = Data.read('tests_data/a.csv', FileType.CSV)
     assert isinstance(df, pd.DataFrame)
