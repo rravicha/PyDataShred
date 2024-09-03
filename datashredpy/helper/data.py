@@ -21,6 +21,10 @@ class Data:
         return Pandas.read_parquet(rel_path)
 
     @classmethod
+    def _read_xml_pandas(cls, rel_path:str, **options) ->  Pandas.DataFrame:
+        return Pandas.read_xml(rel_path)    
+
+    @classmethod
     def _read_delta_pandas(cls, rel_path:str, **options) ->  Pandas.DataFrame:
         return None
 #
@@ -39,6 +43,10 @@ class Data:
     @classmethod
     def _read_parquet_spark(cls, rel_path:str, **options) ->  Pandas.DataFrame:
         return None
+
+    @classmethod
+    def _read_xml_spark(cls, rel_path:str, **options) ->  Pandas.DataFrame:
+        return None
     
     @classmethod
     def read(cls, rel_path: str, file_type: FileType, use_pandas: bool = True, use_spark: Optional[bool] = False, **options):
@@ -55,5 +63,7 @@ class Data:
                     return cls._read_parquet_pandas(rel_path, **options)
             if file_type == FileType.DELTA:
                     return cls._read_delta_pandas(rel_path, **options)
+            if file_type == FileType.XML:
+                    return cls._read_xml_pandas(rel_path, **options)        
         if use_spark:
               pass

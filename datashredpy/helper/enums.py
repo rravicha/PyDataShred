@@ -10,3 +10,4 @@ class FileType(MultiValueEnum):
     PARQUET = 'parquet'
     DELTA = 'delta'
     EXCEL = 'xlsx'
+    XML = 'xml'
