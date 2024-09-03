@@ -50,6 +50,7 @@ class Data:
     
     @classmethod
     def read(cls, rel_path: str, file_type: FileType, use_pandas: bool = True, use_spark: Optional[bool] = False, **options):
+        ''' Contains functions to read inbound using pandas and spark'''
         if use_pandas:
             if file_type==FileType.CSV:
                     return cls._read_csv_pandas(rel_path, **options)
