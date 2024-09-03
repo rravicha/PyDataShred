@@ -22,7 +22,18 @@ class Data:
 
     @classmethod
     def _read_xml_pandas(cls, rel_path:str, **options) ->  Pandas.DataFrame:
-        return Pandas.read_xml(rel_path)    
+         #write code to read xml file , root node is named as root
+        import xml.etree.ElementTree as ET  
+        tree = ET.parse(rel_path)
+        root = tree.getroot()
+        data = []
+        for child in root:
+            row = {}
+            for elem in child:
+                row[elem.tag] = elem.text
+            data.append(row)
+        df = Pandas.DataFrame(data)
+        return df
 
     @classmethod
     def _read_delta_pandas(cls, rel_path:str, **options) ->  Pandas.DataFrame:
