@@ -7,5 +7,5 @@ from datashredpy.helper.enums import FileType
 
 
 
-df=Data.read('/workspaces/PyDataShred/tests_data/F.xlsx',FileType.XLSX)
+df=Data.read('/workspaces/PyDataShred/tests_data/F.xlsx',FileType.EXCEL)
 print(df)
