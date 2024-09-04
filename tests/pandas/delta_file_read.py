@@ -24,7 +24,7 @@ def delta_file_func():
     assert list(df.columns) == ['empid','empname','salary']
     assert df.shape == (6, 3)
     assert df.loc[0, 'empid'] == 1
-    assert df.loc[5,'empname'] == 'Hitesh'
+    assert df.loc[2,'empname'] == 'Aditya'
 
 if __name__ == "__main__":
     delta_file_func()
