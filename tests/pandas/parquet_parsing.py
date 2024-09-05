@@ -11,7 +11,7 @@ from datashredpy.helper.enums import FileType
 #pip3 install pyarrow
 import pandas as pd
 def test_read_parquet():
-    df = Data.read('/workspaces/PyDataShred/tests_data/MT cars.parquet', FileType.PARQUET)
+    df = Data.read('/workspaces/PyDataShred/tests_data/MT cars.parquet', FileType.PARQUET, use_pandas=True)
     print(df)
 #    print(df.columns)
 #    print(df.shape)

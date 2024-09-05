@@ -34,6 +34,6 @@ if __name__ == "__main__":
         SparkEnum.ConfigOptions.SPARK_DRIVER_MEMORY.value: "1g"
     }
     # The below is example of how to initiate spark session in your own module
-    # spark = SparkSessionSingleton.get_spark_session(config_options=config)
+    # spark = SparkSessionSingletopdatan.get_spark_session(config_options=config)
     spark = SparkSessionSingleton.get_spark_instance(config_options=config)
     print("Spark session created successfully!")
