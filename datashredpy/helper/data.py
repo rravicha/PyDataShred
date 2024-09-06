@@ -1,3 +1,4 @@
+from snowflake.snowpark import Session
 from datashredpy.helper.enums import FileType
 from typing import Optional
 import pandas as Pandas
@@ -60,9 +61,15 @@ class Data:
     @classmethod
     def _read_xml_spark(cls, rel_path:str, **options) ->  Pandas.DataFrame:
         return None
-    
+
     @classmethod
-    def read(cls, rel_path: str, file_type: FileType, use_pandas: Optional[bool] = False, use_spark: Optional[bool] = True, **options):
+    def _read_snowflake(cls, table_name, **snowpark_options) ->  Pandas.DataFrame:
+        return Session.builder.configs(snowpark_options).create().table(table_name)
+
+
+
+    @classmethod
+    def read(cls, rel_path: str, file_type: FileType, use_pandas: Optional[bool] = False, use_spark: Optional[bool] = True, snowpark_options: Optional[dict] = False, **options):
         ''' Contains functions to read inbound using pandas and spark'''
         if use_pandas:
             if file_type==FileType.CSV:
@@ -80,6 +87,9 @@ class Data:
             if file_type == FileType.XML:
                 return cls._read_xml_pandas(rel_path, **options)        
         if use_spark:
+            if file_type==FileType.SNOWFLAKE:
+                return cls._read_snowflake(rel_path, **snowpark_options)
             cls.spark = SparkSessionOption.get_spark_instance()
             if file_type==FileType.PARQUET:
                  return cls._read_parquet_spark(rel_path, **options)
+            
