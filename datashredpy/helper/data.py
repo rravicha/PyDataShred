@@ -19,7 +19,7 @@ class Data:
         return Pandas.read_excel(rel_path, engine='openpyxl')
 
     @classmethod
-    def _read_parquet_pandas(cls, rel_path:str, **options) ->  Pandas.DataFrame:
+    def _read_parquet_pandas(cls, rel_path:str, **options):
         return Pandas.read_parquet(rel_path)
 
     @classmethod
