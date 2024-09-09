@@ -7,42 +7,7 @@ sys.path.append('/workspaces/PyDataShred/')
 import requests
 from datashredpy.helper.data import Data
 from datashredpy.helper.enums import FileType
-import requests
-app = FastAPI()
 
-# Initialize Spark session
-spark = SparkSession.builder.appName("FastAPI_PySpark").getOrCreate()
-
-# @app.get("/")
-# def read_root():
-#     df = Data.read('/tests_data/MT cars.parquet', FileType.PARQUET)
-    # print(str(requests.url))
-    # df.show()
-    # return HTMLResponse(content=df.toPandas().to_html())
-    # return df
-    # return {"Pydatashred get": "Welcome to the FastAPI PySpark app!"}
-
-@app.get("/read-file")
-def read_files(file_path: Optional[str] = Query(None, description="Path to the file")):
-    
-    '''
-    You can call this endpoint like this: http://127.0.0.1:8000/read-file?file_path=path/to/your/file.txt.
-
-
-    '''
-    if file_path:
-        return FileResponse(file_path)
-    return {"error": "File path not provided"}
-# @app.get("/read-file")
-# def read_file(file_path: str):
-#     df = spark.read.csv(file_path, header=True, inferSchema=True)
-#     data = df.collect()
-#     return {"data": [row.asDict() for row in data]}
-# @app.post("/write-file")
-# def write_file(file_path: str, data: list):
-#     df = spark.createDataFrame(data)
-#     df.write.csv(file_path, header=True)
-#     return {"message": "File written successfully"}
 from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse, FileResponse
 import pandas as pd
@@ -52,31 +17,40 @@ app = FastAPI()
 def read_root():
     print('shoot-'*10)
     return {"Hello": "World1"}
-@app.get("/read-file", response_class=HTMLResponse)
+def get_html_content(current_url, html_content):
+    return f"""
+    <html>
+        <body>
+            <h2>Current URL: {current_url}</h2>
+            {html_content}  
+            <a href="/download">Download File</a>
+        </body>
+    </html>
+    """
+@app.get("/read", response_class=HTMLResponse)
 def read_file(request: Request):
-    # Read the stored CSV file
-    # df = pd.read_csv('emp.csv')
-    df = Data.read('emp.csv', FileType.CSV, use_pandas=True)
 
-    # input('hold')
-    # Convert the DataFrame to HTML
+    df = Data.read('tests_data/emp.csv', FileType.CSV, use_pandas=True)
     html_table = df.to_html(index=False)
-    
-    # Get the current URL
+    return HTMLResponse(content=get_html_content(str(request.url), html_table))
+
+@app.get("/read1", response_class=HTMLResponse)
+def read_file1(request: Request):
+    df = Data.read('tests_data/emp.csv', FileType.CSV, use_pandas=False)
+    html_table = df.to_html(index=False)
     current_url = str(request.url)
-    
-    # Create the HTML response with the current URL
     html_content = f"""
     <html>
         <body>
             <h2>Current URL: {current_url}</h2>
             {html_table}
+            <a href="/download">Download File</a>
         </body>
     </html>
     """
     
     return HTMLResponse(content=html_content)
 
-@app.get("/download-file")
+@app.get("/download")
 def download_file():
-    return FileResponse('emp.csv', media_type='text/csv', filename='emp.csv')
+    return FileResponse('tests_data/emp.csv', media_type='text/csv', filename='emp.csv')
