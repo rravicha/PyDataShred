@@ -1,4 +1,4 @@
-from snowflake.snowpark import Session
+#from snowflake.snowpark import Session
 from datashredpy.helper.enums import FileType
 from typing import Optional
 import pandas as Pandas
@@ -43,12 +43,25 @@ class Data:
         return None
 #
     @classmethod
-    def _read_csv_spark(cls, rel_path:str, **options) ->  Pandas.DataFrame:
-        return None
+    def _read_csv_spark(cls, rel_path:str, **options) :
+        return cls.spark.read.csv(rel_path)
+    
+     
+   
+    @classmethod
+    def _convert_csv_to_json(cls, rel_path:str, **options) :
+        df=cls._read_csv_spark(rel_path) 
+        
+        df.write.mode("overwrite").json('tests_data/emp_pyspark.json')
+        #print("yes")
+        #return  cls.spark.read.json('tests_data/emp_pyspark2.json',**options)
+        
+        
     
     @classmethod
-    def _read_json_spark(cls, rel_path:str, **options) ->  Pandas.DataFrame:
-        return None
+    def _read_json_spark(cls, rel_path:str, **options):
+
+       return  cls.spark.read.json('tests_data/emp_pyspark.json',**options)
 
     @classmethod
     def _read_xlsx_spark(cls, rel_path:str, **options) ->  Pandas.DataFrame:
@@ -91,5 +104,10 @@ class Data:
                 return cls._read_snowflake(rel_path, **snowpark_options)
             cls.spark = SparkSessionOption.get_spark_instance()
             if file_type==FileType.PARQUET:
+                 cls._convert_csv_to_json(rel_path,**options)
                  return cls._read_parquet_spark(rel_path, **options)
+
+            if file_type==FileType.JSON:
+                 cls._convert_csv_to_json(rel_path,**options)
+                 return cls._read_json_spark(rel_path, **options)     
             
