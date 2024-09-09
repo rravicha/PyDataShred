@@ -53,7 +53,6 @@ class Data:
         df=cls._read_csv_spark(rel_path) 
         json_path='tests_data/emp_pyspark.json'
         df.write.mode("overwrite").json(json_path)
-        #print("yes")
         return  cls.spark.read.json(json_path,**options)
         
      
