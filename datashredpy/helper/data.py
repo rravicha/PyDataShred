@@ -44,7 +44,7 @@ class Data:
 #
     @classmethod
     def _read_csv_spark(cls, rel_path:str, **options) :
-        return cls.spark.read.csv(rel_path)
+        return cls.spark.read.option("header", "true").csv(rel_path)
     
      
    
