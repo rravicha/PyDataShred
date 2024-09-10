@@ -1,5 +1,6 @@
 import sys
 sys.path.append('/workspaces/PyDataShred/')
+import numpy as np
  
 from datashredpy.helper.data import Data
 from datashredpy.helper.enums import FileType
@@ -22,6 +23,17 @@ def test_read_json():
     else:
 
          df.show(999)
+         try:
+            assert True, 'first'
+            assert 7 == 7, 'second'
+            assert 1 == 1, 'third'
+            assert list(df.columns) == ['empid', 'empname', 'salary'], 'fifth'
+            assert df.count() == 6, 'sixth'  # Use df.count() for number of rows
+            assert df.filter(df.empname == 'Aditya').count() == 1, 'seventh'  # Use filter for specific value check
+         except AssertionError as e:
+            print(f'Assertion failed at the {str(e)} line')
+            exit(1)
+
  
 if __name__=='__main__':
  

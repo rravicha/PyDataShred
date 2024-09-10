@@ -98,7 +98,8 @@ class Data:
             cls.spark = SparkSessionOption.get_spark_instance()
             if file_type==FileType.PARQUET:
                  return cls._read_parquet_spark(rel_path, **options)
-
             if file_type==FileType.JSON:
-                 return cls._read_json_spark(rel_path, **options)     
+                 return cls._read_json_spark(rel_path, **options)   
+            if file_type==FileType.PARQUET:
+                 return cls._read_parquet_spark(rel_path, **options)       
             
