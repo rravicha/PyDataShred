@@ -1,4 +1,4 @@
-from snowflake.snowpark import Session
+#from snowflake.snowpark import Session
 from datashredpy.helper.enums import FileType
 from typing import Optional
 import pandas as Pandas
@@ -43,13 +43,19 @@ class Data:
         return None
 #
     @classmethod
-    def _read_csv_spark(cls, rel_path:str, **options) ->  Pandas.DataFrame:
-        return None
+    def _read_csv_spark(cls, rel_path:str, **options) :
+        return cls.spark.read.option("header", "true").csv(rel_path)
     
+     
+   
     @classmethod
-    def _read_json_spark(cls, rel_path:str, **options) ->  Pandas.DataFrame:
-        return None
-
+    def _read_json_spark(cls, rel_path:str, **options) :
+        df=cls._read_csv_spark(rel_path) 
+        json_path='tests_data/emp_pyspark.json'
+        df.write.mode("overwrite").json(json_path)
+        return  cls.spark.read.json(json_path,**options)
+        
+     
     @classmethod
     def _read_xlsx_spark(cls, rel_path:str, **options) ->  Pandas.DataFrame:
         return None
@@ -92,4 +98,8 @@ class Data:
             cls.spark = SparkSessionOption.get_spark_instance()
             if file_type==FileType.PARQUET:
                  return cls._read_parquet_spark(rel_path, **options)
+            if file_type==FileType.JSON:
+                 return cls._read_json_spark(rel_path, **options)   
+            if file_type==FileType.PARQUET:
+                 return cls._read_parquet_spark(rel_path, **options)       
             
