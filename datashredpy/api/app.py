@@ -17,6 +17,7 @@ app = FastAPI()
 def read_root():
     print('shoot-'*10)
     return {"Hello": "World1"}
+
 def get_html_content(current_url, html_content):
     return f"""
     <html>

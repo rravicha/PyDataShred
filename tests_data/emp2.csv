@@ -2,4 +2,5 @@ empid,empname,salary
 7,Ankush,5000
 8,Mishra,6000
 9,Yashwanth,7000
-2,Badwaik,6500
+2,Badwaik,6500,A,<sep9-sep15
+2,Badwaik,7000,A,<sep16-12/31/999

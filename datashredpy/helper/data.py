@@ -44,7 +44,7 @@ class Data:
 #
     @classmethod
     def _read_csv_spark(cls, rel_path:str, **options) ->  Pandas.DataFrame:
-        return None
+        return cls.spark.read.csv(rel_path)
     
     @classmethod
     def _read_json_spark(cls, rel_path:str, **options) ->  Pandas.DataFrame:
@@ -53,7 +53,7 @@ class Data:
     @classmethod
     def _read_xlsx_spark(cls, rel_path:str, **options) ->  Pandas.DataFrame:
         return None
-    
+   
     @classmethod
     def _read_parquet_spark(cls, rel_path:str, **options):
         return cls.spark.read.parquet(rel_path)
@@ -65,8 +65,6 @@ class Data:
     @classmethod
     def _read_snowflake(cls, table_name, **snowpark_options) ->  Pandas.DataFrame:
         return Session.builder.configs(snowpark_options).create().table(table_name)
-
-
 
     @classmethod
     def read(cls, rel_path: str, file_type: FileType, use_pandas: Optional[bool] = False, use_spark: Optional[bool] = True, snowpark_options: Optional[dict] = False, **options):
@@ -92,4 +90,6 @@ class Data:
             cls.spark = SparkSessionOption.get_spark_instance()
             if file_type==FileType.PARQUET:
                  return cls._read_parquet_spark(rel_path, **options)
+            if file_type==FileType.CSV:
+                return cls._read_csv_spark(rel_path, **options)
             
