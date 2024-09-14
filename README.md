@@ -13,7 +13,7 @@ start mysql :  | codespace wont support systemctl so using service
 what is pydantic??
 
 
-Project Workflow:
+# Project Workflow:
 ------- ------
 Python
     File Ingestion
@@ -37,3 +37,10 @@ Splunk Integration  -  Optional
 
 Snowflake integration
 
+# Multi Cloud Accounts
+Google
+AWS
+Azure
+Google Cloud
+Snowflake
+Heroku
