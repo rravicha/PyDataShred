@@ -45,6 +45,7 @@ class Domain:
 class Client:
     client_id: int
     client_name: str
+    platform: str
     domain: Domain = None
 
 # Example usage
@@ -69,7 +70,7 @@ meta_data = Domain(
     )
 )
 
-# client1 = Client(client_id=1, client_name='moodys', domain=meta_data)
+# client1 = Client(client_id=1, client_name='moodys', platform='aws', domain=meta_data)
 # print(client1)
 # print(dir(client1.domain))
 # # form a json for class client
@@ -80,6 +81,7 @@ METADATA_JSON='''
 {
     "client_id": 1,
     "client_name": "Client A",
+    "platform": "aws",
     "domain": {
         "domain_id": 1,
         "domain_name": "example.com",
