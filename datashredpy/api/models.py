@@ -1,5 +1,5 @@
 
-import os;os.system('cls')
+# import os;os.system('cls')
 from dataclasses import dataclass
 from typing import List, Dict, Any
 
@@ -26,26 +26,26 @@ class Aws:
   
 @dataclass
 class Resources:
-    source: Any
-    target : Any
+    source: Any = None
+    target : Any = None
 
 @dataclass
 class App:
     app_id: int
     app_name: str
-    resources: Resources
+    resources: Resources = None
 
 @dataclass
 class Domain:
     domain_id: int
     domain_name: str
-    app: App
+    app: App = None
 
 @dataclass
 class Client:
     client_id: int
     client_name: str
-    domain: Domain
+    domain: Domain = None
 
 # Example usage
 meta_data = Domain(
@@ -73,3 +73,41 @@ meta_data = Domain(
 # print(client1)
 # print(dir(client1.domain))
 # # form a json for class client
+import json
+from dataclasses import dataclass
+
+METADATA_JSON='''
+{
+    "client_id": 1,
+    "client_name": "Client A",
+    "domain": {
+        "domain_id": 1,
+        "domain_name": "example.com",
+        "app": {
+            "app_id": 1,
+            "app_name": "MyApp",
+            "resources": {
+                "source": {
+                    "bucket": {
+                        "name": "my-bucket",
+                        "prefix": "data/",
+                        "file_name": "file.csv"
+                    }
+                },
+                "target": {
+                    "database": {
+                        "database": "my_db",
+                        "schema": "public",
+                        "tablename": "my_table"
+                    }
+                }
+            }
+        }
+    }
+}
+'''
+def instantiate_client_from_json(json_data: str) -> Client:
+    client_dict = json.loads(json_data)
+    return Client(**client_dict)
+client_instance = instantiate_client_from_json(METADATA_JSON)
+print(client_instance)
