@@ -11,6 +11,7 @@ from datashredpy.helper.enums import FileType
 from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse, FileResponse
 import pandas as pd
+from routes import *
 
 app = FastAPI()
 @app.get("/")
@@ -55,3 +56,10 @@ def read_file1(request: Request):
 @app.get("/download")
 def download_file():
     return FileResponse('tests_data/emp.csv', media_type='text/csv', filename='emp.csv')
+
+# write code for registering metadata
+@app.get("/register")
+def register_metadata():
+    # Data.register_metadata('tests_data/emp.csv', FileType.CSV, {'name': 'employee', 'description': 'employee data'})
+    # return {"message": "Metadata registered successfully"}
+    

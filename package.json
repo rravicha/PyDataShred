@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "svelte-kit": "^1.2.0"
+  }
+}
