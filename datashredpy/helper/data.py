@@ -1,5 +1,5 @@
 from snowflake.snowpark import Session
-from datashredpy.helper.enums import FileType
+from datashredpy.helper.enums import FileType, DbType
 from typing import Optional
 import pandas as Pandas
 
@@ -65,10 +65,24 @@ class Data:
     @classmethod
     def _read_snowflake(cls, table_name, **snowpark_options) ->  Pandas.DataFrame:
         return Session.builder.configs(snowpark_options).create().table(table_name)
+    
+    @classmethod
+    def _read_sqlite(cls, table_name, **options):
+        import sqlite3
+        import os
+        sys.path.append('/workspace/PyDataShred/tests_data/HATCHBACK/')
+        conn=sqlite3.connect('storage.db')
+        cur=conn.cursor()
+        cur.execute("SELECT * FROM {table_name};")
+        rows=cur.fetchall()
+        return rows
 
     @classmethod
-    def read(cls, rel_path: str, file_type: FileType, use_pandas: Optional[bool] = False, use_spark: Optional[bool] = True, snowpark_options: Optional[dict] = False, **options):
+    def read(cls, rel_path: str, file_type: FileType = None, db_type: DbType=None, use_pandas: Optional[bool] = False, use_spark: Optional[bool] = True, snowpark_options: Optional[dict] = False, **options):
         ''' Contains functions to read inbound using pandas and spark'''
+        if db_type:
+            if db_type ==DbType.SQLITE:
+                return cls._read_sqlite(rel_path, **options)
         if use_pandas:
             if file_type==FileType.CSV:
                 return cls._read_csv_pandas(rel_path, **options)

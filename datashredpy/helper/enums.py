@@ -1,5 +1,7 @@
 from aenum import Enum as AEnum, MultiValueEnum
 
+class DbType(MultiValueEnum):
+    SQLITE = ['sqlite' , 'sqlite3']
 class FileType(MultiValueEnum):
     CSV = 'csv'
     TXT = 'txt'
