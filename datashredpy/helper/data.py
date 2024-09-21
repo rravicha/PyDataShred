@@ -1,4 +1,7 @@
-from snowflake.snowpark import Session
+try:
+    from snowflake.snowpark import Session
+except Exception:
+    pass
 from datashredpy.helper.enums import FileType, DbType
 from typing import Optional
 import pandas as Pandas

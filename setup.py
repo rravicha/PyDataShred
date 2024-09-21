@@ -8,6 +8,5 @@ import codecs
 setup(
       name='datashredpy',
       version='0.0.1',
-      packages=find_packages(),
-      install_requires=[]
+      packages=find_packages()
       )
