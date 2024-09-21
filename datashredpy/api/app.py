@@ -12,12 +12,13 @@ from fastapi.responses import FileResponse, HTMLResponse
 # Custom Built Packages
 from datashredpy.api.models import Client
 from datashredpy.api.routes import Register
+from datashredpy.cloud.aws.dynamodb import Dynamodb
 # Instantiation
 sys.path.append('/workspaces/PyDataShred/')
 app = FastAPI()
 
 # Routes
-@app.get("/register")
+@app.get("/register/client")
 def register_metadata(json_data):
     client_dict = Register.metadata(json_data)
     return Client(**client_dict)
