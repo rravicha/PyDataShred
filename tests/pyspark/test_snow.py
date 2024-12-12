@@ -19,5 +19,5 @@ def test_read_snowpark():
     df.show(999)
 
 if __name__=='__main__':
-    test_read_parquet()
+    test_read_snowpark()
     # input()

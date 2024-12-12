@@ -3,6 +3,7 @@ To run this app via command line | uvicorn app:app --port 8888
 '''
 # Core Packages
 import sys
+sys.path.append('/workspaces/PyDataShred/')
 import json
 from typing import Optional
 import requests
@@ -14,7 +15,7 @@ from datashredpy.api.models import Client
 from datashredpy.api.routes import Register
 from datashredpy.cloud.aws.dynamodb import Dynamodb
 # Instantiation
-sys.path.append('/workspaces/PyDataShred/')
+
 app = FastAPI()
 
 # Routes
