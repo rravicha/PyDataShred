@@ -99,7 +99,7 @@ METADATA_JSON='''
                 "target": {
                     "database": {
                         "database": "my_db",
-                        "schema": "public",pppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppp
+                        "schema": "public",
                         "tablename": "my_table"
                     }
                 }
@@ -113,3 +113,13 @@ def instantiate_client_from_json(json_data: str) -> Client:
     return Client(**client_dict)
 client_instance = instantiate_client_from_json(METADATA_JSON)
 print(client_instance)
+
+
+
+
+
+
+
+
+
+

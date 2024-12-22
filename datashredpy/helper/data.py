@@ -1,4 +1,4 @@
-# from snowflake.snowpark import Session as sss
+from snowflake.snowpark import Session
 
 from datashredpy.helper.enums import FileType, DbType
 from typing import Optional
@@ -65,7 +65,7 @@ class Data:
 
     @classmethod
     def _read_snowflake(cls, table_name, **snowpark_options) ->  Pandas.DataFrame:
-        return sss.builder.configs(snowpark_options).create().table(table_name)
+        return Session.builder.configs(snowpark_options).create().table(table_name)
     
     @classmethod
     def _read_sqlite(cls, table_name, **options):

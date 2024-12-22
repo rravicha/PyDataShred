@@ -3,5 +3,5 @@ from datashredpy.api.models import Client
 class Register(Client):
     @classmethod
     def metadata(cls, metadata_json):
-        client_dict = json.loads(json_data)
+        client_dict = json.loads(metadata_json)
         return Client(**client_dict)

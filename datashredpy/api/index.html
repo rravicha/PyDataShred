@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Data Ingestion</title>
+</head>
+<body>
+    <h1>Data Ingestion</h1>
+    <form id="dataForm">
+        <label for="column1">Column 1:</label>
+        <input type="text" id="column1" name="column1"><br><br>
+        <label for="column2">Column 2:</label>
+        <input type="number" id="column2" name="column2"><br><br>
+        <button type="submit">Submit</button>
+    </form>
+    <div id="result"></div>
+
+    <script>
+        const form = document.getElementById('dataForm');
+        const resultDiv = document.getElementById('result');
+
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            const formData = new FormData(form);
+            const data = Object.fromEntries(formData);
+
+            try {
+                const response = await fetch('/ingest', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const result = await response.json();
+                resultDiv.innerHTML = `
+                    <p>Processed Data:</p>
+                    <ul>
+                        <li>new_column1: ${result.new_column1}</li>
+                        <li>new_column2: ${result.new_column2}</li>
+                    </ul>
+                `;
+
+            } catch (error) {
+                resultDiv.innerHTML = `<p>Error: ${error.message}</p>`;
+            }
+        });
+    </script>
+</body>
+</html>

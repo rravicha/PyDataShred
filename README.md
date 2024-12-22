@@ -12,16 +12,17 @@ Pyspark
 API
     Batch
     Streaming
-    MetaData Ingestion Framework | Multi-Cloud Approach
+    MetaData Ingestion Framework | Multi-Cloud Approach - Current Sprint
 SCD
     Spark / Non Spark
 
 Frontend:
+    StreamLit
     FastHtml
-    SvelteKit
+    SvelteKit / ReactJS
 
 Orchestration:
-    Airflow / Apache Beam / Step Functions
+    Airflow / Apache Beam / Step Functions (AWS)
     
 Multi Cloud Support
     AWS/Azure/GCS - Databricks
