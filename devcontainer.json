@@ -1,0 +1,8 @@
+{
+
+    "features": ["mysql"],
+  
+    "postCreateCommand": "sudo apt-get update && sudo apt-get install -y mysql-server"
+  
+  } 
+  

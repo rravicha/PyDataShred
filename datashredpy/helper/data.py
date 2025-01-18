@@ -1,4 +1,4 @@
-from snowflake.snowpark import Session
+# from snowflake.snowpark import Session
 
 from datashredpy.helper.enums import FileType, DbType
 from typing import Optional

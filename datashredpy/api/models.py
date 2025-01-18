@@ -59,60 +59,24 @@ meta_data = Domain(
             source=Aws(
                 url='console.aws.amazon.com',
                 region='us-east-1',
-                s3=S3(bucket=Bucket(name='datashred-moodys',prefix='raw/reference/oem',file_name='employee.csv'))
+                s3=S3(bucket=Bucket(name='datashred-client1',prefix='raw/reference/oem',file_name='employee.csv'))
                 ),
             target=Aws(
                 url='console.aws.amazon.com',
                 region='us-west-2',
-                rds=Rds(database='moodys-reference', schema='oem', tablename='employee')
+                rds=Rds(database='client1-reference', schema='oem', tablename='employee')
             )
         )
     )
 )
 
-# client1 = Client(client_id=1, client_name='moodys', platform='aws', domain=meta_data)
+# client1 = Client(client_id=1, client_name='client1', platform='aws', domain=meta_data)
 # print(client1)
 # print(dir(client1.domain))
 # # form a json for class client
-import json
-from dataclasses import dataclass
 
-METADATA_JSON='''
-{
-    "client_id": 1,
-    "client_name": "Client A",
-    "platform": "aws",
-    "domain": {
-        "domain_id": 1,
-        "domain_name": "example.com",
-        "app": {
-            "app_id": 1,
-            "app_name": "MyApp",
-            "resources": {
-                "source": {
-                    "bucket": {
-                        "name": "my-bucket",
-                        "prefix": "data/",
-                        "file_name": "file.csv"
-                    }
-                },
-                "target": {
-                    "database": {
-                        "database": "my_db",
-                        "schema": "public",
-                        "tablename": "my_table"
-                    }
-                }
-            }
-        }
-    }
-}
-'''
-def instantiate_client_from_json(json_data: str) -> Client:
-    client_dict = json.loads(json_data)
-    return Client(**client_dict)
-client_instance = instantiate_client_from_json(METADATA_JSON)
-print(client_instance)
+# client_instance = instantiate_client_from_json(METADATA_JSON)
+# print(f'client_instance from models.py:{client_instance}')
 
 
 

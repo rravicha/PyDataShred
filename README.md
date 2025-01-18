@@ -55,3 +55,11 @@ install mysql : sudo apt install mysql-server
      >>> mysql -u scott -p <-login -->
 
 what is pydantic??
+
+# Workflow
+Wrappper
+    Handler
+        Delegator
+            Mapper
+            Service
+                Repository

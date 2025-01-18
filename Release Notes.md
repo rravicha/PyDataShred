@@ -18,6 +18,8 @@
     * Reformat Pytest
 >>> 1.2
     * Database Ingestion | SQL Alchemy | Mysql
+
 >>> 2.0
     * PyDataShred | Frontend | FastHtml / SvelteKit / StreamLit
+    * API Ingestion
     
