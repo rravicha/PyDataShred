@@ -48,7 +48,7 @@ class Client:
     platform: str
     domain: Domain = None
 
-# Example usage
+# Sample usage
 meta_data = Domain(
     domain_id=1,
     domain_name='reference',

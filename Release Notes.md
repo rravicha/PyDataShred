@@ -20,6 +20,7 @@
     * Database Ingestion | SQL Alchemy | Mysql
 
 >>> 2.0
-    * PyDataShred | Frontend | FastHtml / SvelteKit / StreamLit
     * API Ingestion
-    
+    * data.py fill up
+>>> 9.9
+    * PyDataShred | Frontend | FastHtml / SvelteKit / StreamLit

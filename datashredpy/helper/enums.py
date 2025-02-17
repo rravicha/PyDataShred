@@ -14,6 +14,8 @@ class FileType(MultiValueEnum):
     HTML = 'html'
     PDF = 'pdf'
     SNOWFLAKE = 'snowflake'
+class ApiType:
+    DEFAULT_API = 'api'
     
 class ConfigOptions:
     class Spark(MultiValueEnum):

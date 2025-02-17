@@ -1,10 +1,11 @@
 # from snowflake.snowpark import Session
 
-from datashredpy.helper.enums import FileType, DbType
-from typing import Optional
-import pandas as Pandas
 
+from typing import Optional, List, Dict
+import pandas as Pandas
+import requests
 from datashredpy.utilities.init_spark import SparkSessionOption
+from datashredpy.helper.enums import FileType, DbType, ApiType
 
 class Data:
 
@@ -49,7 +50,7 @@ class Data:
     
     @classmethod
     def _read_json_spark(cls, rel_path:str, **options) ->  Pandas.DataFrame:
-        return None
+        return cls.spark.read.json(rel_path)
 
     @classmethod
     def _read_xlsx_spark(cls, rel_path:str, **options) ->  Pandas.DataFrame:
@@ -70,22 +71,29 @@ class Data:
     @classmethod
     def _read_sqlite(cls, table_name, **options):
         import sqlite3
-        import os
+        import sys,os
         sys.path.append('/workspace/PyDataShred/tests_data/HATCHBACK/')
         conn=sqlite3.connect('storage.db')
         cur=conn.cursor()
         cur.execute("SELECT * FROM {table_name};")
         rows=cur.fetchall()
         return rows
+    
+    @classmethod
+    def _read_api(cls, url, **options) -> List[Dict]:
+        return requests.get(url).json()
 
     @classmethod
-    def read(cls, rel_path: str, file_type: FileType = None, db_type: DbType=None, use_pandas: Optional[bool] = False, use_spark: Optional[bool] = True, snowpark_options: Optional[dict] = False, **options):
+    def read(cls, rel_path: str, api_type: ApiType = None, file_type: FileType = None, db_type: DbType=None, use_pandas: Optional[bool] = False, use_spark: Optional[bool] = True, snowpark_options: Optional[dict] = False, **options):
         ''' Contains functions to read inbound using pandas and spark'''
+        if api_type:
+            if api_type == ApiType.DEFAULT_API:
+                return cls._read_api(rel_path, **options)
         if db_type:
-            if db_type ==DbType.SQLITE:
+            if db_type == DbType.SQLITE:
                 return cls._read_sqlite(rel_path, **options)
         if use_pandas:
-            if file_type==FileType.CSV:
+            if file_type == FileType.CSV:
                 return cls._read_csv_pandas(rel_path, **options)
             if file_type==FileType.TSV:
                 return cls._read_csv_pandas(rel_path, **options)
@@ -102,9 +110,11 @@ class Data:
         if use_spark:
             if file_type==FileType.SNOWFLAKE:
                 return cls._read_snowflake(rel_path, **snowpark_options)
-            cls.spark = SparkSessionOption.get_spark_instance()
+            
             if file_type==FileType.PARQUET:
                  return cls._read_parquet_spark(rel_path, **options)
             if file_type==FileType.CSV:
                 return cls._read_csv_spark(rel_path, **options)
+            if file_type==FileType.JSON:
+                return cls._read_json_spark(rel_path, **options)
             

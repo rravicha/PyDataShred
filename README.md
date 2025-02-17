@@ -49,6 +49,7 @@ Gitpod
 Steps to install mysql in codespace
 https://www.digitalocean.com/community/tutorials/how-to-install-mysql-on-ubuntu-20-04
 install mysql : sudo apt install mysql-server
+sudo apt-get update && sudo apt-get install -y mysql-server
 
 <!-- >>> sudo su
      >>> sudo service mysql start | gitpod or codespace wont support systemctl so using service
