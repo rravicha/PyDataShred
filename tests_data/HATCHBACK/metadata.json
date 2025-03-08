@@ -1,0 +1,36 @@
+{
+    "client_id": 1,
+    "client_name": "client1",
+    "domain": {
+        "domain_id": 1,
+        "domain_name": "reference",
+        "app": {
+            "app_id": 1,
+            "app_name": "oem",
+            "resources": {
+                "source": {
+                    "url": "console.aws.amazon.com",
+                    "region": "us-east-1",
+                    "s3": {
+                        "bucket": {
+                            "name": "datashred-client1",
+                            "prefix": "raw/reference/oem",
+                            "file_name": "employee.csv"
+                        }
+                    },
+                    "rds": null
+                },
+                "target": {
+                    "url": "console.aws.amazon.com",
+                    "region": "us-west-2",
+                    "s3": null,
+                    "rds": {
+                        "database": "client1-reference",
+                        "schema": "oem",
+                        "tablename": "employee"
+                    }
+                }
+            }
+        }
+    }
+}

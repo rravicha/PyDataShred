@@ -78,6 +78,11 @@ class Data:
         cur.execute("SELECT * FROM {table_name};")
         rows=cur.fetchall()
         return rows
+    @classmethod
+    def _read_duckdb(cls, table_name, **options):
+        import duckdb
+        conn = duckdb.connect('storage.db')
+        return conn.execute("SELECT * FROM {table_name};").fetchall()
     
     @classmethod
     def _read_api(cls, url, **options) -> List[Dict]:
@@ -89,9 +94,11 @@ class Data:
         if api_type:
             if api_type == ApiType.DEFAULT_API:
                 return cls._read_api(rel_path, **options)
+            
         if db_type:
             if db_type == DbType.SQLITE:
                 return cls._read_sqlite(rel_path, **options)
+            
         if use_pandas:
             if file_type == FileType.CSV:
                 return cls._read_csv_pandas(rel_path, **options)
@@ -107,10 +114,10 @@ class Data:
                 return cls._read_delta_pandas(rel_path, **options)
             if file_type == FileType.XML:
                 return cls._read_xml_pandas(rel_path, **options)        
+        
         if use_spark:
             if file_type==FileType.SNOWFLAKE:
                 return cls._read_snowflake(rel_path, **snowpark_options)
-            
             if file_type==FileType.PARQUET:
                  return cls._read_parquet_spark(rel_path, **options)
             if file_type==FileType.CSV:
