@@ -133,7 +133,7 @@ pycosat @ file:///croot/pycosat_1714510623388/work
 pycparser==2.22
 pydantic==2.9.0
 pydantic_core==2.23.2
-Pygments==2.18.0
+Pygments==2.15.1
 PyJWT==2.9.0
 pylint==3.2.6
 pyOpenSSL @ file:///croot/pyopenssl_1723651579422/work
