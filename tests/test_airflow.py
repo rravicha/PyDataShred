@@ -1,64 +1,69 @@
-from airflow import DAG
-from airflow.operators.python import PythonOperator
-import datetime
-import random
-import json
-import os
+from airflow.decorators import dag, task
+from datetime import datetime
+import pandas as pd
 
-# Define the directory to store the output file
-OUTPUT_DIR = "/tmp/weather_data"
+import logging
 
-# Ensure the output directory exists
-os.makedirs(OUTPUT_DIR, exist_ok=True)
+logger=logging.getLogger()
+logger.info('start')
 
-# Define the start date
-start_date = datetime.datetime(2023, 11, 3)
 
-# Create the DAG
-dag = DAG(
-    'weather_data_pipeline',
-    schedule=datetime.timedelta(days=1),
-    start_date=start_date,
-    catchup=False,  # Avoid backfilling for this example
+@dag(
+    start_date=datetime(year=2023, month=1, day=1, hour=9, minute=0),
+    schedule="@daily",
+    catchup=True,
+    max_active_runs=1
 )
+def weather_etl():
+    @task()
+    def extract_data():
+        logger.info('extract_data')
+        # Print message, return a response
+        print("Extracting data from an weather API")
+        return {
+            "date": "2023-01-01",
+            "location": "NYC",
+            "weather": {
+                "temp": 33,
+                "conditions": "Light snow and wind"
+            }
+        }
 
-def extract_weather_data():
-    """Simulates fetching weather data from an API."""
-    city = "ExampleCity"
-    temperature = random.randint(10, 35)  # Random temperature between 10 and 35
-    humidity = random.randint(30, 90)     # Random humidity between 30 and 90
-    weather_data = {
-        "city": city,
-        "temperature": temperature,
-        "humidity": humidity,
-        "timestamp": datetime.datetime.now().isoformat()
-    }
-    return weather_data
+    @task()
+    def transform_data(raw_data):
+        logger.info('transform_data')
+        # Transform response to a list
+        print('')
+        transformed_data = [
+            [
+                raw_data.get("date"),
+                raw_data.get("location"),
+                raw_data.get("weather").get("temp"),
+                raw_data.get("weather").get("conditions")
+            ]
+        ]
+        return transformed_data
 
-def load_weather_data(ti):
-    """Loads weather data into a local file."""
-    weather_data = ti.xcom_pull(task_ids='extract_data_task', dag_id='weather_data_pipeline')
-    if weather_data:
-        filename = os.path.join(OUTPUT_DIR, f"weather_data_{datetime.datetime.now().strftime('%Y%m%d%H%M%S')}.json")
-        with open(filename, 'w') as f:
-            json.dump(weather_data, f, indent=4)
-        print(f"Weather data written to {filename}")
-    else:
-        print("No weather data found.")
+    @task()
+    def load_data(transformed_data):
+        logger.info('load_data')
+        # Load the data to a DataFrame, set the columns
+        loaded_data = pd.DataFrame(transformed_data)
+        loaded_data.columns = [
+            "date",
+            "location",
+            "weather_temp",
+            "weather_conditions"
+        ]
+        print(loaded_data)
 
-# Define the tasks
-extract_data_task = PythonOperator(
-    task_id='extract_data_task',
-    python_callable=extract_weather_data,
-    dag=dag,
-    do_xcom_push=True,  # Push the weather data to XCom
-)
+    # Set dependencies using function calls
+    raw_dataset = extract_data()
+    transformed_dataset = transform_data(raw_dataset)
+    load_data(transformed_dataset)
 
-load_data_task = PythonOperator(
-    task_id='load_data_task',
-    python_callable=load_weather_data,
-    dag=dag,
-)
 
-# Set task dependencies
-extract_data_task >> load_data_task
+# Allow the DAG to be run
+if __name__=='__main__':
+    weather_etl()
+
