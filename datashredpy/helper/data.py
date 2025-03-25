@@ -1,9 +1,9 @@
 # from snowflake.snowpark import Session
-
-
+import requests
 from typing import Optional, List, Dict
 import pandas as Pandas
-import requests
+from pyspark.sql import DataFrame as SparkDataFrame
+
 from datashredpy.utilities.init_spark import SparkSessionOption
 from datashredpy.helper.enums import FileType, DbType, ApiType
 
@@ -45,27 +45,32 @@ class Data:
         return None
 #
     @classmethod
-    def _read_csv_spark(cls, rel_path:str, **options) ->  Pandas.DataFrame:
-        return cls.spark.read.csv(rel_path)
+    def _read_csv_spark(cls, rel_path:str, **options) ->  SparkDataFrame:
+        
+        return cls.spark.read.option("header", "true").option("inferSchema", "true").csv(rel_path)
     
     @classmethod
-    def _read_json_spark(cls, rel_path:str, **options) ->  Pandas.DataFrame:
+    def _read_json_spark(cls, rel_path:str, **options) ->  SparkDataFrame:
         return cls.spark.read.json(rel_path)
 
     @classmethod
-    def _read_xlsx_spark(cls, rel_path:str, **options) ->  Pandas.DataFrame:
+    def _read_xlsx_spark(cls, rel_path:str, **options) ->  SparkDataFrame:
         return None
+    
+    @classmethod
+    def _read_delta_spark(cls, rel_path:str, **options) ->  SparkDataFrame:
+        return cls.spark.read.format("delta").load(rel_path)
    
     @classmethod
-    def _read_parquet_spark(cls, rel_path:str, **options):
+    def _read_parquet_spark(cls, rel_path:str, **options) ->  SparkDataFrame:
         return cls.spark.read.parquet(rel_path)
 
     @classmethod
-    def _read_xml_spark(cls, rel_path:str, **options) ->  Pandas.DataFrame:
+    def _read_xml_spark(cls, rel_path:str, **options) ->  SparkDataFrame:
         return None
 
     @classmethod
-    def _read_snowflake(cls, table_name, **snowpark_options) ->  Pandas.DataFrame:
+    def _read_snowflake(cls, table_name, **snowpark_options) ->  SparkDataFrame:
         return Session.builder.configs(snowpark_options).create().table(table_name)
     
     @classmethod
@@ -116,6 +121,8 @@ class Data:
                 return cls._read_xml_pandas(rel_path, **options)        
         
         if use_spark:
+            
+            cls.spark = SparkSessionOption.get_spark_instance()
             if file_type==FileType.SNOWFLAKE:
                 return cls._read_snowflake(rel_path, **snowpark_options)
             if file_type==FileType.PARQUET:
@@ -124,4 +131,10 @@ class Data:
                 return cls._read_csv_spark(rel_path, **options)
             if file_type==FileType.JSON:
                 return cls._read_json_spark(rel_path, **options)
+            if file_type==FileType.DELTA:
+                delta_config ={
+                    "spark.sql.extensions":"io.delta.sql.DeltaSparkSessionExtension"
+                }
+                cls.spark = SparkSessionOption.get_spark_instance(config_options=delta_config)
+                return cls._read_delta_spark(rel_path, **options)
             

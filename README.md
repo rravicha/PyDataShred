@@ -1,66 +1,88 @@
-# PyDataShred
-This project emphasis on creating a wrapper for the modern data engineering which involves data shredding at its core
+# PyDataShred 🔄
 
-# Project Workflow:
-------- ------
-Python
-    File Ingestion
-    Database Ingestion - mysql
-Pyspark
-    File Ingestion
-    Databse Ingestion
-API
-    Batch
-    Streaming
-    MetaData Ingestion Framework | Multi-Cloud Approach - Current Sprint
-SCD
-    Spark / Non Spark
+> A comprehensive wrapper for modern data engineering with focus on data shredding capabilities
 
-Frontend:
-    StreamLit
-    FastHtml
-    SvelteKit / ReactJS
+## 🌟 Features
 
-Orchestration:
-    Airflow / Apache Beam / Step Functions (AWS)
-    
-Multi Cloud Support
-    AWS/Azure/GCS - Databricks
+### Core Components
+- **Python Processing**
+  - File Ingestion
+  - Database Ingestion (MySQL)
+  
+- **PySpark Integration**
+  - File Ingestion
+  - Database Ingestion
 
-Sentry.io Integration
+- **API Support**
+  - ⚡ Batch Processing
+  - 🔄 Streaming
+  - 📊 MetaData Ingestion Framework (Multi-Cloud Approach) *[Current Sprint]*
 
-Splunk Integration  -  Optional
+- **SCD (Slowly Changing Dimensions)**
+  - Spark Implementation
+  - Non-Spark Implementation
 
-Snowflake /SnowPark integration - using https://docs.snowflake.com/en/developer-guide/snowpark/python/testing-python-snowpark
+### Frontend Options
+- 📱 StreamLit
+- 🌐 FastHTML
+- ⚛️ Modern Web Frameworks
+  - SvelteKit
+  - ReactJS
 
+### Orchestration Solutions
+- 🔄 Apache Airflow
+- 🌊 Apache Beam
+- ⚡ AWS Step Functions
 
-# Multi Cloud Accounts
-Google
-AWS
-Azure
-Google Cloud
-Snowflake
-Heroku
+## 🌐 Multi-Cloud Support
+- Amazon Web Services (AWS)
+- Microsoft Azure
+- Google Cloud Platform (GCS)
+- Databricks
 
-<!-- Coding enviroment -->
-Gitpod
+## 🔌 Integrations
+- Sentry.io - Error Tracking
+- Splunk (Optional) - Log Management
+- Snowflake/SnowPark - [Documentation](https://docs.snowflake.com/en/developer-guide/snowpark/python/testing-python-snowpark)
 
-# Random Articles
-Steps to install mysql in codespace
-https://www.digitalocean.com/community/tutorials/how-to-install-mysql-on-ubuntu-20-04
-install mysql : sudo apt install mysql-server
-sudo apt-get update && sudo apt-get install -y mysql-server
+## ☁️ Supported Cloud Platforms
+- Google Cloud
+- AWS
+- Azure
+- Snowflake
+- Heroku
 
-<!-- >>> sudo su
-     >>> sudo service mysql start | gitpod or codespace wont support systemctl so using service
-     >>> mysql -u scott -p <-login -->
+## 💻 Development Environment
+- Gitpod
+- GitHub Codespaces
 
-what is pydantic??
+## 🛠️ Setup Guide
 
-# Workflow
-Wrappper
-    Handler
-        Delegator
-            Mapper
-            Service
-                Repository
+### MySQL Installation in Codespace
+```bash
+# Update package list and install MySQL
+sudo apt-get update
+sudo apt-get install -y mysql-server
+
+# Start MySQL service
+sudo service mysql start
+
+# Login to MySQL
+mysql -u scott -p
+```
+
+## 📚 Project Architecture
+```
+Wrapper
+│
+├── Handler
+│   │
+│   └── Delegator
+│       ├── Mapper
+│       └── Service
+│           └── Repository
+```
+
+## 📝 Notes
+- What is Pydantic? [Add explanation here]
+- using typing especially Union[str,List[str]]!!

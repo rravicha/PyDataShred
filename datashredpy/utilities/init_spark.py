@@ -3,11 +3,12 @@ sys.path.append('/workspaces/PyDataShred')
 
 from pyspark.sql import SparkSession
 from datashredpy.helper.enums import ConfigOptions
+from typing import Dict
 
 class SparkSessionOption:
     _instance = None
     @classmethod
-    def get_spark_instance(cls, app_name="MyApp", master="local[*]", config_options=None, snow_spark = False):
+    def get_spark_instance(cls, app_name="MyApp", master="local[*]", config_options: Dict=None, snow_spark = False):
         ''' gets you an spark instance that can be shared across your application'''
         if snow_spark:
             config_options = {"spark.jars.packages" : "net.snowflake:spark-snowflake_2.12:2.9.0-spark_3.1"}

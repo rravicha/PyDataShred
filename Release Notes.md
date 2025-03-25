@@ -1,26 +1,69 @@
->>> 1.0
-    * Initial Project Structuring
-    * Added necessary files for basic project build
-    * Added License
-    * Added helper/data.py | Methods for file based Ingestion
->>> 1.1.1
-    * MetaData Ingestion Processing | On Prem | Sqlite / Mysql
-        --> Metadata Source will be Sqlite
-        --> Data will be from tests_data or On Prem Databases
-        --> Sqlite to Delta Partition Files (On Prem) | Scd 1 & Scd 2 | Create Models Accordingly\
-        <!-- raw.emp > delta on prem file with partition > shred > sqlite views/current and history e2e automate -->
->>> 1.1.2
-    * MetaData Ingestion Processing | Multi Cloud | DBX
-        --> Snowpark Table | Delta Live Table with Partition | Scd 2
-        --> CSV file with multi date | aws-delta file with partition | Scd 2
-    * Full Fledged Dataclass Usage
-        --> api/models.py | Multi Cloud Updates
-    * Reformat Pytest
->>> 1.2
-    * Database Ingestion | SQL Alchemy | Mysql
+# PyDataShred Release Notes
 
->>> 2.0
-    * API Ingestion
-    * data.py fill up
->>> 9.9
-    * PyDataShred | Frontend | FastHtml / SvelteKit / StreamLit
+## Version History
+
+### 1.0 - Initial Release
+- 🎉 Initial Project Structuring
+- 📁 Added necessary files for basic project build
+- ⚖️ Added License
+- 🔧 Added `helper/data.py` - Methods for file based Ingestion
+
+### 1.0.1 - Metadata & Cloud Integration
+#### Cloud Infrastructure
+- 🌨️ **Snowpark Table Integration**
+  - Delta Live Table with Partition
+  - SCD Type 2 Implementation
+- 📊 **AWS Integration**
+  - CSV file with multi-date support
+  - AWS Delta file with partition
+  - SCD Type 2 Implementation
+
+#### Development Updates
+- 🏗️ Full Fledged Dataclass Usage
+  - Enhanced `api/models.py`
+  - Multi Cloud Updates
+- 🧪 Reformat Pytest Structure
+- 🏛️ Documentation
+    - 🔄 Core Architecture - Figma
+        - System Architecture
+    - 📖 How to Use Guide
+        - Installation Steps
+        - Configuration Settings
+        - Basic Usage Examples
+    - 📋 Coding Standards
+        - Python Style Guide
+        - Code Review Process
+        - Best Practices
+
+### 1.1 - File Operations
+- 📂 File Copy Utility
+  - On-premises support
+  - Multi-cloud support (AWS/Azure/GCP)
+
+### 1.2 - Database Integration
+- 🗄️ Database Ingestion
+  - SQL Alchemy Integration
+  - Relational Database Support
+
+### 1.3 - Streaming Data
+- 🔄 Kafka Ingestion
+  - Python implementation
+  - PySpark integration
+
+### 1.4 - Snowflake Operations
+- ❄️ Snowflake Integration
+  - Read operations
+  - Write operations
+  - SCD Type 2 implementation
+
+### 1.5 - API Integration
+- 🌐 API Ingestion Support
+
+### 9.9 - Future Release
+- 🎨 PyDataShred Frontend Dashboard
+  - FastHTML implementation
+  - SvelteKit integration
+  - StreamLit support
+
+---
+*For more information, please visit our [documentation](https://pydatashred.readthedocs.io/).*

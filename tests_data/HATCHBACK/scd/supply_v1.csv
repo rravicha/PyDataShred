@@ -1,0 +1,11 @@
+id,make,model,year,price,quantity
+1,Toyota,Corolla,2020,20000,15
+2,Honda,Civic,2019,22000,10
+3,Ford,Focus,2021,21000,8
+4,Chevrolet,Cruze,2018,18000,12
+5,Nissan,Sentra,2020,19500,20
+6,Hyundai,Elantra,2021,20500,18
+7,Kia,Forte,2019,19000,25
+8,Volkswagen,Jetta,2020,23000,5
+9,Subaru,Impreza,2021,24000,7
+10,Mazda,3,2018,17500,10
