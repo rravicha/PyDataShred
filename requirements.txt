@@ -25,11 +25,6 @@ charset-normalizer==3.3.2
 click==8.1.7
 cloudpickle==2.2.1
 colorama==0.4.6
-comm==0.2.2
-conda
-conda-libmamba-solver
-conda-package-handling
-conda_package_streaming
 contourpy==1.3.0
 cryptography
 cycler==0.12.1

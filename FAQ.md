@@ -1,3 +1,5 @@
+Databse : postgres
+login -  sudo su - postgres -c psql
 Database: mysql
 codespace:
 - Command: 'sudo systemctl start mysql.service'

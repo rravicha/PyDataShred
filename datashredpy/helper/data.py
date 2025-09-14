@@ -1,4 +1,4 @@
-# from snowflake.snowpark import Session
+from snowflake.snowpark import Session
 import requests
 from typing import Optional, List, Dict
 import pandas as Pandas

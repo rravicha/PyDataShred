@@ -6,9 +6,9 @@ from datashredpy.helper.enums import FileType
 # pytest fixtures
 def test_read_snowpark():
     snowpark_options = {
-                        "account": "VU33144",
+                        "account": "MS76173",
                         "user": "RRAVICHA",
-                        "password": "Susi@786",
+                        "password": "code$Mesh12345",
                         "role": 'ACCOUNTADMIN',
                         "warehouse": "COMPUTE_WH",
                         "database": "MISC",

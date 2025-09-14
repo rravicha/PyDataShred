@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ஸ்னோஃப்ளேக் யூடியூப் தொடர்: ஒரு காட்சி வழிகாட்டி</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Arima:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Arima', sans-serif;
+            background-color: #F8F9FA;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+        .flow-arrow {
+            font-size: 2rem;
+            color: #EE9B00;
+            line-height: 1;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <header class="bg-[#005F73] text-white text-center py-12 px-4">
+        <h1 class="text-4xl md:text-5xl font-bold mb-2">ஸ்னோஃப்ளேக் தொடக்கநிலையாளர்களுக்கானது</h1>
+        <p class="text-xl md:text-2xl font-light">ஒரு முழுமையான காட்சி வழிகாட்டி</p>
+    </header>
+
+    <main class="container mx-auto p-4 md:p-8">
+
+        <section id="overview" class="text-center mb-12">
+            <p class="text-lg max-w-3xl mx-auto mb-8">இந்தத் தொடர் கிளவுட் டேட்டா வேர்ஹவுஸான ஸ்னோஃப்ளேக்கிற்கான ஒரு விரிவான, படிப்படியான அறிமுகத்தை வழங்குகிறது. சிக்கலான தலைப்புகளை எளிதாக அணுகும் வகையில் இது வடிவமைக்கப்பட்டுள்ளது.</p>
+            <div class="flex justify-center items-center space-x-8 md:space-x-16">
+                <div class="text-center">
+                    <p class="text-5xl md:text-6xl font-bold text-[#0A9396]">11</p>
+                    <p class="text-lg font-semibold">வீடியோக்கள்</p>
+                </div>
+                <div class="text-center">
+                    <p class="text-5xl md:text-6xl font-bold text-[#EE9B00]">5</p>
+                    <p class="text-lg font-semibold">அலகுகள்</p>
+                </div>
+            </div>
+        </section>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+            <div class="bg-white rounded-lg shadow-md p-6 lg:col-span-1">
+                <h2 class="text-2xl font-bold text-[#005F73] mb-4">அலகு 1: தொடங்குதல்</h2>
+                <h3 class="text-xl font-semibold mb-2">வீடியோ 1: ஸ்னோஃப்ளேக் என்றால் என்ன?</h3>
+                <p class="mb-4">ஸ்னோஃப்ளேக்கின் முக்கிய கட்டமைப்பு மற்றும் அதன் நன்மைகளான அளவிடுதல், ஒரே நேரத்தில் இயங்குதல், மற்றும் பராமரிப்பு இல்லாமை ஆகியவற்றை விளக்குகிறது.</p>
+                <div class="space-y-2">
+                    <p class="flex items-center"><span class="text-2xl mr-2 text-[#EE9B00]">🚀</span> அளவிடுதல் மற்றும் நெகிழ்வுத்தன்மை</p>
+                    <p class="flex items-center"><span class="text-2xl mr-2 text-[#EE9B00]">👥</span> ஒரே நேரத்தில் இயங்குதல்</p>
+                    <p class="flex items-center"><span class="text-2xl mr-2 text-[#EE9B00]">⚙️</span> பராமரிப்பு இல்லை</p>
+                </div>
+                 <h3 class="text-xl font-semibold mt-6 mb-2">வீடியோ 2: கணக்கு அமைத்தல்</h3>
+                <p>இலவச சோதனை கணக்கைத் தொடங்கி, Snowsight பயனர் இடைமுகத்தை ஆராய்வது எப்படி என்பதை விளக்குகிறது.</p>
+            </div>
+
+            <div class="bg-white rounded-lg shadow-md p-6 lg:col-span-2">
+                <h2 class="text-2xl font-bold text-[#005F73] mb-4">அலகு 2: முக்கிய கருத்துகள்</h2>
+                <h3 class="text-xl font-semibold mb-2">வீடியோ 3: வேர்ஹவுஸ்கள், டேட்டாபேஸ்கள்</h3>
+                <p class="mb-4">ஸ்னோஃப்ளேக்கின் படிநிலையை இது விளக்குகிறது. விர்ச்சுவல் வேர்ஹவுஸ்கள் கணக்கீட்டு சக்தியை வழங்குகின்றன, மேலும் அவற்றின் அளவு செயல்திறனையும் செலவையும் பாதிக்கிறது.</p>
+                <div class="chart-container">
+                    <canvas id="warehouseChart"></canvas>
+                </div>
+                 <h3 class="text-xl font-semibold mt-6 mb-2">வீடியோ 4: அட்டவணைகள் மற்றும் டேட்டா வகைகள்</h3>
+                 <p>SQL ஐப் பயன்படுத்தி அட்டவணைகளை உருவாக்குவது, டேட்டாவைச் செருகுவது, மற்றும் சரியான டேட்டா வகைகளைத் தேர்ந்தெடுப்பதன் முக்கியத்துவம் பற்றி விவரிக்கிறது.</p>
+            </div>
+
+            <div class="bg-white rounded-lg shadow-md p-6 lg:col-span-3">
+                <h2 class="text-2xl font-bold text-[#005F73] mb-4">அலகு 3: உங்கள் டேட்டாவை ஏற்றுதல்</h2>
+                 <p class="text-center mb-4">ஸ்னோஃப்ளேக்கில் டேட்டாவை ஏற்றுவதற்கான இரண்டு முக்கிய முறைகளை இந்த அலகு காட்டுகிறது: எளிதான பயனர் இடைமுகம் மற்றும் தொழில்முறை கிளவுட் ஸ்டேஜ் முறை.</p>
+                <div class="flex flex-col md:flex-row justify-around items-center text-center">
+                    <div class="p-4">
+                         <h3 class="text-xl font-semibold mb-2">வீடியோ 5: பயனர் இடைமுகம்</h3>
+                         <p class="mb-2">சிறிய கோப்புகளை ஏற்றுவதற்கான எளிய வழி.</p>
+                         <div class="text-4xl text-[#0A9396]">💻</div>
+                    </div>
+                    <div class="flow-arrow hidden md:block">&rarr;</div>
+                     <div class="flow-arrow md:hidden my-4">&darr;</div>
+                    <div class="p-4">
+                        <h3 class="text-xl font-semibold mb-2">வீடியோ 6: கிளவுட் ஸ்டேஜ் (S3/GCS)</h3>
+                        <p class="mb-2">பெரிய டேட்டா பைப்லைன்களுக்கான நிலையான முறை.</p>
+                        <div class="text-4xl text-[#0A9396]">☁️</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-lg shadow-md p-6 lg:col-span-2">
+                <h2 class="text-2xl font-bold text-[#005F73] mb-4">அலகு 4: வினவுதல் மற்றும் மாற்றுதல்</h2>
+                <h3 class="text-xl font-semibold mb-2">வீடியோ 7 & 8: SQL அடிப்படைகள் மற்றும் மேம்பட்ட அம்சங்கள்</h3>
+                <p class="mb-4">டேட்டாவை பகுப்பாய்வு செய்வதற்கான SQL இன் சக்தியை இந்த அலகு ஆராய்கிறது. தொடக்கநிலையாளர்களுக்கான அடிப்படைகள் முதல் சாளர செயல்பாடுகள் போன்ற மேம்பட்ட தலைப்புகள் வரை இது உள்ளடக்கியது.</p>
+                <div class="chart-container">
+                    <canvas id="sqlChart"></canvas>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-lg shadow-md p-6 lg:col-span-1">
+                <h2 class="text-2xl font-bold text-[#005F73] mb-4">அலகு 5: மேம்பட்ட அம்சங்கள்</h2>
+                <h3 class="text-xl font-semibold mb-2">வீடியோ 9: நேரப் பயணம் & குளோனிங்</h3>
+                <p class="mb-4">தற்செயலாக நீக்கப்பட்ட டேட்டாவை மீட்டெடுக்கும் 'நேரப் பயணம்' மற்றும் உடனடி டேட்டா நகல்களை உருவாக்கும் 'ஜீரோ-காப்பி குளோனிங்' போன்ற சக்திவாய்ந்த அம்சங்கள்.</p>
+                <div class="space-y-2">
+                    <p class="flex items-center"><span class="text-2xl mr-2 text-[#EE9B00]">⏳</span> நேரப் பயணம்</p>
+                    <p class="flex items-center"><span class="text-2xl mr-2 text-[#EE9B00]">👯</span> ஜீரோ-காப்பி குளோனிங்</p>
+                </div>
+                <h3 class="text-xl font-semibold mt-6 mb-2">வீடியோ 10: செலவு மேலாண்மை</h3>
+                <p>AUTO_SUSPEND போன்ற அம்சங்களைப் பயன்படுத்தி ஸ்னோஃப்ளேக் செலவுகளை எவ்வாறு திறம்பட நிர்வகிப்பது என்பதை விளக்குகிறது.</p>
+            </div>
+
+            <div class="bg-white rounded-lg shadow-md p-6 md:col-span-2 lg:col-span-3">
+                <h2 class="text-2xl font-bold text-[#005F73] text-center mb-4">வீடியோ 11: இறுதித் திட்டம் - ஒரு எளிய டேட்டா பைப்லைன்</h2>
+                <p class="text-center max-w-2xl mx-auto mb-6">இந்தத் தொடரில் கற்றுக்கொண்ட அனைத்தையும் ஒன்றிணைத்து, ஒரு முழுமையான டேட்டா பைப்லைனை உருவாக்கும் ஒரு நடைமுறைத் திட்டம் இது.</p>
+                <div class="flex flex-col md:flex-row justify-center items-center space-y-4 md:space-y-0 md:space-x-8 text-center">
+                    <div class="p-4 rounded-lg bg-teal-50">
+                        <p class="text-2xl mb-2">📂</p>
+                        <h3 class="text-lg font-bold text-[#005F73]">1. பிரித்தெடுத்தல் (Extract)</h3>
+                        <p>மூல டேட்டாவை ஏற்றுதல்</p>
+                    </div>
+                    <div class="flow-arrow">&darr;</div>
+                    <div class="p-4 rounded-lg bg-amber-50">
+                        <p class="text-2xl mb-2">✨</p>
+                        <h3 class="text-lg font-bold text-[#EE9B00]">2. மாற்றுதல் (Transform)</h3>
+                        <p>டேட்டாவை சுத்தம் செய்தல்</p>
+                    </div>
+                     <div class="flow-arrow">&darr;</div>
+                    <div class="p-4 rounded-lg bg-teal-50">
+                        <p class="text-2xl mb-2">📊</p>
+                        <h3 class="text-lg font-bold text-[#005F73]">3. ஏற்றுதல் (Load)</h3>
+                        <p>பகுப்பாய்வுக்குத் தயார்</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-lg shadow-md p-6 md:col-span-2 lg:col-span-3">
+                <h2 class="text-2xl font-bold text-[#005F73] text-center mb-4">✨ ஸ்னோஃப்ளேக் உதவியாளர்</h2>
+                <p class="text-center max-w-2xl mx-auto mb-6">ஒரு எளிய ஆங்கில விளக்கத்தை உள்ளிட்டு, உங்கள் தேவைகளுக்கு ஏற்ற SQL வினவலை உருவாக்குங்கள். </p>
+                <div class="flex flex-col items-center">
+                    <textarea id="queryPrompt" rows="4" class="w-full max-w-xl p-4 mb-4 rounded-lg border-2 border-gray-300 focus:outline-none focus:border-[#0A9396] transition-colors" placeholder="உங்கள் வினவல் விளக்கத்தை இங்கு உள்ளிடவும்..."></textarea>
+                    <button id="generateBtn" class="bg-[#0A9396] text-white font-bold py-3 px-6 rounded-full shadow-lg hover:bg-[#005F73] transition-colors">✨ SQL வினவலை உருவாக்கு</button>
+                    <div id="loadingIndicator" class="hidden mt-4 text-[#EE9B00]">உருவாக்கப்படுகிறது...</div>
+                </div>
+                <div id="resultContainer" class="hidden mt-6">
+                    <h3 class="text-xl font-semibold mb-2">உருவாக்கப்பட்ட SQL வினவல்</h3>
+                    <pre class="bg-gray-100 p-4 rounded-lg overflow-x-auto text-sm"><code><span id="generatedCode"></span></code></pre>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <footer class="bg-[#005F73] text-white text-center py-6 mt-12">
+        <p>இந்தத் தொடரைப் பார்த்து ஸ்னோஃப்ளேக்கில் உங்கள் பயணத்தைத் தொடங்குங்கள்!</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const tooltipTitleCallback = (tooltipItems) => {
+                const item = tooltipItems[0];
+                let label = item.chart.data.labels[item.dataIndex];
+                if (Array.isArray(label)) {
+                    return label.join(' ');
+                } else {
+                    return label;
+                }
+            };
+            
+            const defaultPlugins = {
+                legend: {
+                    position: 'top',
+                     labels: {
+                        font: {
+                            family: 'Arima',
+                            size: 14
+                        }
+                    }
+                },
+                tooltip: {
+                    callbacks: {
+                        title: tooltipTitleCallback
+                    },
+                    bodyFont: {
+                        family: 'Arima'
+                    },
+                    titleFont: {
+                         family: 'Arima'
+                    }
+                }
+            };
+            
+            const defaultScales = {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        font: { family: 'Arima' }
+                    }
+                },
+                x: {
+                    ticks: {
+                        font: { family: 'Arima' }
+                    }
+                }
+            };
+
+            const warehouseCtx = document.getElementById('warehouseChart');
+            if (warehouseCtx) {
+                new Chart(warehouseCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['X-Small', 'Small', 'Medium', 'Large'],
+                        datasets: [{
+                            label: 'ஒரு மணிநேரத்திற்கான வரவுகள் (Credits)',
+                            data: [1, 2, 4, 8],
+                            backgroundColor: ['#0A9396', '#94D2BD', '#E9C46A', '#EE9B00'],
+                            borderColor: '#005F73',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: defaultPlugins,
+                        scales: defaultScales
+                    }
+                });
+            }
+
+            const sqlCtx = document.getElementById('sqlChart');
+            if (sqlCtx) {
+                new Chart(sqlCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['அடிப்படை SQL', 'மேம்பட்ட SQL'],
+                        datasets: [{
+                            label: 'SQL தலைப்புகள்',
+                            data: [60, 40],
+                            backgroundColor: ['#0A9396', '#EE9B00'],
+                            hoverOffset: 4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: defaultPlugins
+                    }
+                });
+            }
+
+            const generateBtn = document.getElementById('generateBtn');
+            const queryPrompt = document.getElementById('queryPrompt');
+            const loadingIndicator = document.getElementById('loadingIndicator');
+            const resultContainer = document.getElementById('resultContainer');
+            const generatedCode = document.getElementById('generatedCode');
+
+            const API_KEY = "";
+            const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${API_KEY}`;
+            const SYSTEM_INSTRUCTION = "You are an expert Snowflake SQL developer. Your task is to generate a Snowflake SQL query based on a user's natural language request. You must only return the SQL code. Do not include any explanations, introductory phrases, or markdown formatting like ```sql. Provide only the clean, runnable SQL query.";
+
+            async function generateQuery() {
+                const userQuery = queryPrompt.value;
+                if (!userQuery) {
+                    return;
+                }
+
+                loadingIndicator.classList.remove('hidden');
+                resultContainer.classList.add('hidden');
+                generatedCode.textContent = '';
+                
+                const payload = {
+                    contents: [{ parts: [{ text: userQuery }] }],
+                    systemInstruction: { parts: [{ text: SYSTEM_INSTRUCTION }] },
+                    tools: [{ "google_search": {} }]
+                };
+
+                let retries = 0;
+                const maxRetries = 3;
+                while (retries < maxRetries) {
+                    try {
+                        const response = await fetch(API_URL, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(payload)
+                        });
+
+                        if (!response.ok) {
+                            if (response.status === 429) {
+                                const delay = Math.pow(2, retries) * 1000;
+                                await new Promise(resolve => setTimeout(resolve, delay));
+                                retries++;
+                                continue;
+                            } else {
+                                throw new Error(`API error: ${response.status}`);
+                            }
+                        }
+
+                        const result = await response.json();
+                        const text = result?.candidates?.[0]?.content?.parts?.[0]?.text;
+                        
+                        if (text) {
+                            generatedCode.textContent = text.trim();
+                            resultContainer.classList.remove('hidden');
+                        } else {
+                            generatedCode.textContent = "ஏதோ தவறு நடந்துவிட்டது. மீண்டும் முயற்சிக்கவும்.";
+                            resultContainer.classList.remove('hidden');
+                        }
+                        break;
+                    } catch (error) {
+                        generatedCode.textContent = "ஏதோ தவறு நடந்துவிட்டது. மீண்டும் முயற்சிக்கவும்.";
+                        resultContainer.classList.remove('hidden');
+                        break;
+                    } finally {
+                        loadingIndicator.classList.add('hidden');
+                    }
+                }
+            }
+
+            generateBtn.addEventListener('click', generateQuery);
+
+        });
+    </script>
+
+</body>
+</html>
