@@ -137,4 +137,4 @@ class Data:
                 }
                 cls.spark = SparkSessionOption.get_spark_instance(config_options=delta_config)
                 return cls._read_delta_spark(rel_path, **options)
-            
+

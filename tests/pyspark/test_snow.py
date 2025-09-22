@@ -1,5 +1,9 @@
 import sys
-sys.path.append('/workspaces/PyDataShred/')
+import os
+
+# Get absolute path to project root
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "../.."))
+sys.path.append(project_root)
 
 from datashredpy.helper.data import Data
 from datashredpy.helper.enums import FileType

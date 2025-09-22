@@ -8,7 +8,7 @@ import snowflake.connector
 
 # Snowflake connection parameters
 conn_params = {
-    "account": "MS76173",
+    "account": "VUZSETQ-MS76173",
     "user": "RRAVICHA",
     "password": "code$Mesh12345",
     "role": "ACCOUNTADMIN",
