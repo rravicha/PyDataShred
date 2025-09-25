@@ -13,7 +13,7 @@ class Bucket:
 
 @dataclass
 class S3:
-    bucket: Bucket  
+    bucket: Bucket
 @dataclass
 class Rds:
     database: str
@@ -39,7 +39,7 @@ class Nas:
     host: str
     path: str
     file_name: str
-  
+
 @dataclass
 class Resources:
     source: Any
@@ -120,7 +120,7 @@ class Movies:
             return response["Item"]
 
 
-    def create_table(self, table_name, key_schema, attribute_definitions):  
+    def create_table(self, table_name, key_schema, attribute_definitions):
         """
         Creates a DynamoDB table.
 
@@ -140,4 +140,4 @@ class Movies:
         )
         # Wait until the table exists.
         table.meta.client.get_waiter("table_exists").wait(TableName=table_name)
-        return table    
+        return table
