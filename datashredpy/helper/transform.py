@@ -1,14 +1,19 @@
+"""Data transformation and SCD (Slowly Changing Dimensions) implementation."""
+import logging
 from dataclasses import dataclass
-from typing import List, Union, Optional
 from datetime import datetime
+from typing import List, Union, Optional
+
 from pydantic import BaseModel, validator
 from pyspark.sql import DataFrame
 from pyspark.sql.functions import (
-    current_timestamp, 
-    lit, 
-    when, 
+    current_timestamp,
+    lit,
+    when,
     col
 )
+
+logger = logging.getLogger(__name__)
 
 class SparkDataFrameModel(BaseModel):
     """Pydantic model for validating PySpark DataFrame properties"""
@@ -73,8 +78,7 @@ class ETL:
         )
         
         if self.target_df.rdd.isEmpty():
-            print("Initial load - returning source data with audit columns")
-            source_with_dates.show()
+            logger.info("Initial load - returning source data with audit columns")
             return source_with_dates
             
         # Find changed records
@@ -114,11 +118,10 @@ class ETL:
                 "expired"
             ).otherwise(col("etl_flag"))
         )
-        
+
         # Combine updated records
         final_df = updated_target.union(source_with_dates)
-        
-        print("Final DataFrame with SCD Type 2 implementation:")
-        final_df.orderBy(self.config.key_columns + ["start_date"]).show()
-        
+
+        logger.info("Final DataFrame with SCD Type 2 implementation created successfully")
+
         return final_df.orderBy(self.config.key_columns + ["start_date"])

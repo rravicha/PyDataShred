@@ -1,62 +1,35 @@
-from pyspark.sql import SparkSession
-from fastapi import FastAPI, Query
-from fastapi.responses import FileResponse, HTMLResponse
+"""FastAPI application for reading and serving data files.
+
+Run with: uvicorn run:app --port 8000
+"""
+import logging
 from typing import Optional
-import sys
-sys.path.append('/workspaces/PyDataShred/')
-import requests
+
+import pandas as pd
+from fastapi import FastAPI, Query, Request
+from fastapi.responses import FileResponse, HTMLResponse, JSONResponse
+
 from datashredpy.helper.data import Data
 from datashredpy.helper.enums import FileType
-import requests
-# uvicorn app:app --port 8000
 
-# app = FastAPI()
-
-# Initialize Spark session
-# spark = SparkSession.builder.appName("FastAPI_PySpark").getOrCreate()
-
-# @app.get("/")
-# def read_root():
-#     df = Data.read('/tests_data/MT cars.parquet', FileType.PARQUET)
-    # print(str(requests.url))
-    # df.show()
-    # return HTMLResponse(content=df.toPandas().to_html())
-    # return df
-    # return {"Pydatashred get": "Welcome to the FastAPI PySpark app!"}
-
-# @app.get("/read-file")
-# def read_files(file_path: Optional[str] = Query(None, description="Path to the file")):
-    
-#     '''
-#     You can call this endpoint like this: http://127.0.0.1:8000/read-file?file_path=path/to/your/file.txt.
-
-
-#     '''
-#     if file_path:
-#         return FileResponse(file_path)
-#     return {"error": "File path not provided"}
-# @app.get("/read-file")
-# def read_file(file_path: str):
-#     df = spark.read.csv(file_path, header=True, inferSchema=True)
-#     data = df.collect()
-#     return {"data": [row.asDict() for row in data]}
-# @app.post("/write-file")
-# def write_file(file_path: str, data: list):
-#     df = spark.createDataFrame(data)
-#     df.write.csv(file_path, header=True)
-#     return {"message": "File written successfully"}
-from fastapi import FastAPI, Request
-from fastapi.responses import HTMLResponse, FileResponse
-import pandas as pd
+logger = logging.getLogger(__name__)
 
 app = FastAPI()
+
+
 @app.get("/")
-def read_root():
-    print('shoot-'*10)
-    return {"Hello": "World1"}
+def read_root() -> dict:
+    """Root endpoint returning welcome message.
+    
+    Returns:
+        dict: Welcome message
+    """
+    logger.info("Root endpoint accessed")
+    return {"Hello": "World - PyDataShred API"}
+
 
 @app.get("/read", response_class=HTMLResponse)
-def read_file(request: Request):
+def read_file(request: Request) -> str:
     # Read the stored CSV file
     # df = pd.read_csv('emp.csv')
     df = Data.read('tests_data/emp.csv', FileType.CSV, use_pandas=True)

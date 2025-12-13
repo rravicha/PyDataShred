@@ -1,26 +1,20 @@
-"""
-DataMesh Layer Models
-=====================
+"""DataMesh Layer Models.
+
 Defines core data product models, contracts, SLAs, and quality rules for PyDataShred.
 
 This layer wraps the existing Client -> Domain -> App -> Resource hierarchy
 and adds self-serve, discoverable data products with contracts and governance.
 """
-
-import os
-import sys
-from dataclasses import dataclass, field
-from typing import List, Dict, Any, Optional, Literal
-from enum import Enum
-from datetime import datetime, timedelta
 import json
-
-if os.uname().nodename == 'zebronics':
-    sys.path.append('/home/susi/workspace/github/PyDataShred')
-else:
-    sys.path.append('/workspaces/PyDataShred')
+import logging
+from dataclasses import dataclass, field
+from datetime import datetime, timedelta
+from enum import Enum
+from typing import List, Dict, Any, Optional, Literal
 
 from datashredpy.api.models import Domain, App, Resources
+
+logger = logging.getLogger(__name__)
 
 
 # ============================================================================

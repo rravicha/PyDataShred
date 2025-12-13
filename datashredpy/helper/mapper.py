@@ -1,23 +1,17 @@
-import sys
-import os
+"""Mapper module for client and domain configuration management."""
+import json
+import logging
 import uuid
-from typing import Any
+from dataclasses import dataclass
+from typing import Any, Optional
+
 import yaml
 
-if os.uname().nodename == 'zebronics':
-    sys.path.append('/home/susi/workspace/github/PyDataShred')
-else:
-    sys.path.append('/workspaces/PyDataShred')
+from datashredpy.helper.models import (
+    Domain, App, Resources, Aws, S3, Rds, Bucket, Client
+)
 
-
-from datashredpy.helper.models import Domain, App, Resources, Aws, S3, Rds, Bucket, Client
-import json
-from dataclasses import dataclass
-
-
-
-
-
+logger = logging.getLogger(__name__)
 # meta_data = Client(
 #     client_id=1,
 #     client_name='client1',

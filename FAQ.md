@@ -51,3 +51,12 @@ def _expand_recursive_globs(package_data: Dict[str, List[str]]) -> Dict[str, Lis
 
 Local Stack token from github
 ls-soRifiNA-dIxA-BOno-QeQI-kAku1923a495
+
+dbx token
+dapi75cbe414671e3bfaf02a79648be6eed6
+dbx url
+https://dbc-467986f9-3e2c.cloud.databricks.com
+
+./venv/bin/pip3 install databricks-sdk
+
+python ./scripts/upload_to_databricks.py ./dist/pydatashred-1.0-py3-none-any.whl

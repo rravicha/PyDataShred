@@ -1,7 +1,6 @@
 import sys
 
 from pydantic import NatsDsn
-sys.path.append('/workspaces/PyDataShred/')
 
 from datashredpy.helper.models import Domain, App, Resources, Aws, S3, Rds, Bucket, Client, Nas
 import json

@@ -1,6 +1,5 @@
-"""
-DataMesh Integration Layer
-==========================
+"""DataMesh Integration Layer.
+
 Integrates DataMesh governance, contracts, and discovery with existing
 PyDataShred pipelines.
 
@@ -10,23 +9,15 @@ Provides:
 - Metadata publication post-run
 - Backward compatibility with existing Domain/App/Resource models
 """
-
-import os
-import sys
-from typing import Any, Dict, Optional, List, Callable
-from datetime import datetime
-from dataclasses import dataclass
 import logging
+from dataclasses import dataclass
+from datetime import datetime
+from typing import Any, Dict, Optional, List, Callable
 
-if os.uname().nodename == 'zebronics':
-    sys.path.append('/home/susi/workspace/github/PyDataShred')
-else:
-    sys.path.append('/workspaces/PyDataShred')
-
-from datashredpy.datamesh.models import DataProduct, DataProductContract, ComplianceLevel
+from datashredpy.api.models import Domain, App, Resources
 from datashredpy.datamesh.contract_validation import ContractValidator
 from datashredpy.datamesh.governance import GovernanceEngine, PolicyContext, EnforcementPoint
-from datashredpy.api.models import Domain, App, Resources
+from datashredpy.datamesh.models import DataProduct, DataProductContract, ComplianceLevel
 
 logger = logging.getLogger(__name__)
 

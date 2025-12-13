@@ -1,19 +1,11 @@
-"""
-Data Product Discovery Portal - API Models
-===========================================
+"""Data Product Discovery Portal - API Models.
+
 Pydantic models for REST API request/response.
 """
-
-import os
-import sys
-from typing import List, Dict, Any, Optional
 from datetime import datetime
-from pydantic import BaseModel, Field
+from typing import List, Dict, Any, Optional
 
-if os.uname().nodename == 'zebronics':
-    sys.path.append('/home/susi/workspace/github/PyDataShred')
-else:
-    sys.path.append('/workspaces/PyDataShred')
+from pydantic import BaseModel, Field
 
 
 # ============================================================================

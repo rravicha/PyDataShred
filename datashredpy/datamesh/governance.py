@@ -1,6 +1,5 @@
-"""
-Federated Governance Layer
-==========================
+"""Federated Governance Layer.
+
 Enforces global and domain-level governance policies.
 
 Policy-as-Code approach:
@@ -9,21 +8,13 @@ Policy-as-Code approach:
 - Enforcement points: ingestion, transformation, publish
 - Pluggable architecture
 """
-
-import os
-import sys
-from abc import ABC, abstractmethod
-from typing import Any, Dict, List, Optional, Tuple
-from enum import Enum
-from dataclasses import dataclass
-from datetime import datetime
 import logging
 import re
-
-if os.uname().nodename == 'zebronics':
-    sys.path.append('/home/susi/workspace/github/PyDataShred')
-else:
-    sys.path.append('/workspaces/PyDataShred')
+from abc import ABC, abstractmethod
+from dataclasses import dataclass
+from datetime import datetime
+from enum import Enum
+from typing import Any, Dict, List, Optional, Tuple
 
 from datashredpy.datamesh.models import (
     DataProduct,

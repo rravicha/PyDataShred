@@ -1,28 +1,29 @@
-"""
-DataMesh for PyDataShred - Complete Usage Examples
-===================================================
+"""DataMesh for PyDataShred - Complete Usage Examples.
+
 Demonstrates how to use the DataMesh layer with existing PyDataShred pipelines.
 """
-
+import logging
 import os
 import sys
-if os.uname().nodename == 'zebronics':
-    sys.path.append('/home/susi/workspace/github/PyDataShred')
-else:
-    sys.path.append('/workspaces/PyDataShred')
-
 from datetime import datetime
-from datashredpy.datamesh.models import (
-    DataProduct, DataProductContract, Schema, SchemaField, DataType,
-    DataQualityRule, SLA, ComplianceLevel, EXAMPLE_DATA_PRODUCT_DEFINITION
+
+from datashredpy.api.models import Domain, App, Resources
+from datashredpy.datamesh.contract_validation import (
+    SchemaValidator, QualityRuleEngine, ContractValidator
 )
-from datashredpy.datamesh.contract_validation import SchemaValidator, QualityRuleEngine, ContractValidator
 from datashredpy.datamesh.governance import (
     GovernanceEngine, PolicyContext, EnforcementPoint,
     PIIDetectionPolicy, SchemaDriftPolicy
 )
-from datashredpy.datamesh.pipeline_integration import DataProductPipeline, DataMeshIntegrationHelper
-from datashredpy.api.models import Domain, App, Resources
+from datashredpy.datamesh.models import (
+    DataProduct, DataProductContract, Schema, SchemaField, DataType,
+    DataQualityRule, SLA, ComplianceLevel, EXAMPLE_DATA_PRODUCT_DEFINITION
+)
+from datashredpy.datamesh.pipeline_integration import (
+    DataProductPipeline, DataMeshIntegrationHelper
+)
+
+logger = logging.getLogger(__name__)
 
 
 # ============================================================================
@@ -40,7 +41,7 @@ def example_1_create_data_product():
     - Specify compliance requirements
     """
     print("\n" + "="*70)
-    print("EXAMPLE 1: Create a Data Product with Contract")
+    logger.info("EXAMPLE 1: Create a Data Product with Contract")
     print("="*70)
     
     # Define schema fields
@@ -201,7 +202,7 @@ def example_2_schema_validation():
     - Error reporting
     """
     print("\n" + "="*70)
-    print("EXAMPLE 2: Schema Validation")
+    logger.info("EXAMPLE 2: Schema Validation")
     print("="*70)
     
     # Create simple schema
@@ -292,7 +293,7 @@ def example_3_schema_compatibility():
     - Removing required fields (incompatible)
     """
     print("\n" + "="*70)
-    print("EXAMPLE 3: Schema Compatibility & Versioning")
+    logger.info("EXAMPLE 3: Schema Compatibility & Versioning")
     print("="*70)
     
     # Original schema
@@ -369,7 +370,7 @@ def example_4_governance():
     - Policy results and remediation
     """
     print("\n" + "="*70)
-    print("EXAMPLE 4: Governance Policy Evaluation")
+    logger.info("EXAMPLE 4: Governance Policy Evaluation")
     print("="*70)
     
     # Create data product
@@ -425,7 +426,7 @@ def example_5_pipeline_integration():
     - Lifecycle management
     """
     print("\n" + "="*70)
-    print("EXAMPLE 5: Pipeline Integration with DataMesh")
+    logger.info("EXAMPLE 5: Pipeline Integration with DataMesh")
     print("="*70)
     
     # Create data product
@@ -495,7 +496,7 @@ def example_6_discovery_portal():
     - Validation endpoints
     """
     print("\n" + "="*70)
-    print("EXAMPLE 6: Discovery Portal API Usage")
+    logger.info("EXAMPLE 6: Discovery Portal API Usage")
     print("="*70)
     
     # These would be API calls in real usage

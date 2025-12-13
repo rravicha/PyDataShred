@@ -1,6 +1,4 @@
 import sys
-sys.path.append('/workspaces/PyDataShred/')
-sys.path.append('/workspaces/PyDataShred/tests_data/HATCHBACK')
 
 from datashredpy.helper.enums import FileType
 from datashredpy.helper.data import Data

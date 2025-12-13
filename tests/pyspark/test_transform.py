@@ -1,5 +1,4 @@
 import sys
-sys.path.append('/workspaces/PyDataShred/')
 import pytest
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import col

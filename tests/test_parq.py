@@ -1,5 +1,4 @@
 import sys
-sys.path.append('/workspace/PyDataShred')
 from datashredpy.helper.data import Data
 from datashredpy.helper.enums import FileType
 from tests.enums import TestFilePath

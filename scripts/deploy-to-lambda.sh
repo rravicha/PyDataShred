@@ -1,23 +1,31 @@
 #!/bin/bash
-# Deploy PyDataShred as AWS Lambda Layer
-# Usage: ./deploy-to-lambda.sh pydatashred-layer pydatashred-lambda-layer.zip
+# Quick deployment script for AWS Lambda
+# Usage: ./deploy-to-lambda.sh <wheel-file> [aws-region] [aws-profile]
 
-set -e
+WHEEL_FILE=$1
+AWS_REGION=${2:-us-east-1}
+PROFILE=${3:-default}
 
-# Color output
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-BLUE='\033[0;34m'
-NC='\033[0m' # No Color
+if [ -z "$WHEEL_FILE" ]; then
+    echo "Usage: $0 <wheel-file> [aws-region] [aws-profile]"
+    echo "Example: $0 dist/pydatashred-1.0-py3-none-any.whl us-east-1 default"
+    exit 1
+fi
 
-# Arguments
-LAYER_NAME="${1:?Error: Layer name required. Usage: $0 layer-name [zip-file]}"
-ZIP_FILE="${2:?Error: Zip file required. Usage: $0 layer-name zip-file}"
-FUNCTION_NAME="${3:-}"  # Optional
+if [ ! -f "$WHEEL_FILE" ]; then
+    echo "❌ Error: Wheel file not found: $WHEEL_FILE"
+    exit 1
+fi
 
-echo -e "${YELLOW}═══════════════════════════════════════════${NC}"
-echo -e "${YELLOW}  PyDataShred → AWS Lambda Layer${NC}"
+WHEEL_NAME=$(basename "$WHEEL_FILE")
+LAYER_NAME="pydatashred-layer"
+
+echo "🚀 PyDataShred AWS Lambda Deployment"
+echo "======================================"
+echo "Wheel: $WHEEL_NAME"
+echo "Region: $AWS_REGION"
+echo "Profile: $PROFILE"
+echo ""
 echo -e "${YELLOW}═══════════════════════════════════════════${NC}"
 echo ""
 

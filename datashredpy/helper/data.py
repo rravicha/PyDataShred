@@ -1,34 +1,45 @@
-from snowflake.snowpark import Session
+"""Data reading module for various file formats and data sources."""
+import logging
+from typing import Optional, List, Dict, Union
+
+import pandas as pd
 import requests
-from typing import Optional, List, Dict
-import pandas as Pandas
+from snowflake.snowpark import Session
 from pyspark.sql import DataFrame as SparkDataFrame
 
 from datashredpy.utilities.init_spark import SparkSessionOption
 from datashredpy.helper.enums import FileType, DbType, ApiType
 
+logger = logging.getLogger(__name__)
+
 class Data:
+    """Data reader class supporting multiple file formats and data sources."""
 
     @classmethod
-    def _read_csv_pandas(cls, rel_path:str, **options) ->  Pandas.DataFrame:
-        return Pandas.read_csv(rel_path,**options)
+    def _read_csv_pandas(cls, rel_path: str, **options) -> pd.DataFrame:
+        """Read CSV file using pandas."""
+        return pd.read_csv(rel_path, **options)
     
     @classmethod
-    def _read_json_pandas(cls, rel_path:str, **options) ->  Pandas.DataFrame:
-        return Pandas.read_json(rel_path,**options)
+    def _read_json_pandas(cls, rel_path: str, **options) -> pd.DataFrame:
+        """Read JSON file using pandas."""
+        return pd.read_json(rel_path, **options)
 
     @classmethod
-    def _read_xlsx_pandas(cls, rel_path:str, **options) ->  Pandas.DataFrame:
-        return Pandas.read_excel(rel_path, engine='openpyxl')
+    def _read_xlsx_pandas(cls, rel_path: str, **options) -> pd.DataFrame:
+        """Read Excel file using pandas."""
+        return pd.read_excel(rel_path, engine='openpyxl')
 
     @classmethod
-    def _read_parquet_pandas(cls, rel_path:str, **options) ->  Pandas.DataFrame:
-        return Pandas.read_parquet(rel_path)
+    def _read_parquet_pandas(cls, rel_path: str, **options) -> pd.DataFrame:
+        """Read Parquet file using pandas."""
+        return pd.read_parquet(rel_path)
 
     @classmethod
-    def _read_xml_pandas(cls, rel_path:str, **options) ->  Pandas.DataFrame:
-        # write code to read xml file , root node is named as root
-        import xml.etree.ElementTree as ET  
+    def _read_xml_pandas(cls, rel_path: str, **options) -> pd.DataFrame:
+        """Read XML file using ElementTree and pandas."""
+        import xml.etree.ElementTree as ET
+        
         tree = ET.parse(rel_path)
         root = tree.getroot()
         data = []
@@ -37,60 +48,56 @@ class Data:
             for elem in child:
                 row[elem.tag] = elem.text
             data.append(row)
-        df = Pandas.DataFrame(data)
-        return df
+        return pd.DataFrame(data)
 
     @classmethod
-    def _read_delta_pandas(cls, rel_path:str, **options) ->  Pandas.DataFrame:
+    def _read_delta_pandas(cls, rel_path: str, **options) -> Optional[pd.DataFrame]:
+        """Delta format reading not yet implemented for pandas."""
+        logger.warning("Delta format reading not implemented for pandas backend")
         return None
-#
     @classmethod
-    def _read_csv_spark(cls, rel_path:str, **options) ->  SparkDataFrame:
-        
-        return cls.spark.read.option("header", "true").option("inferSchema", "true").csv(rel_path)
+    def _read_csv_spark(cls, rel_path: str, **options) -> SparkDataFrame:
+        """Read CSV file using Spark."""
+        return cls.spark.read.option(
+            "header", "true"
+        ).option(
+            "inferSchema", "true"
+        ).csv(rel_path)
     
     @classmethod
-    def _read_json_spark(cls, rel_path:str, **options) ->  SparkDataFrame:
+    def _read_json_spark(cls, rel_path: str, **options) -> SparkDataFrame:
+        """Read JSON file using Spark."""
         return cls.spark.read.json(rel_path)
 
     @classmethod
-    def _read_xlsx_spark(cls, rel_path:str, **options) ->  SparkDataFrame:
+    def _read_xlsx_spark(cls, rel_path: str, **options) -> Optional[SparkDataFrame]:
+        """Excel reading not implemented for Spark."""
+        logger.warning("Excel format reading not implemented for Spark backend")
         return None
     
     @classmethod
-    def _read_delta_spark(cls, rel_path:str, **options) ->  SparkDataFrame:
+    def _read_delta_spark(cls, rel_path: str, **options) -> SparkDataFrame:
+        """Read Delta format using Spark."""
         return cls.spark.read.format("delta").load(rel_path)
    
     @classmethod
-    def _read_parquet_spark(cls, rel_path:str, **options) ->  SparkDataFrame:
+    def _read_parquet_spark(cls, rel_path: str, **options) -> SparkDataFrame:
+        """Read Parquet file using Spark."""
         return cls.spark.read.parquet(rel_path)
 
     @classmethod
-    def _read_xml_spark(cls, rel_path:str, **options) ->  SparkDataFrame:
+    def _read_xml_spark(cls, rel_path: str, **options) -> Optional[SparkDataFrame]:
+        """XML reading not implemented for Spark."""
+        logger.warning("XML format reading not implemented for Spark backend")
         return None
 
     @classmethod
-    def _read_snowflake(cls, table_name, **snowpark_options) ->  SparkDataFrame:
+    def _read_snowflake(cls, table_name: str, **snowpark_options) -> SparkDataFrame:
+        """Read table from Snowflake using Snowpark."""
         return Session.builder.configs(snowpark_options).create().table(table_name)
     
     @classmethod
-    def _read_sqlite(cls, table_name, **options):
-        import sqlite3
-        import sys,os
-        sys.path.append('/workspace/PyDataShred/tests_data/HATCHBACK/')
-        conn=sqlite3.connect('storage.db')
-        cur=conn.cursor()
-        cur.execute("SELECT * FROM {table_name};")
-        rows=cur.fetchall()
-        return rows
-    @classmethod
-    def _read_duckdb(cls, table_name, **options):
-        import duckdb
-        conn = duckdb.connect('storage.db')
-        return conn.execute("SELECT * FROM {table_name};").fetchall()
-    
-    @classmethod
-    def _read_api(cls, url, **options) -> List[Dict]:
+    def _read_api(cls, url: str, **options) -> List[Dict]:
         return requests.get(url).json()
 
     @classmethod
@@ -100,10 +107,9 @@ class Data:
             if api_type == ApiType.DEFAULT_API:
                 return cls._read_api(rel_path, **options)
             
-        if db_type:
-            if db_type == DbType.SQLITE:
-                return cls._read_sqlite(rel_path, **options)
-            
+        if db_type and db_type != DbType.SQLITE:
+            logger.warning(f"Database type {db_type} not directly supported via read(). Use appropriate connector.")
+
         if use_pandas:
             if file_type == FileType.CSV:
                 return cls._read_csv_pandas(rel_path, **options)

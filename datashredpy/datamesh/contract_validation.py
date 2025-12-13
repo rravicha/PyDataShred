@@ -1,22 +1,13 @@
-"""
-Schema Validation & Quality Enforcement Engine
-==============================================
+"""Schema Validation & Quality Enforcement Engine.
+
 Validates data against DataProduct contracts at runtime.
 - Schema validation
 - Quality rule enforcement
 - Backward compatibility checks
 """
-
-import os
-import sys
-from typing import Any, Dict, List, Tuple, Optional
-from datetime import datetime
 import logging
-
-if os.uname().nodename == 'zebronics':
-    sys.path.append('/home/susi/workspace/github/PyDataShred')
-else:
-    sys.path.append('/workspaces/PyDataShred')
+from datetime import datetime
+from typing import Any, Dict, List, Tuple, Optional
 
 from datashredpy.datamesh.models import (
     DataProductContract,

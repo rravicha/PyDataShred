@@ -1,17 +1,16 @@
-'''
-To run this app via command line | uvicorn app:app --port 8888
-'''
-# Core Packages
-import sys
-sys.path.append('/workspaces/PyDataShred/')
+"""FastAPI application for client metadata registration.
+
+Run with: uvicorn main:app --port 8888
+"""
 import json
+import logging
 from typing import Optional
+
 import requests
-# External Packages
 from fastapi import FastAPI, Query
 from fastapi.responses import FileResponse, HTMLResponse
-# Custom Built Packages
+
 from datashredpy.api.models import Client
 from datashredpy.api.routes import Register
 
-client_dict = Register.metadata(json_data)
+logger = logging.getLogger(__name__)

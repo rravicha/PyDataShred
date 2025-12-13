@@ -1,14 +1,24 @@
-from models import *
-# from sqlalchemy.ext.declarative import declarative_base
+"""Routes for registering and managing metadata."""
+import json
+import logging
 
-# from sqlalchemy import create_engine
-# from sqlalchemy.orm import sessionmaker
-# from sqlalchemy.ext.declarative import declarative_base
+from datashredpy.api.models import Domain, Client
 
-# Base = declarative_base()
-# engine = create_engine("sqlite:///database.db")
+logger = logging.getLogger(__name__)
+
+
 class Register(Domain):
+    """Register domain class for metadata management."""
+
     @classmethod
-    def metadata(cls, metadata_json):
-        client_dict = json.loads(json_data)
+    def metadata(cls, metadata_json: str) -> Client:
+        """Parse metadata JSON and return Client object.
+        
+        Args:
+            metadata_json: JSON string containing client metadata
+            
+        Returns:
+            Client: Parsed client object
+        """
+        client_dict = json.loads(metadata_json)
         return Client(**client_dict)

@@ -1,21 +1,14 @@
-"""
-Data Product Discovery Portal - FastAPI Routes
-===============================================
+"""Data Product Discovery Portal - FastAPI Routes.
+
 REST API for discovering, registering, and managing data products.
 """
-
-import os
-import sys
-from typing import List, Optional
-from datetime import datetime
 import logging
-
-if os.uname().nodename == 'zebronics':
-    sys.path.append('/home/susi/workspace/github/PyDataShred')
-else:
-    sys.path.append('/workspaces/PyDataShred')
+from datetime import datetime
+from typing import List, Optional
 
 from fastapi import APIRouter, HTTPException, Query, Body
+
+from datashredpy.api.models import Domain, App, Resources
 from datashredpy.datamesh.api_models import (
     RegisterDataProductRequest,
     PublishContractRequest,
@@ -31,6 +24,8 @@ from datashredpy.datamesh.api_models import (
     SAMPLE_CONTRACT_RESPONSE,
     SAMPLE_GOVERNANCE_RESPONSE
 )
+from datashredpy.datamesh.contract_validation import ContractValidator
+from datashredpy.datamesh.governance import GovernanceEngine, PolicyContext, EnforcementPoint
 from datashredpy.datamesh.models import (
     DataProduct,
     DataProductContract,
@@ -40,9 +35,6 @@ from datashredpy.datamesh.models import (
     DataQualityRule,
     SLA
 )
-from datashredpy.datamesh.contract_validation import ContractValidator
-from datashredpy.datamesh.governance import GovernanceEngine, PolicyContext, EnforcementPoint
-from datashredpy.api.models import Domain, App, Resources
 
 logger = logging.getLogger(__name__)
 

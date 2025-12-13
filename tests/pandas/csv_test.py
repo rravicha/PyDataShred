@@ -1,5 +1,4 @@
 import sys
-sys.path.append('/workspaces/PyDataShred')
 
 import pytest
 from datashredpy.helper.data import Data
