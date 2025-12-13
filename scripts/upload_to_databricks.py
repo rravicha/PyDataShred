@@ -99,12 +99,12 @@ if __name__ == "__main__":
     parser.add_argument(
         "--host",
         help="Databricks workspace URL (or use DATABRICKS_HOST env var)",
-        default="https://dbc-467986f9-3e2c.cloud.databricks.com"
+        default=""
     )
     parser.add_argument(
         "--token",
         help="Databricks API token (or use DATABRICKS_TOKEN env var)",
-        default="dapi75cbe414671e3bfaf02a79648be6eed6"
+        default=""
     )
     parser.add_argument(
         "--target",
