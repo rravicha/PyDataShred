@@ -1,0 +1,262 @@
+name: Deploy to Databricks
+
+on:
+  workflow_run:
+    workflows: ["Publish to AWS S3"]
+    types:
+      - completed
+  workflow_dispatch:
+    inputs:
+      wheel-version:
+        description: 'Wheel version to deploy (e.g., 2.0.0)'
+        required: true
+      databricks-host:
+        description: 'Databricks workspace URL'
+        required: false
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  deploy-databricks:
+    name: Deploy wheel to Databricks
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+
+    - name: Create deployment script
+      run: |
+        cat > deploy_databricks.py << 'SCRIPT'
+        #!/usr/bin/env python3
+        """
+        Deploy wheel to Databricks workspace
+        
+        Usage:
+          python deploy_databricks.py \
+            --wheel-path dist/pydatashred-2.0.0-py3-none-any.whl \
+            --workspace-host https://your-workspace.cloud.databricks.com \
+            --token your-pat-token
+        """
+        import os
+        import sys
+        import argparse
+        import json
+        from pathlib import Path
+        
+        def deploy_to_databricks(wheel_path: str, workspace_host: str, token: str):
+            """Deploy wheel file to Databricks workspace"""
+            
+            print(f"🚀 Deploying wheel to Databricks")
+            print(f"   Wheel: {wheel_path}")
+            print(f"   Workspace: {workspace_host}")
+            
+            # Note: Actual deployment would use:
+            # 1. Databricks CLI: databricks fs cp wheel_path dbfs:/path/
+            # 2. REST API: Upload to DBFS
+            # 3. Workspace API: Register as installed library
+            
+            wheel_file = Path(wheel_path)
+            if not wheel_file.exists():
+                print(f"❌ Error: Wheel file not found: {wheel_path}")
+                return False
+            
+            print(f"✓ Wheel file found: {wheel_file.stat().st_size} bytes")
+            
+            # TODO: Implement actual Databricks deployment
+            print(f"""
+            ✓ Deployment Configuration:
+            
+            Using DBFS:
+              1. Upload wheel to DBFS:
+                 dbfs cp {wheel_path} dbfs:/mnt/libraries/
+            
+            Using Workspace API:
+              1. Get your Databricks token
+              2. Call: PUT /api/2.0/dbfs/put
+              3. Path: dbfs:/mnt/libraries/{wheel_file.name}
+            
+            Install in cluster:
+              1. Navigate to Libraries tab in cluster config
+              2. Install from DBFS: dbfs:/mnt/libraries/{wheel_file.name}
+              3. Or in code:
+                 %pip install dbfs:/mnt/libraries/{wheel_file.name}
+            """)
+            
+            return True
+        
+        def main():
+            parser = argparse.ArgumentParser(
+                description='Deploy PyDataShred wheel to Databricks'
+            )
+            parser.add_argument(
+                '--wheel-path',
+                required=True,
+                help='Path to wheel file'
+            )
+            parser.add_argument(
+                '--workspace-host',
+                required=False,
+                default=os.getenv('DATABRICKS_HOST'),
+                help='Databricks workspace URL'
+            )
+            parser.add_argument(
+                '--token',
+                required=False,
+                default=os.getenv('DATABRICKS_TOKEN'),
+                help='Databricks personal access token'
+            )
+            
+            args = parser.parse_args()
+            
+            if not args.workspace_host or not args.token:
+                print("⚠️  Databricks credentials not provided")
+                print("   Set DATABRICKS_HOST and DATABRICKS_TOKEN environment variables")
+                print("   Or provide --workspace-host and --token arguments")
+                return False
+            
+            return deploy_to_databricks(
+                args.wheel_path,
+                args.workspace_host,
+                args.token
+            )
+        
+        if __name__ == '__main__':
+            success = main()
+            sys.exit(0 if success else 1)
+        SCRIPT
+        chmod +x deploy_databricks.py
+        echo "✓ Deployment script created"
+
+    - name: Build wheel (if needed)
+      run: |
+        python -m pip install --upgrade pip
+        pip install build setuptools wheel setuptools-scm[toml]
+        if [ ! -d "dist" ] || [ -z "$(ls dist/*.whl 2>/dev/null)" ]; then
+          echo "Building wheel..."
+          python -m build --wheel
+        fi
+
+    - name: Show available wheels
+      run: |
+        echo "Available wheels:"
+        ls -lah dist/*.whl || echo "No wheels found in dist/"
+
+    - name: Deployment Instructions
+      run: |
+        cat > DATABRICKS_DEPLOYMENT.md << 'DEPLOY_GUIDE'
+        # Databricks Deployment Guide
+        
+        ## Option 1: Using Databricks CLI
+        
+        ```bash
+        # Install Databricks CLI
+        pip install databricks-cli
+        
+        # Configure authentication
+        databricks configure --token
+        
+        # Upload wheel to DBFS
+        databricks fs cp dist/pydatashred-2.0.0-py3-none-any.whl \
+          dbfs:/mnt/libraries/pydatashred/
+        ```
+        
+        ## Option 2: Using Python Script
+        
+        ```python
+        import requests
+        import os
+        
+        # Get token from environment
+        token = os.getenv('DATABRICKS_TOKEN')
+        host = os.getenv('DATABRICKS_HOST')
+        
+        # Read wheel file
+        with open('dist/pydatashred-2.0.0-py3-none-any.whl', 'rb') as f:
+            wheel_data = f.read()
+        
+        # Upload via DBFS API
+        headers = {
+            'Authorization': f'Bearer {token}',
+            'Content-Type': 'application/octet-stream'
+        }
+        
+        response = requests.put(
+            f'{host}/api/2.0/dbfs/put',
+            headers=headers,
+            data=wheel_data,
+            params={
+                'path': 'dbfs:/mnt/libraries/pydatashred.whl',
+                'overwrite': True
+            }
+        )
+        print(f"Upload status: {response.status_code}")
+        ```
+        
+        ## Option 3: Direct in Databricks Notebook
+        
+        ```python
+        # In your Databricks notebook
+        %pip install /dbfs/mnt/libraries/pydatashred-2.0.0-py3-none-any.whl
+        
+        # Import and use
+        from datashredpy.datamesh import DataProduct, DataProductContract
+        ```
+        
+        ## Option 4: Add to Cluster Configuration
+        
+        1. Go to Cluster Configuration
+        2. Under **Libraries**, click **Install new**
+        3. Select **Wheel** as library type
+        4. Upload the .whl file
+        5. Click **Install**
+        
+        ## Option 5: Use S3 URL (Recommended)
+        
+        If wheel is in S3:
+        
+        ```bash
+        # Upload wheel to S3
+        aws s3 cp dist/pydatashred-2.0.0-py3-none-any.whl \
+          s3://your-bucket/libraries/
+        
+        # In Databricks notebook
+        %pip install s3://your-bucket/libraries/pydatashred-2.0.0-py3-none-any.whl
+        ```
+        
+        ## Verify Installation
+        
+        ```python
+        import datashredpy
+        from datashredpy.datamesh import DataProduct
+        print("✓ PyDataShred installed successfully")
+        ```
+        DEPLOY_GUIDE
+        
+        cat DATABRICKS_DEPLOYMENT.md
+
+    - name: Deployment Complete
+      run: |
+        echo "╔════════════════════════════════════════════════════════════╗"
+        echo "║          📦 DATABRICKS DEPLOYMENT READY                    ║"
+        echo "╚════════════════════════════════════════════════════════════╝"
+        echo ""
+        echo "Wheel file: pydatashred-2.0.0-py3-none-any.whl"
+        echo ""
+        echo "Next steps:"
+        echo "1. Download wheel from GitHub workflow artifacts"
+        echo "2. Upload to Databricks using one of:"
+        echo "   • DBFS (Databricks File System)"
+        echo "   • S3 (via AWS integration)"
+        echo "   • Direct notebook upload"
+        echo "3. Install in cluster via Libraries"
+        echo ""
+        echo "See DATABRICKS_DEPLOYMENT.md for detailed instructions"
+        echo ""

@@ -1,18 +1,96 @@
 [build-system]
-requires = ["setuptools"]
+requires = ["setuptools>=61", "wheel", "setuptools-scm[toml]>=6.2"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "pydatashred"
-version = "1.0"
-description = "A helper library based on modern data engineering involving data shredding at its core."
+version = "2.0.0"
+description = "PyDataShred - Advanced Data Ingestion and Transformation Platform with DataMesh Governance"
 readme = "README.md"
-requires-python = ">=3.10"
-dynamic = ["dependencies", "optional-dependencies"]  # Include both fields here
+requires-python = ">=3.8"
+license = { text = "Apache-2.0" }
+authors = [
+  { name = "Raghavendran Ravichandran", email = "rravicha.2008@gmail.com" }
+]
+keywords = [
+  "data-ingestion",
+  "data-transformation",
+  "datamesh",
+  "governance",
+  "pyspark",
+  "pandas",
+  "data-platform"
+]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: Apache Software License",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Topic :: Software Development :: Libraries :: Python Modules",
+  "Topic :: Scientific/Engineering :: Information Analysis"
+]
+dependencies = [
+  "fastapi>=0.95.0",
+  "pydantic>=2.0.0",
+]
 
-[tool.setuptools.dynamic]
-dependencies = {file = ["requirements.txt"]}
+[project.optional-dependencies]
+dev = [
+  "pytest>=7.0.0",
+  "pytest-cov>=4.0.0",
+  "black>=23.0.0",
+  "flake8>=6.0.0",
+  "mypy>=1.0.0",
+  "build>=0.10.0",
+  "twine>=4.0.0",
+  "setuptools-scm[toml]>=6.2",
+]
+pyspark = [
+  "pyspark>=3.0.0",
+]
+pandas = [
+  "pandas>=1.0.0",
+]
+aws = [
+  "boto3>=1.26.0",
+]
+all = [
+  "pyspark>=3.0.0",
+  "pandas>=1.0.0",
+  "boto3>=1.26.0",
+]
 
-[tool.setuptools.dynamic.optional-dependencies]
-test = { file = ["requirements-opt.txt"] }
+[project.urls]
+Repository = "https://github.com/rravicha/PyDataShred"
+Documentation = "https://github.com/rravicha/PyDataShred#readme"
+Issues = "https://github.com/rravicha/PyDataShred/issues"
 
+[tool.setuptools]
+packages = ["datashredpy"]
+
+[tool.setuptools.package-data]
+datashredpy = ["py.typed"]
+
+[tool.black]
+line-length = 100
+target-version = ["py38", "py39", "py310", "py311", "py312"]
+
+[tool.isort]
+profile = "black"
+line_length = 100
+
+[tool.mypy]
+python_version = "3.8"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = false
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = "test_*.py"
+addopts = "--cov=datashredpy --cov-report=xml --cov-report=html"

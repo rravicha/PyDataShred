@@ -1,0 +1,179 @@
+name: Build Wheel Package
+
+on:
+  push:
+    branches:
+      - main
+      - master
+      - develop
+    tags:
+      - 'v*'
+  pull_request:
+    branches:
+      - main
+      - master
+      - develop
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build wheel and source distribution
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.8', '3.9', '3.10', '3.11', '3.12']
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0  # Full history for versioning
+
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python-version }}
+        cache: 'pip'
+
+    - name: Install build dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install build setuptools wheel setuptools-scm[toml]
+
+    - name: Build wheel
+      run: |
+        python -m build --wheel
+
+    - name: Build source distribution (Python 3.10 only)
+      if: matrix.python-version == '3.10'
+      run: |
+        python -m build --sdist
+
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: python-${{ matrix.python-version }}-wheel
+        path: dist/
+        retention-days: 30
+
+    - name: List generated files
+      run: |
+        echo "=== Generated Distribution Files ==="
+        ls -lah dist/
+        echo "=== File Details ==="
+        file dist/*
+
+  test-wheel:
+    name: Test wheel installation
+    runs-on: ubuntu-latest
+    needs: build
+    strategy:
+      matrix:
+        python-version: ['3.10']
+
+    steps:
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Download wheel artifact
+      uses: actions/download-artifact@v3
+      with:
+        name: python-${{ matrix.python-version }}-wheel
+        path: dist/
+
+    - name: Install wheel
+      run: |
+        pip install --upgrade pip
+        pip install dist/*.whl
+        
+    - name: Verify installation
+      run: |
+        python -c "import datashredpy; print(f'✓ datashredpy imported successfully')"
+        python -c "from datashredpy.datamesh import DataProduct; print(f'✓ DataMesh module available')"
+
+  validate:
+    name: Code validation
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+        cache: 'pip'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install build setuptools wheel setuptools-scm[toml]
+
+    - name: Validate Python syntax
+      run: |
+        echo "=== Validating Python Syntax ==="
+        python -m py_compile datashredpy/datamesh/*.py
+        echo "✓ All Python files have valid syntax"
+
+    - name: Check imports
+      run: |
+        echo "=== Checking Imports ==="
+        python -c "from datashredpy.datamesh import *; print('✓ All imports work correctly')"
+
+  create-release:
+    name: Create GitHub Release
+    runs-on: ubuntu-latest
+    needs: [build, test-wheel, validate]
+    if: startsWith(github.ref, 'refs/tags/v')
+    permissions:
+      contents: write
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Download all artifacts
+      uses: actions/download-artifact@v3
+      with:
+        path: all-wheels/
+
+    - name: Prepare release assets
+      run: |
+        mkdir -p release-assets
+        find all-wheels -name "*.whl" -o -name "*.tar.gz" | xargs -I {} cp {} release-assets/
+        ls -lah release-assets/
+
+    - name: Create Release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: release-assets/*
+        draft: false
+        prerelease: false
+        generate_release_notes: true
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  notify-build-success:
+    name: Notify build success
+    runs-on: ubuntu-latest
+    needs: [build, test-wheel, validate]
+    if: success()
+
+    steps:
+    - name: Build Success Summary
+      run: |
+        echo "╔════════════════════════════════════════════════════════════╗"
+        echo "║                 ✅ BUILD SUCCESSFUL                        ║"
+        echo "╚════════════════════════════════════════════════════════════╝"
+        echo ""
+        echo "Workflow Status: SUCCESS"
+        echo "Build artifacts available for download"
+        echo ""
+        echo "Next steps:"
+        echo "  1. Download wheel files from workflow artifacts"
+        echo "  2. Upload to S3 for Databricks/Lambda/Glue access"
+        echo "  3. Or attach wheels to GitHub Release"
+        echo ""

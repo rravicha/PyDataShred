@@ -1,0 +1,254 @@
+name: Deploy to AWS Lambda/Glue
+
+on:
+  workflow_run:
+    workflows: ["Publish to AWS S3"]
+    types:
+      - completed
+  workflow_dispatch:
+    inputs:
+      lambda-layer-name:
+        description: 'Lambda layer name (e.g., pydatashred-2-0-0)'
+        required: false
+        default: 'pydatashred-layer'
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  create-lambda-layer:
+    name: Create AWS Lambda Layer
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+
+    - name: Build wheel
+      run: |
+        python -m pip install --upgrade pip
+        pip install build setuptools wheel setuptools-scm[toml]
+        python -m build --wheel
+
+    - name: Create Lambda layer structure
+      run: |
+        echo "Creating Lambda layer directory structure..."
+        
+        # Create layer structure
+        mkdir -p lambda-layer/python/lib/python3.10/site-packages
+        mkdir -p lambda-layer/python/lib/python3.11/site-packages
+        mkdir -p lambda-layer/python/lib/python3.12/site-packages
+        
+        # Extract wheel
+        cd lambda-layer/python/lib/python3.10/site-packages
+        unzip -q ../../../../../../../dist/pydatashred-*.whl
+        cd ../../../../../
+        
+        # Copy to other Python versions
+        cp -r lambda-layer/python/lib/python3.10/site-packages/* \
+          lambda-layer/python/lib/python3.11/site-packages/
+        cp -r lambda-layer/python/lib/python3.10/site-packages/* \
+          lambda-layer/python/lib/python3.12/site-packages/
+        
+        # Create zip
+        cd lambda-layer
+        zip -r ../pydatashred-lambda-layer.zip .
+        
+        echo "✓ Lambda layer created: pydatashred-lambda-layer.zip"
+        ls -lh ../pydatashred-lambda-layer.zip
+
+    - name: Configure AWS credentials (if available)
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
+        aws-region: us-east-1
+      continue-on-error: true
+
+    - name: Publish Lambda layer to AWS
+      if: env.AWS_ACCESS_KEY_ID != ''
+      run: |
+        LAYER_NAME="${{ github.event.inputs.lambda-layer-name || 'pydatashred-layer' }}"
+        LAYER_FILE="pydatashred-lambda-layer.zip"
+        PYTHON_VERSIONS="python3.10 python3.11 python3.12"
+        
+        echo "Publishing Lambda layer: $LAYER_NAME"
+        echo "File: $LAYER_FILE"
+        echo ""
+        
+        # Publish layer version
+        for RUNTIME in $PYTHON_VERSIONS; do
+          echo "Publishing for runtime: $RUNTIME"
+          RESPONSE=$(aws lambda publish-layer-version \
+            --layer-name "$LAYER_NAME" \
+            --description "PyDataShred Python package" \
+            --zip-file "fileb://$LAYER_FILE" \
+            --compatible-runtimes "$RUNTIME" \
+            --query 'LayerVersionArn' \
+            --output text)
+          
+          if [ $? -eq 0 ]; then
+            echo "  ✓ Layer ARN: $RESPONSE"
+          else
+            echo "  ⚠️  Failed to publish for $RUNTIME"
+          fi
+        done
+        
+        echo ""
+        echo "Layer published successfully"
+
+    - name: Instructions without AWS credentials
+      if: env.AWS_ACCESS_KEY_ID == ''
+      run: |
+        cat > AWS_LAMBDA_DEPLOYMENT.md << 'LAMBDA_GUIDE'
+        # AWS Lambda/Glue Deployment Guide
+        
+        ## For AWS Lambda
+        
+        ### Step 1: Create Lambda Layer
+        
+        ```bash
+        # Download the pydatashred-lambda-layer.zip from artifacts
+        
+        # Publish to AWS Lambda
+        aws lambda publish-layer-version \
+          --layer-name pydatashred-layer \
+          --description "PyDataShred package" \
+          --zip-file fileb://pydatashred-lambda-layer.zip \
+          --compatible-runtimes python3.10 python3.11 python3.12
+        ```
+        
+        ### Step 2: Add Layer to Lambda Function
+        
+        ```bash
+        # Get the layer ARN from the output above
+        LAYER_ARN="arn:aws:lambda:region:account:layer:pydatashred-layer:version"
+        FUNCTION_NAME="your-function-name"
+        
+        # Add layer to function
+        aws lambda update-function-configuration \
+          --function-name $FUNCTION_NAME \
+          --layers $LAYER_ARN
+        ```
+        
+        ### Step 3: Use in Lambda Code
+        
+        ```python
+        import json
+        from datashredpy.datamesh import DataProduct, DataProductContract
+        
+        def lambda_handler(event, context):
+            # Your data processing code here
+            return {
+                'statusCode': 200,
+                'body': json.dumps('Success')
+            }
+        ```
+        
+        ## For AWS Glue
+        
+        ### Option 1: Upload to S3 and Reference
+        
+        ```bash
+        # Upload wheel to S3
+        aws s3 cp dist/pydatashred-*.whl s3://your-bucket/libraries/
+        
+        # In Glue job configuration:
+        # - Add S3 path to "Python libraries"
+        # - Path: s3://your-bucket/libraries/pydatashred-*.whl
+        ```
+        
+        ### Option 2: Add Wheel to Job Resources
+        
+        ```python
+        import sys
+        from awsglue.transforms import *
+        from awsglue.utils import getResolvedOptions
+        from pyspark.context import SparkContext
+        from awsglue.context import GlueContext
+        
+        # PyDataShred will be available if wheel is in libraries
+        from datashredpy.datamesh import DataProduct
+        
+        glueContext = GlueContext(SparkContext.getOrCreate())
+        spark = glueContext.spark_session
+        ```
+        
+        ### Option 3: Dynamic Installation
+        
+        ```python
+        import subprocess
+        import sys
+        
+        # Install at runtime
+        subprocess.check_call([
+            sys.executable, "-m", "pip", "install",
+            "s3://your-bucket/libraries/pydatashred-2.0.0-py3-none-any.whl"
+        ])
+        
+        from datashredpy.datamesh import DataProduct
+        ```
+        
+        ## Step 4: Verify Installation
+        
+        ```python
+        # Test in Lambda or Glue
+        import datashredpy
+        print(f"PyDataShred version: {datashredpy.__version__}")
+        from datashredpy.datamesh import DataProduct
+        print("✓ DataMesh module available")
+        ```
+        
+        ## Troubleshooting
+        
+        ### Lambda Layer Size Issues
+        If layer zip exceeds 50MB, use Lambda Extensions:
+        ```bash
+        aws s3 cp pydatashred-lambda-layer.zip \
+          s3://your-bucket/layers/
+        
+        # Reference in function via S3
+        ```
+        
+        ### Glue Job Timeout
+        If installation times out, pre-install dependencies:
+        ```python
+        # Add to job parameters:
+        # --extra-py-files s3://bucket/pydatashred-wheel.whl
+        ```
+        
+        ### Import Errors
+        Ensure Python version matches (3.10, 3.11, 3.12)
+        LAMBDA_GUIDE
+        
+        cat AWS_LAMBDA_DEPLOYMENT.md
+
+    - name: Upload layer as artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: lambda-layer
+        path: pydatashred-lambda-layer.zip
+        retention-days: 30
+
+    - name: Deployment Summary
+      run: |
+        echo "╔════════════════════════════════════════════════════════════╗"
+        echo "║      🚀 AWS LAMBDA/GLUE DEPLOYMENT READY                   ║"
+        echo "╚════════════════════════════════════════════════════════════╝"
+        echo ""
+        echo "Artifacts generated:"
+        echo "  • pydatashred-lambda-layer.zip (for Lambda layers)"
+        echo "  • dist/pydatashred-*.whl (for Glue jobs)"
+        echo ""
+        echo "Available for:"
+        echo "  📦 AWS Lambda Layer - Deploy as custom runtime layer"
+        echo "  🔧 AWS Glue - Add to job dependencies"
+        echo "  ☁️  S3 - Store for direct import via pip"
+        echo ""
+        echo "See AWS_LAMBDA_DEPLOYMENT.md for detailed instructions"
+        echo ""

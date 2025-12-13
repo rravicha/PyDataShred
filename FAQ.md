@@ -48,3 +48,6 @@ def _expand_recursive_globs(package_data: Dict[str, List[str]]) -> Dict[str, Lis
 [pypi]
   username = __token__
   password = pypi-AgEIcHlwaS5vcmcCJGE5YjZiN2YzLTIzMjAtNGNiNS04YjIzLWZiMjMzOWFlNDdlNwACKlszLCI3ODkyNjNiYy1mN2ZhLTQ3MWEtYmU0NS05OTA0YmFmMjJlMmQiXQAABiBm_qTLMqY8Zsu_u0kRBYeTEerBvzifgBqXTo4E5y5RbQ
+
+Local Stack token from github
+ls-soRifiNA-dIxA-BOno-QeQI-kAku1923a495
