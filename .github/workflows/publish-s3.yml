@@ -11,9 +11,9 @@ on:
   workflow_dispatch:
     inputs:
       s3-path:
-        description: 'S3 path to upload wheel (e.g., s3://my-bucket/libs/)'
+        description: 'S3 path to upload wheel'
         required: false
-        default: 's3://my-bucket/libs/'
+        default: 's3://pds-artifacts-dev/repo/'
 
 permissions:
   id-token: write
@@ -72,7 +72,7 @@ jobs:
     - name: Upload to S3 (if AWS credentials configured)
       if: steps.aws-creds.outcome == 'success'
       env:
-        S3_BUCKET_PATH: ${{ github.event.inputs.s3-path || 's3://my-bucket/pydatashred/' }}
+        S3_BUCKET_PATH: ${{ github.event.inputs.s3-path || 's3://pds-artifacts-dev/repo/' }}
       run: |
         echo "Uploading wheels to S3..."
         find . -name "*.whl" -type f -exec aws s3 cp {} $S3_BUCKET_PATH \;
