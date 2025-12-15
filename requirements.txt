@@ -1,3 +1,2 @@
-pyspark
 snowflake-snowpark-python
 pandas

@@ -1,9 +1,10 @@
 #!/bin/bash
+# trap "set +x; sleep 5; set -x" DEBUG
 # Quick deployment script for AWS Lambda
 # Usage: ./deploy-to-lambda.sh <wheel-file> [aws-region] [aws-profile]
 
 WHEEL_FILE=$1
-AWS_REGION=${2:-us-east-1}
+AWS_REGION=${2:-ap-south-2}
 PROFILE=${3:-default}
 
 if [ -z "$WHEEL_FILE" ]; then
@@ -19,6 +20,7 @@ fi
 
 WHEEL_NAME=$(basename "$WHEEL_FILE")
 LAYER_NAME="pydatashred-layer"
+ZIP_FILE="pydatashred-lambda-layer.zip"
 
 echo "🚀 PyDataShred AWS Lambda Deployment"
 echo "======================================"

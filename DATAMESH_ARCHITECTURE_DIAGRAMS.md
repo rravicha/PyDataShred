@@ -6,36 +6,36 @@
 ┌────────────────────────────────────────────────────────────────┐
 │                    END USERS                                   │
 │  (Data Analysts, Data Engineers, Business Teams)               │
-└────────────────┬─────────────────────────────────────────────┘
+└────────────────┬───────────────────────────────__──────────────┘
                  │
-┌────────────────▼─────────────────────────────────────────────┐
-│           DISCOVERY PORTAL (REST API)                          │
+┌────────────────▼──────────────────────────────────────────────┐
+│           DISCOVERY PORTAL (REST API)                         │
 │  ┌──────────────────────────────────────────────────────────┐ │
 │  │ Search Products │ View Contracts │ Check SLAs │ Audit... │ │
 │  └──────────────────────────────────────────────────────────┘ │
 │  Endpoints: /api/v1/datamesh/products/search                  │
 │             /api/v1/datamesh/governance/audit-trail           │
-└────────────────┬─────────────────────────────────────────────┘
+└────────────────┬──────────────────────────────────────────────┘
                  │
 ┌────────────────▼─────────────────────────────────────────────┐
-│         DATAMESH ORCHESTRATION LAYER                           │
+│         DATAMESH ORCHESTRATION LAYER                         │
+│  ┌────────────────────────────────────────────────────────┐  │
+│  │ DataProductPipeline (3-phase execution)                │  │
+│  │  ├─ INGESTION: Governance + Schema validation          │  │
+│  │  ├─ TRANSFORMATION: Quality checks + warnings          │  │
+│  │  └─▶ PUBLICATION: Full validation + enforcement        │  │
+│  └────────────────────────────────────────────────────────┘   │
 │  ┌──────────────────────────────────────────────────────────┐ │
-│  │ DataProductPipeline (3-phase execution)                 │ │
-│  │  ├─ INGESTION: Governance + Schema validation          │ │
-│  │  ├─ TRANSFORMATION: Quality checks + warnings          │ │
-│  │  └─ PUBLICATION: Full validation + enforcement         │ │
+│  │ GovernanceEngine (Policy Enforcement)                    │ │
+│  │  ├─ PIIDetectionPolicy                                   │ │
+│  │  ├─ SchemaDriftPolicy                                    │ │
+│  │  ├─ NullThresholdPolicy                                  │ │
+│  │  └─▶ DataRetentionPolicy (+ custom policies)             │ │
 │  └──────────────────────────────────────────────────────────┘ │
 │  ┌──────────────────────────────────────────────────────────┐ │
-│  │ GovernanceEngine (Policy Enforcement)                   │ │
-│  │  ├─ PIIDetectionPolicy                                 │ │
-│  │  ├─ SchemaDriftPolicy                                  │ │
-│  │  ├─ NullThresholdPolicy                                │ │
-│  │  └─ DataRetentionPolicy (+ custom policies)            │ │
-│  └──────────────────────────────────────────────────────────┘ │
-│  ┌──────────────────────────────────────────────────────────┐ │
-│  │ ContractValidator (Schema + Quality)                    │ │
-│  │  ├─ SchemaValidator: Type/constraint checking           │ │
-│  │  └─ QualityRuleEngine: Null/unique/range/pattern       │ │
+│  │ ContractValidator (Schema + Quality)                     │ │
+│  │  ├─ SchemaValidator: Type/constraint checking            │ │
+│  │  └─▶ QualityRuleEngine: Null/unique/range/pattern        │ │
 │  └──────────────────────────────────────────────────────────┘ │
 └────────────────┬─────────────────────────────────────────────┘
                  │
@@ -49,11 +49,11 @@
 │  │ ├─ PySpark Processing & Transformations                │ │
 │  │ ├─ Pandas Processing                                    │ │
 │  │ ├─ SCD (Slowly Changing Dimensions)                    │ │
-│  │ └─ Multi-cloud Targets (S3, RDS, Snowflake, DDB)       │ │
+│  │ └─▶ Multi-cloud Targets (S3, RDS, Snowflake, DDB)       │ │
 │  └──────────────────────────────────────────────────────────┘ │
 │  ┌──────────────────────────────────────────────────────────┐ │
 │  │ Metadata Ingestion Framework                            │ │
-│  │  └─ Captures lineage, transformations, quality metrics  │ │
+│  │  └─▶ Captures lineage, transformations, quality metrics  │ │
 │  └──────────────────────────────────────────────────────────┘ │
 └────────────────────────────────────────────────────────────────┘
                  │
@@ -63,7 +63,7 @@
 │  ├─ Pandas (single-machine)                                  │
 │  ├─ Apache Airflow (orchestration)                           │
 │  ├─ Apache Beam (streaming)                                  │
-│  └─ AWS Step Functions (serverless)                          │
+│  └─▶ AWS Step Functions (serverless)                          │
 └────────────────────────────────────────────────────────────────┘
 ```
 
@@ -72,11 +72,11 @@
 ```
 Client
   │
-  └─ Domain (autonomous data domain)
+  └─▶ Domain (autonomous data domain)
      │   Product Owner: data-team@company.com
      │   Examples: Customer Analytics, Finance, Marketing
      │
-     └─ App (data ingestion/processing)
+     └─▶ App (data ingestion/processing)
         │   Examples: Customer Ingestion, Order Processing
         │
         ├─ DataProduct 1 (wraps App)
@@ -85,21 +85,21 @@ Client
         │  │  ├─ Schema: customers [id, name, email, signup_date]
         │  │  ├─ Quality: unique IDs, valid emails
         │  │  ├─ SLA: 1h freshness, 99.5% availability
-        │  │  └─ Compliance: CONFIDENTIAL, 365-day retention
+        │  │  └─▶ Compliance: CONFIDENTIAL, 365-day retention
         │  ├─ Owner: data-team@company.com
         │  ├─ Tags: [customer, high-value, confidential]
-        │  └─ Documentation: https://docs.company.com/customer
-        │
-        └─ DataProduct 2 (another wrapped App)
-           └─ ...
-```
-
+        │  └─▶ Documentatio
 ## 3. Contract Structure
 
 ```
 DataProductContract
 ├── Schema (versioned, typed)
-│   ├── version: "1.0.0"
+│   ├── version: "1.0.0"n: https://docs.company.com/customer
+        │
+        └─▶ DataProduct 2 (another wrapped App)
+           └─▶ ...
+```
+
 │   ├── Fields
 │   │   ├── id: STRING (required)
 │   │   ├── email: STRING (required, pattern: email_regex)
@@ -139,17 +139,17 @@ User initiates pipeline
 │  Source: S3, Database, API          │
 ├─────────────────────────────────────┤
 │ ✓ Check Governance Policies         │
-│   ├─ PIIDetectionPolicy (INGESTION) │
-│   ├─ SchemaDriftPolicy              │
-│   └─ Result: ALLOW / WARN / DENY    │
+│   ├─▶ PIIDetectionPolicy (INGESTION) │
+│   ├─▶ SchemaDriftPolicy              │
+│   └─▶ Result: ALLOW / WARN / DENY    │
 │                                     │
 │ ✓ Validate Schema                   │
-│   ├─ Type checking                  │
-│   ├─ Constraint validation          │
-│   └─ Error summary                  │
+│   ├─▶ Type checking                  │
+│   ├─▶ Constraint validation          │
+│   └─▶ Error summary                  │
 │                                     │
 │ ✓ Count Records                     │
-│   └─ Log source metrics             │
+│   └─▶ Log source metrics             │
 └─────────────────────────────────────┘
          │
          ├─ PASS? ──NO──▶ FAIL (log violations, exit)
@@ -161,16 +161,16 @@ User initiates pipeline
 ├─────────────────────────────────────┤
 │ ✓ Apply Transform Function          │
 │   ├─ User-defined logic             │
-│   └─ Output DataFrame               │
+│   └─▶ Output DataFrame               │
 │                                     │
 │ ✓ Quality Rule Checks               │
 │   ├─ Null checks (warning)          │
 │   ├─ Pass rates per rule            │
-│   └─ Non-blocking (WARN)            │
+│   └─▶ Non-blocking (WARN)            │
 │                                     │
 │ ✓ Governance Warnings               │
 │   ├─ Policy checks (non-enforcing)  │
-│   └─ Alert if issues but allow      │
+│   └─▶ Alert if issues but allow      │
 └─────────────────────────────────────┘
          │
          ▼ (Always proceed to publication)
@@ -181,46 +181,46 @@ User initiates pipeline
 │ ✓ Full Schema Validation            │
 │   ├─ ALL records checked            │
 │   ├─ Type/constraint enforcement    │
-│   └─ FAIL if invalid                │
+│   └─▶ FAIL if invalid                │
 │                                     │
 │ ✓ Quality Rule Enforcement          │
 │   ├─ ENFORCED (not just warnings)   │
 │   ├─ Each rule must pass threshold  │
-│   └─ FAIL if any rule fails         │
+│   └─▶ FAIL if any rule fails         │
 │                                     │
 │ ✓ Governance Enforcement            │
 │   ├─ PIIDetectionPolicy (ENFORCE)   │
 │   ├─ DataRetentionPolicy (ENFORCE)  │
-│   └─ FAIL or REQUIRE_APPROVAL       │
+│   └─▶ FAIL or REQUIRE_APPROVAL       │
 │                                     │
 │ ✓ SLA Verification                  │
 │   ├─ Freshness check                │
 │   ├─ Latency check                  │
-│   └─ Log compliance status          │
+│   └─▶ Log compliance status          │
 │                                     │
 │ ✓ Generate Metadata                 │
 │   ├─ Record count                   │
 │   ├─ Execution timestamp            │
 │   ├─ Schema version used            │
-│   └─ Quality scores                 │
+│   └─▶ Quality scores                 │
 │                                     │
 │ ✓ Publish to Target                 │
 │   ├─ Write DataFrame                │
-│   └─ Update catalog                 │
+│   └─▶ Update catalog                 │
 │                                     │
 │ ✓ Audit Trail                       │
 │   ├─ Record all policy decisions    │
 │   ├─ Timestamp & user               │
-│   └─ Compliance history             │
+│   └─▶ Compliance history             │
 └─────────────────────────────────────┘
          │
          ├─ PASS? ──YES──▶ SUCCESS! ✓
          │
-         └─ PASS? ──NO──▶ FAIL (log violations, exit)
+         └─▶ PASS? ──NO──▶ FAIL (log violations, exit)
               │
-              └─ REQUIRE_APPROVAL? ──YES──▶ QUEUE for review
+              └─▶ REQUIRE_APPROVAL? ──YES──▶ QUEUE for review
                  │
-                 └─ DENY? ──YES──▶ FAIL (exit)
+                 └─▶ DENY? ──YES──▶ FAIL (exit)
 ```
 
 ## 5. Governance Policy Evaluation
@@ -235,27 +235,27 @@ User initiates pipeline
          │   ├─ Detect: email, phone, ssn fields
          │   ├─ Verify: marked in contract.pii_fields
          │   ├─ Check: compliance_level is CONFIDENTIAL+
-         │   └─ Result: ALLOW / DENY
+         │   └─▶ Result: ALLOW / DENY
          │
          ├─▶ SchemaDriftPolicy
          │   ├─ Validate: all fields typed
          │   ├─ Check: no breaking changes
-         │   └─ Result: ALLOW / WARN
+         │   └─▶ Result: ALLOW / WARN
          │
          ├─▶ NullThresholdPolicy
          │   ├─ Required fields: <1% nulls
          │   ├─ Optional fields: <10% nulls
-         │   └─ Result: ALLOW / WARN
+         │   └─▶ Result: ALLOW / WARN
          │
          ├─▶ DataRetentionPolicy
          │   ├─ PUBLIC: max 30 days
          │   ├─ INTERNAL: max 90 days
          │   ├─ CONFIDENTIAL: max 365 days
          │   ├─ RESTRICTED: requires approval
-         │   └─ Result: ALLOW / REQUIRE_APPROVAL / DENY
+         │   └─▶ Result: ALLOW / REQUIRE_APPROVAL / DENY
          │
          └─▶ Custom Policies (user-defined)
-             └─ Result: ALLOW / WARN / DENY / REQUIRE_APPROVAL
+             └─▶ Result: ALLOW / WARN / DENY / REQUIRE_APPROVAL
                  │
                  ▼
         ┌─────────────────────────────┐
@@ -266,7 +266,7 @@ User initiates pipeline
                  ├─ ALLOW: ✓ Proceed
                  ├─ WARN: ⚠ Log but proceed
                  ├─ DENY: ✗ Block operation
-                 └─ REQUIRE_APPROVAL: ⏳ Queue for review
+                 └─▶ REQUIRE_APPROVAL: ⏳ Queue for review
 ```
 
 ## 6. Schema Versioning & Compatibility
@@ -287,7 +287,7 @@ Base Schema (v1.0.0)
     ├─ Upgrade to v1.3.0 (backward compatible ✓)
     │   └── Change: name nullable ← Required → optional is safe
     │
-    └─ Upgrade to v2.0.0 (breaking change)
+    └─▶ Upgrade to v2.0.0 (breaking change)
         └── Remove: email ← Required field removed, breaks consumers
 
 
@@ -313,40 +313,40 @@ User
  ├─▶ Search Endpoint
  │   ├─ POST /api/v1/datamesh/products/search
  │   ├─ Query: {query, tags, domain, owner, compliance_level}
- │   └─ Response: [DataProduct with contract summary]
+ │   └─▶ Response: [DataProduct with contract summary]
  │
  ├─▶ Product Details
  │   ├─ GET /api/v1/datamesh/products/{product_id}
  │   ├─ Includes: metadata, tags, documentation
- │   └─ Includes: Contract (schema, quality, SLA)
+ │   └─▶ Includes: Contract (schema, quality, SLA)
  │
  ├─▶ Contract Details
  │   ├─ GET /api/v1/datamesh/products/{id}/contracts/{contract_id}
  │   ├─ Schema: field definitions with constraints
  │   ├─ Quality: rules and thresholds
  │   ├─ SLA: commitments
- │   └─ Compliance: levels and retention
+ │   └─▶ Compliance: levels and retention
  │
  ├─▶ Validate Product
  │   ├─ POST /api/v1/datamesh/products/{id}/validate
  │   ├─ Schema validation result
  │   ├─ Quality validation result
- │   └─ Governance validation result
+ │   └─▶ Governance validation result
  │
  ├─▶ Check Compatibility
  │   ├─ POST /api/v1/datamesh/products/{id}/schema-compatibility
  │   ├─ Compare: old_contract vs new_contract
  │   ├─ Result: compatible? [YES/NO]
- │   └─ Issues: [list of incompatibilities]
+ │   └─▶ Issues: [list of incompatibilities]
  │
  ├─▶ List Policies
  │   ├─ GET /api/v1/datamesh/governance/policies
- │   └─ Policies: [name, scope, enforcement_points, status]
+ │   └─▶ Policies: [name, scope, enforcement_points, status]
  │
  └─▶ Audit Trail
      ├─ GET /api/v1/datamesh/governance/audit-trail
      ├─ Filter: product_id, date_range
-     └─ Results: [timestamp, product, decision, violations]
+     └─▶ Results: [timestamp, product, decision, violations]
 ```
 
 ## 8. Class Hierarchy
