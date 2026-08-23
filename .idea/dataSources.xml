@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
+    <data-source source="LOCAL" name="@ap-southeast-2.console.aws.amazon.com" uuid="c9674382-a1ac-4d9b-8bc7-7d7c397753b9">
+      <driver-ref>dynamo</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.jetbrains.DynamoDriver</jdbc-driver>
+      <jdbc-url>jdbc:dynamodb://ap-southeast-2.console.aws.amazon.com?region=ap-southeast-2</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
+    </data-source>
+  </component>
+</project>
