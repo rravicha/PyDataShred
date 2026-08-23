@@ -1,0 +1,1492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PyDataShred Documentation - Enterprise Ingestion, SCD2 & DataMesh Governance</title>
+  <meta name="description" content="Complete documentation, API reference, real-time enterprise use cases, and interactive tools for PyDataShred (datashredpy) Python package.">
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:ital,wght@0,400;0,500;0,700;1,400&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  
+  <!-- CSS -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- ========================================================================
+       TOP NAVBAR
+       ======================================================================== -->
+  <header class="top-nav">
+    <div class="brand-container">
+      <button id="mobile-menu-btn" class="nav-link-btn" style="display: none; padding: 0.4rem;" aria-label="Toggle Menu">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+      </button>
+      <div class="brand-logo">
+        <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+      </div>
+      <span class="brand-text">PyDataShred</span>
+      <span class="brand-version">v2.0.0</span>
+    </div>
+
+    <div class="search-box-wrapper">
+      <div class="search-input-container">
+        <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+        <input type="text" id="search-input" class="search-input" placeholder="Search documentation, APIs, use cases, rules..." autocomplete="off">
+        <span class="search-kbd">Ctrl K</span>
+      </div>
+      <div id="search-results" class="search-results-dropdown"></div>
+    </div>
+
+    <div class="nav-actions">
+      <button id="theme-toggle-btn" class="nav-link-btn" title="Toggle Theme">🌙 Dark</button>
+      <a href="#playground" class="nav-link-btn">⚡ Live Studio</a>
+      <a href="#quickstart" class="nav-link-btn primary">🚀 Get Started</a>
+      <a href="https://github.com/rravicha/PyDataShred" target="_blank" rel="noopener" class="nav-link-btn" title="GitHub Repository">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+      </a>
+    </div>
+  </header>
+
+  <!-- ========================================================================
+       APPLICATION CONTAINER
+       ======================================================================== -->
+  <div class="app-layout">
+
+    <!-- SIDEBAR NAVIGATION -->
+    <aside class="sidebar">
+      <div class="nav-group">
+        <div class="nav-group-title">Getting Started</div>
+        <ul class="nav-list">
+          <li class="nav-item"><a href="#overview" class="nav-link active"><span>📖 Overview & Architecture</span></a></li>
+          <li class="nav-item"><a href="#quickstart" class="nav-link"><span>⚡ Quick Start (60s)</span></a></li>
+          <li class="nav-item"><a href="#installation" class="nav-link"><span>📦 Installation & Extras</span></a></li>
+        </ul>
+      </div>
+
+      <div class="nav-group">
+        <div class="nav-group-title">Core Engine</div>
+        <ul class="nav-list">
+          <li class="nav-item"><a href="#data-ingestion" class="nav-link"><span>📥 Multi-Format Ingestion</span></a></li>
+          <li class="nav-item"><a href="#spark-engine" class="nav-link"><span>⚙️ PySpark & Singleton</span></a></li>
+          <li class="nav-item"><a href="#scd-transformation" class="nav-link"><span>🔄 SCD Type 2 Engine</span></a></li>
+          <li class="nav-item"><a href="#entity-delegator" class="nav-link"><span>🏗️ Entity & Domain Model</span></a></li>
+        </ul>
+      </div>
+
+      <div class="nav-group">
+        <div class="nav-group-title">DataMesh & Governance</div>
+        <ul class="nav-list">
+          <li class="nav-item"><a href="#datamesh-concepts" class="nav-link"><span>🌐 Data Product Model</span></a></li>
+          <li class="nav-item"><a href="#contract-validation" class="nav-link"><span>🛡️ Contracts & Quality Rules</span></a></li>
+          <li class="nav-item"><a href="#governance-policies" class="nav-link"><span>⚖️ Policy-as-Code Governance</span></a></li>
+          <li class="nav-item"><a href="#pipeline-phases" class="nav-link"><span>🔁 3-Phase Pipeline Engine</span></a></li>
+          <li class="nav-item"><a href="#discovery-api" class="nav-link"><span>🔎 Discovery Portal API</span></a></li>
+        </ul>
+      </div>
+
+      <div class="nav-group">
+        <div class="nav-group-title">Interactive Studio</div>
+        <ul class="nav-list">
+          <li class="nav-item"><a href="#playground" class="nav-link"><span style="color: var(--cyan-primary);">🧪 Governance Simulator</span><span class="nav-badge">Live</span></a></li>
+          <li class="nav-item"><a href="#code-generator" class="nav-link"><span style="color: var(--purple-primary);">💻 Code Generator</span><span class="nav-badge">Tool</span></a></li>
+          <li class="nav-item"><a href="#api-explorer" class="nav-link"><span>🛰️ REST API Explorer</span></a></li>
+        </ul>
+      </div>
+
+      <div class="nav-group">
+        <div class="nav-group-title">Enterprise Blueprints</div>
+        <ul class="nav-list">
+          <li class="nav-item"><a href="#use-case-retail" class="nav-link"><span>🛒 1. Retail POS Stream</span></a></li>
+          <li class="nav-item"><a href="#use-case-airlines" class="nav-link"><span>✈️ 2. Airline Fleet Telemetry</span></a></li>
+          <li class="nav-item"><a href="#use-case-customer360" class="nav-link"><span>👥 3. Customer 360 SCD2</span></a></li>
+          <li class="nav-item"><a href="#use-case-finance" class="nav-link"><span>💳 4. Financial Ledger Lake</span></a></li>
+          <li class="nav-item"><a href="#use-case-compliance" class="nav-link"><span>📋 5. Automated Audit Trail</span></a></li>
+        </ul>
+      </div>
+
+      <div class="nav-group">
+        <div class="nav-group-title">Reference & Ops</div>
+        <ul class="nav-list">
+          <li class="nav-item"><a href="#api-reference" class="nav-link"><span>📚 Full API Reference</span></a></li>
+          <li class="nav-item"><a href="#troubleshooting" class="nav-link"><span>🔧 FAQ & Troubleshooting</span></a></li>
+        </ul>
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+      <div class="content-container">
+
+        <!-- ====================================================================
+             HERO BANNER
+             ==================================================================== -->
+        <section id="hero" class="hero-banner">
+          <div class="hero-pill">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+            Next-Gen Enterprise Data Platform
+          </div>
+          <h1 class="hero-title">PyDataShred</h1>
+          <p class="hero-subtitle">
+            A unified, multi-engine data ingestion, automated Slowly Changing Dimension (SCD Type 2) transformation, and federated DataMesh governance framework for modern hybrid & multi-cloud data engineering.
+          </p>
+
+          <div class="hero-cta-group">
+            <a href="#quickstart" class="hero-btn primary">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              Quick Start in 60s
+            </a>
+            <a href="#playground" class="hero-btn secondary">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              Launch Live Simulator
+            </a>
+            <a href="#use-case-retail" class="hero-btn secondary">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+              Explore 5 Enterprise Blueprints
+            </a>
+          </div>
+
+          <div class="hero-stats-row">
+            <div class="stat-box">
+              <span class="stat-number">9+</span>
+              <span class="stat-label">Ingestion Formats (CSV, Parquet, Delta, Snowflake...)</span>
+            </div>
+            <div class="stat-box">
+              <span class="stat-number">Dual Engine</span>
+              <span class="stat-label">Pandas (In-Memory) & PySpark (Distributed)</span>
+            </div>
+            <div class="stat-box">
+              <span class="stat-number">Policy-as-Code</span>
+              <span class="stat-label">PII Detection, Schema Drift, Null Thresholds</span>
+            </div>
+            <div class="stat-box">
+              <span class="stat-number">DataMesh</span>
+              <span class="stat-label">Contracts, Self-Serve Catalog & REST Discovery</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- ====================================================================
+             CORE FEATURES GRID
+             ==================================================================== -->
+        <section class="feature-grid">
+          <div class="feature-card">
+            <div class="feature-icon-wrapper">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+            </div>
+            <h3 class="feature-title">Universal Data Ingestion</h3>
+            <p class="feature-desc">Single unified <code>Data.read()</code> interface supporting CSV, TSV, JSON, Parquet, Delta Lake, Excel, XML, Snowflake Snowpark, and REST APIs.</p>
+          </div>
+
+          <div class="feature-card purple">
+            <div class="feature-icon-wrapper">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            </div>
+            <h3 class="feature-title">Automated SCD Type 2</h3>
+            <p class="feature-desc">Effortless slowly changing dimensions tracking. Auto-injects <code>start_date</code>, <code>end_date</code>, <code>etl_flag</code> with single or composite business keys.</p>
+          </div>
+
+          <div class="feature-card emerald">
+            <div class="feature-icon-wrapper">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            </div>
+            <h3 class="feature-title">DataMesh Governance</h3>
+            <p class="feature-desc">Machine-enforceable contracts, pluggable governance policies, automated PII protection, schema drift detection, and full compliance audit trails.</p>
+          </div>
+        </section>
+
+        <!-- ====================================================================
+             1. OVERVIEW & ARCHITECTURE
+             ==================================================================== -->
+        <section id="overview" class="doc-section">
+          <div class="section-header">
+            <span class="section-tag">Architecture</span>
+            <h2 class="section-title">System Architecture & Design Philosophy</h2>
+            <p class="section-subtitle">How PyDataShred decouples ingestion, business transformations, and federated DataMesh governance.</p>
+          </div>
+
+          <p>
+            Traditional data pipelines mix validation, ingestion logic, business rules, and target storage into tightly coupled monolithic scripts. <strong>PyDataShred</strong> introduces a clean, multi-tier architecture that separates data transformation from enterprise governance while providing a unified execution wrapper:
+          </p>
+
+          <!-- SVG Architecture Diagram -->
+          <div class="diagram-card">
+            <svg viewBox="0 0 900 480" width="100%" height="auto">
+              <defs>
+                <linearGradient id="cyanGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#06b6d4" stop-opacity="0.9"/>
+                  <stop offset="100%" stop-color="#0284c7" stop-opacity="0.9"/>
+                </linearGradient>
+                <linearGradient id="purpleGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#8b5cf6" stop-opacity="0.9"/>
+                  <stop offset="100%" stop-color="#6d28d9" stop-opacity="0.9"/>
+                </linearGradient>
+                <linearGradient id="cardBg" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#111827" stop-opacity="0.9"/>
+                  <stop offset="100%" stop-color="#1f2937" stop-opacity="0.8"/>
+                </linearGradient>
+                <filter id="glow">
+                  <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                  <feMerge>
+                    <feMergeNode in="coloredBlur"/>
+                    <feMergeNode in="SourceGraphic"/>
+                  </feMerge>
+                </filter>
+              </defs>
+
+              <!-- Layer 1: Data Consumers -->
+              <rect x="50" y="20" width="800" height="60" rx="12" fill="url(#cardBg)" stroke="#374151" stroke-width="1.5"/>
+              <text x="450" y="55" fill="#f3f4f6" font-family="Outfit" font-size="16" font-weight="700" text-anchor="middle">
+                DATA CONSUMERS & ANALYTICS TEAMS (Discovery Portal • BI Dashboards • ML Applications)
+              </text>
+
+              <!-- Flow Arrow -->
+              <path d="M450 80 L450 110" stroke="#06b6d4" stroke-width="2" marker-end="url(#arrow)" stroke-dasharray="4 4"/>
+
+              <!-- Layer 2: DataMesh Discovery & Governance Layer -->
+              <rect x="50" y="110" width="800" height="110" rx="14" fill="url(#cardBg)" stroke="#06b6d4" stroke-width="2" filter="url(#glow)"/>
+              <text x="75" y="138" fill="#06b6d4" font-family="Outfit" font-size="15" font-weight="700">DATAMESH FEDERATED GOVERNANCE & DISCOVERY PORTAL</text>
+              
+              <rect x="75" y="150" width="220" height="50" rx="8" fill="#1f2937" stroke="#374151"/>
+              <text x="185" y="172" fill="#e2e8f0" font-family="Inter" font-size="12" font-weight="600" text-anchor="middle">DataProductContract</text>
+              <text x="185" y="188" fill="#9ca3af" font-family="Inter" font-size="10" text-anchor="middle">Schemas • SLAs • Quality Rules</text>
+
+              <rect x="315" y="150" width="240" height="50" rx="8" fill="#1f2937" stroke="#374151"/>
+              <text x="435" y="172" fill="#e2e8f0" font-family="Inter" font-size="12" font-weight="600" text-anchor="middle">GovernanceEngine (Policy-as-Code)</text>
+              <text x="435" y="188" fill="#9ca3af" font-family="Inter" font-size="10" text-anchor="middle">PII Scan • Retention • Drift Check</text>
+
+              <rect x="575" y="150" width="250" height="50" rx="8" fill="#1f2937" stroke="#374151"/>
+              <text x="700" y="172" fill="#e2e8f0" font-family="Inter" font-size="12" font-weight="600" text-anchor="middle">Discovery REST API</text>
+              <text x="700" y="188" fill="#9ca3af" font-family="Inter" font-size="10" text-anchor="middle">FastAPI • Search • Metadata Catalog</text>
+
+              <!-- Flow Arrow -->
+              <path d="M450 220 L450 250" stroke="#8b5cf6" stroke-width="2" stroke-dasharray="4 4"/>
+
+              <!-- Layer 3: Pipeline Orchestration & SCD2 -->
+              <rect x="50" y="250" width="800" height="110" rx="14" fill="url(#cardBg)" stroke="#8b5cf6" stroke-width="2"/>
+              <text x="75" y="278" fill="#8b5cf6" font-family="Outfit" font-size="15" font-weight="700">PYDATASHRED 3-PHASE EXECUTION ENGINE</text>
+
+              <rect x="75" y="290" width="220" height="50" rx="8" fill="#1f2937" stroke="#374151"/>
+              <text x="185" y="312" fill="#e2e8f0" font-family="Inter" font-size="12" font-weight="600" text-anchor="middle">1. Ingestion Phase</text>
+              <text x="185" y="328" fill="#9ca3af" font-family="Inter" font-size="10" text-anchor="middle">Data.read() • Ingestion Governance</text>
+
+              <rect x="315" y="290" width="240" height="50" rx="8" fill="#1f2937" stroke="#374151"/>
+              <text x="435" y="312" fill="#e2e8f0" font-family="Inter" font-size="12" font-weight="600" text-anchor="middle">2. Transformation (SCD Type 2)</text>
+              <text x="435" y="328" fill="#9ca3af" font-family="Inter" font-size="10" text-anchor="middle">ETL.apply_scd2() • Quality Checks</text>
+
+              <rect x="575" y="290" width="250" height="50" rx="8" fill="#1f2937" stroke="#374151"/>
+              <text x="700" y="312" fill="#e2e8f0" font-family="Inter" font-size="12" font-weight="600" text-anchor="middle">3. Publication Phase</text>
+              <text x="700" y="328" fill="#9ca3af" font-family="Inter" font-size="10" text-anchor="middle">Contract Enforcement • Audit Log</text>
+
+              <!-- Flow Arrow -->
+              <path d="M450 360 L450 390" stroke="#10b981" stroke-width="2" stroke-dasharray="4 4"/>
+
+              <!-- Layer 4: Multi-Cloud Sources & Targets -->
+              <rect x="50" y="390" width="800" height="70" rx="12" fill="url(#cardBg)" stroke="#10b981" stroke-width="1.5"/>
+              <text x="450" y="420" fill="#10b981" font-family="Outfit" font-size="14" font-weight="700" text-anchor="middle">
+                HYBRID & MULTI-CLOUD STORAGE & PROCESSING BACKENDS
+              </text>
+              <text x="450" y="442" fill="#9ca3af" font-family="Inter" font-size="12" text-anchor="middle">
+                AWS S3 / RDS / DynamoDB • Snowflake Snowpark • Databricks • Azure Functions • Local Spark / Pandas
+              </text>
+            </svg>
+          </div>
+
+          <h3>The Client &rarr; Domain &rarr; App Hierarchy</h3>
+          <p>
+            At its core, PyDataShred models data infrastructure using an enterprise-ready object hierarchy:
+          </p>
+          <ul>
+            <li><strong>Client</strong>: Represents the highest organizational level (e.g., Enterprise Client, Airline, Retail Chain).</li>
+            <li><strong>Domain</strong>: Autonomous business unit (e.g., <code>Customer Analytics</code>, <code>Flight Maintenance</code>, <code>Billing</code>).</li>
+            <li><strong>App</strong>: Dedicated processing application responsible for a data pipeline flow.</li>
+            <li><strong>Resources</strong>: Contains the <code>source</code> and <code>target</code> configurations across cloud services (AWS S3, RDS, DynamoDB, NAS, etc.).</li>
+            <li><strong>DataProduct</strong>: A DataMesh abstraction that wraps Domain/App, attaching enforceable versioned contracts, SLAs, and ownership metadata.</li>
+          </ul>
+        </section>
+
+        <!-- ====================================================================
+             2. QUICK START
+             ==================================================================== -->
+        <section id="quickstart" class="doc-section">
+          <div class="section-header">
+            <span class="section-tag">Quick Start</span>
+            <h2 class="section-title">Get Started in 60 Seconds</h2>
+            <p class="section-subtitle">Read data, apply SCD Type 2 tracking, and enforce DataMesh governance in minutes.</p>
+          </div>
+
+          <div class="tab-container">
+            <div class="tab-nav">
+              <button class="tab-btn active">1. Ingest Data (Pandas/Spark)</button>
+              <button class="tab-btn">2. Apply SCD Type 2</button>
+              <button class="tab-btn">3. Wrap with DataMesh</button>
+            </div>
+
+            <!-- Tab 1 -->
+            <div class="tab-content active">
+              <div class="code-container">
+                <div class="code-header">
+                  <span class="code-title"><span class="code-lang-tag">Python</span> basic_ingestion.py</span>
+                  <button class="copy-code-btn">Copy Code</button>
+                </div>
+                <div class="code-body">
+<pre><span class="hl-kw">from</span> <span class="hl-cls">datashredpy.helper.data</span> <span class="hl-kw">import</span> <span class="hl-cls">Data</span>
+<span class="hl-kw">from</span> <span class="hl-cls">datashredpy.helper.enums</span> <span class="hl-kw">import</span> <span class="hl-cls">FileType</span>
+
+<span class="hl-cm"># 1. Read CSV using In-Memory Pandas Engine</span>
+<span class="hl-num">df_pandas</span> = <span class="hl-cls">Data</span>.<span class="hl-fn">read</span>(
+    <span class="hl-str">"tests_data/HATCHBACK/emp.csv"</span>,
+    <span class="hl-num">file_type</span>=<span class="hl-cls">FileType</span>.CSV,
+    <span class="hl-num">use_pandas</span>=<span class="hl-kw">True</span>
+)
+<span class="hl-fn">print</span>(<span class="hl-str">f"Pandas records loaded: {len(df_pandas)}"</span>)
+
+<span class="hl-cm"># 2. Read Parquet or Delta Lake using Distributed PySpark Engine</span>
+<span class="hl-num">df_spark</span> = <span class="hl-cls">Data</span>.<span class="hl-fn">read</span>(
+    <span class="hl-str">"data/transactions.parquet"</span>,
+    <span class="hl-num">file_type</span>=<span class="hl-cls">FileType</span>.PARQUET,
+    <span class="hl-num">use_spark</span>=<span class="hl-kw">True</span>
+)
+<span class="hl-fn">print</span>(<span class="hl-str">f"Spark partitions: {df_spark.rdd.getNumPartitions()}"</span>)</pre>
+                </div>
+              </div>
+            </div>
+
+            <!-- Tab 2 -->
+            <div class="tab-content">
+              <div class="code-container">
+                <div class="code-header">
+                  <span class="code-title"><span class="code-lang-tag">Python</span> scd2_quickstart.py</span>
+                  <button class="copy-code-btn">Copy Code</button>
+                </div>
+                <div class="code-body">
+<pre><span class="hl-kw">from</span> <span class="hl-cls">datashredpy.helper.transform</span> <span class="hl-kw">import</span> <span class="hl-cls">ETL</span>
+
+<span class="hl-cm"># Merge incoming source records with current target warehouse table</span>
+<span class="hl-cm"># Automatically updates end_date and marks changed rows as 'expired' / 'current'</span>
+<span class="hl-num">etl</span> = <span class="hl-cls">ETL</span>(
+    <span class="hl-num">source_df</span>=df_source_spark,
+    <span class="hl-num">target_df</span>=df_target_spark,
+    <span class="hl-num">key_columns</span>=<span class="hl-str">"employee_id"</span>  <span class="hl-cm"># Supports composite keys: ["employee_id", "department_id"]</span>
+)
+
+<span class="hl-num">df_scd2_result</span> = <span class="hl-num">etl</span>.<span class="hl-fn">apply_scd2</span>()
+<span class="hl-num">df_scd2_result</span>.<span class="hl-fn">show</span>()</pre>
+                </div>
+              </div>
+            </div>
+
+            <!-- Tab 3 -->
+            <div class="tab-content">
+              <div class="code-container">
+                <div class="code-header">
+                  <span class="code-title"><span class="code-lang-tag">Python</span> datamesh_quickstart.py</span>
+                  <button class="copy-code-btn">Copy Code</button>
+                </div>
+                <div class="code-body">
+<pre><span class="hl-kw">from</span> <span class="hl-cls">datashredpy.datamesh</span> <span class="hl-kw">import</span> (
+    <span class="hl-cls">DataProduct</span>, <span class="hl-cls">DataProductContract</span>, <span class="hl-cls">Schema</span>, <span class="hl-cls">SchemaField</span>,
+    <span class="hl-cls">DataType</span>, <span class="hl-cls">DataQualityRule</span>, <span class="hl-cls">SLA</span>, <span class="hl-cls">ComplianceLevel</span>,
+    <span class="hl-cls">DataProductPipeline</span>
+)
+
+<span class="hl-cm"># 1. Define Enforceable Contract</span>
+<span class="hl-num">contract</span> = <span class="hl-cls">DataProductContract</span>(
+    <span class="hl-num">contract_id</span>=<span class="hl-str">"cust-v1.0.0"</span>,
+    <span class="hl-num">product_id</span>=<span class="hl-str">"customer-master"</span>,
+    <span class="hl-num">schema</span>=<span class="hl-cls">Schema</span>(<span class="hl-num">version</span>=<span class="hl-str">"1.0.0"</span>, <span class="hl-num">fields</span>=[
+        <span class="hl-cls">SchemaField</span>(<span class="hl-num">name</span>=<span class="hl-str">"id"</span>, <span class="hl-num">data_type</span>=<span class="hl-cls">DataType</span>.INTEGER, <span class="hl-num">nullable</span>=<span class="hl-kw">False</span>),
+        <span class="hl-cls">SchemaField</span>(<span class="hl-num">name</span>=<span class="hl-str">"email"</span>, <span class="hl-num">data_type</span>=<span class="hl-cls">DataType</span>.STRING, <span class="hl-num">nullable</span>=<span class="hl-kw">False</span>)
+    ]),
+    <span class="hl-num">quality_rules</span>=[
+        <span class="hl-cls">DataQualityRule</span>(<span class="hl-num">rule_id</span>=<span class="hl-str">"q1"</span>, <span class="hl-num">name</span>=<span class="hl-str">"Unique ID"</span>, <span class="hl-num">rule_type</span>=<span class="hl-str">"uniqueness"</span>, <span class="hl-num">applies_to</span>=[<span class="hl-str">"id"</span>], <span class="hl-num">threshold</span>=<span class="hl-num">1.0</span>)
+    ],
+    <span class="hl-num">compliance_level</span>=<span class="hl-cls">ComplianceLevel</span>.CONFIDENTIAL,
+    <span class="hl-num">pii_fields</span>=[<span class="hl-str">"email"</span>]
+)
+
+<span class="hl-cm"># 2. Execute 3-Phase Governed Pipeline</span>
+<span class="hl-num">pipeline</span> = <span class="hl-cls">DataProductPipeline</span>(<span class="hl-num">data_product</span>=my_product, <span class="hl-num">contract</span>=<span class="hl-num">contract</span>)
+<span class="hl-num">res_ingest</span> = <span class="hl-num">pipeline</span>.<span class="hl-fn">ingestion_phase</span>(df_source)
+<span class="hl-num">res_transform</span> = <span class="hl-num">pipeline</span>.<span class="hl-fn">transformation_phase</span>(df_source)
+<span class="hl-num">res_publish</span> = <span class="hl-num">pipeline</span>.<span class="hl-fn">publication_phase</span>(res_transform[<span class="hl-str">"output_df"</span>], <span class="hl-num">target_name</span>=<span class="hl-str">"Snowflake"</span>)
+
+<span class="hl-fn">print</span>(<span class="hl-str">f"Publication status: {res_publish['passed']}"</span>)</pre>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ====================================================================
+             3. INSTALLATION & SETUP
+             ==================================================================== -->
+        <section id="installation" class="doc-section">
+          <div class="section-header">
+            <span class="section-tag">Installation</span>
+            <h2 class="section-title">Package Installation & Dependencies</h2>
+            <p class="section-subtitle">Install PyDataShred tailored to your environment (Pandas, PySpark, AWS, or full enterprise suite).</p>
+          </div>
+
+          <div class="code-container">
+            <div class="code-header">
+              <span class="code-title"><span class="code-lang-tag">Bash</span> pip install</span>
+              <button class="copy-code-btn">Copy Command</button>
+            </div>
+            <div class="code-body">
+<pre><span class="hl-cm"># 1. Base Installation (FastAPI & Pydantic models)</span>
+pip install pydatashred
+
+<span class="hl-cm"># 2. In-Memory Pandas Stack</span>
+pip install "pydatashred[pandas]"
+
+<span class="hl-cm"># 3. Big Data PySpark Stack</span>
+pip install "pydatashred[pyspark]"
+
+<span class="hl-cm"># 4. AWS Cloud Stack (Boto3, S3, DynamoDB, RDS)</span>
+pip install "pydatashred[aws]"
+
+<span class="hl-cm"># 5. Full Enterprise Suite (All Dependencies)</span>
+pip install "pydatashred[all]"</pre>
+            </div>
+          </div>
+
+          <div class="callout tip">
+            <div class="callout-icon">💡</div>
+            <div class="callout-content">
+              <div class="callout-title">AWS Lambda & Serverless Layer</div>
+              <div class="callout-text">
+                For serverless data shredding in AWS Lambda, PyDataShred includes pre-built layers in <code>pydatashred-lambda-layer.zip</code>. Mount this layer to your Lambda runtime without installing PySpark overhead.
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ====================================================================
+             4. MULTI-FORMAT DATA INGESTION
+             ==================================================================== -->
+        <section id="data-ingestion" class="doc-section">
+          <div class="section-header">
+            <span class="section-tag">Ingestion Engine</span>
+            <h2 class="section-title">Multi-Format Ingestion: <code>Data.read()</code></h2>
+            <p class="section-subtitle">Deep dive into reading files, Delta lakes, relational databases, Snowpark sessions, and REST endpoints.</p>
+          </div>
+
+          <p>
+            The <code>Data</code> class (in <code>datashredpy.helper.data</code>) provides a polyglot reader that automatically switches between <strong>Pandas</strong> and <strong>PySpark</strong> backends based on your throughput and scalability requirements.
+          </p>
+
+          <div class="data-table-wrapper">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Format / Type</th>
+                  <th><code>FileType</code> Enum</th>
+                  <th>Pandas Support</th>
+                  <th>PySpark Support</th>
+                  <th>Key Options & Features</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>CSV / TSV</strong></td>
+                  <td><code>FileType.CSV</code>, <code>FileType.TSV</code></td>
+                  <td><span class="sim-badge pass">YES</span></td>
+                  <td><span class="sim-badge pass">YES</span></td>
+                  <td>Auto-infers schema, header detection, delimiter control</td>
+                </tr>
+                <tr>
+                  <td><strong>JSON</strong></td>
+                  <td><code>FileType.JSON</code></td>
+                  <td><span class="sim-badge pass">YES</span></td>
+                  <td><span class="sim-badge pass">YES</span></td>
+                  <td>JSON lines, multi-line nested record parsing</td>
+                </tr>
+                <tr>
+                  <td><strong>Parquet</strong></td>
+                  <td><code>FileType.PARQUET</code></td>
+                  <td><span class="sim-badge pass">YES</span></td>
+                  <td><span class="sim-badge pass">YES</span></td>
+                  <td>Columnar compression (Snappy, GZIP), dictionary encoding</td>
+                </tr>
+                <tr>
+                  <td><strong>Delta Lake</strong></td>
+                  <td><code>FileType.DELTA</code></td>
+                  <td><span class="sim-badge warn">Roadmap</span></td>
+                  <td><span class="sim-badge pass">YES</span></td>
+                  <td>ACID transactions, Delta Spark session extension enabled</td>
+                </tr>
+                <tr>
+                  <td><strong>Excel (.xlsx)</strong></td>
+                  <td><code>FileType.EXCEL</code></td>
+                  <td><span class="sim-badge pass">YES</span></td>
+                  <td><span class="sim-badge warn">N/A</span></td>
+                  <td>Sheet selection, openpyxl engine backend</td>
+                </tr>
+                <tr>
+                  <td><strong>XML</strong></td>
+                  <td><code>FileType.XML</code></td>
+                  <td><span class="sim-badge pass">YES</span></td>
+                  <td><span class="sim-badge warn">N/A</span></td>
+                  <td>Hierarchical ElementTree parsing to tabular DataFrame</td>
+                </tr>
+                <tr>
+                  <td><strong>Snowflake</strong></td>
+                  <td><code>FileType.SNOWFLAKE</code></td>
+                  <td><span class="sim-badge warn">N/A</span></td>
+                  <td><span class="sim-badge pass">YES</span></td>
+                  <td>Snowpark session builder & Snowflake table connector</td>
+                </tr>
+                <tr>
+                  <td><strong>REST API</strong></td>
+                  <td><code>ApiType.DEFAULT_API</code></td>
+                  <td><span class="sim-badge pass">YES</span></td>
+                  <td><span class="sim-badge pass">YES</span></td>
+                  <td>HTTP GET JSON ingestion with header authentication</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3>Code Walkthrough: Ingestion Methods</h3>
+          <div class="code-container">
+            <div class="code-header">
+              <span class="code-title"><span class="code-lang-tag">Python</span> ingestion_examples.py</span>
+              <button class="copy-code-btn">Copy Code</button>
+            </div>
+            <div class="code-body">
+<pre><span class="hl-kw">from</span> <span class="hl-cls">datashredpy.helper.data</span> <span class="hl-kw">import</span> <span class="hl-cls">Data</span>
+<span class="hl-kw">from</span> <span class="hl-cls">datashredpy.helper.enums</span> <span class="hl-kw">import</span> <span class="hl-cls">FileType</span>, <span class="hl-cls">ApiType</span>
+
+<span class="hl-cm"># 1. Read JSON file with Pandas</span>
+<span class="hl-num">df_json</span> = <span class="hl-cls">Data</span>.<span class="hl-fn">read</span>(<span class="hl-str">"tests_data/HATCHBACK/emp.json"</span>, <span class="hl-num">file_type</span>=<span class="hl-cls">FileType</span>.JSON, <span class="hl-num">use_pandas</span>=<span class="hl-kw">True</span>)
+
+<span class="hl-cm"># 2. Read Excel spreadsheet</span>
+<span class="hl-num">df_excel</span> = <span class="hl-cls">Data</span>.<span class="hl-fn">read</span>(<span class="hl-str">"tests_data/HATCHBACK/emp.xlsx"</span>, <span class="hl-num">file_type</span>=<span class="hl-cls">FileType</span>.EXCEL, <span class="hl-num">use_pandas</span>=<span class="hl-kw">True</span>)
+
+<span class="hl-cm"># 3. Read Delta Lake table with PySpark</span>
+<span class="hl-num">df_delta</span> = <span class="hl-cls">Data</span>.<span class="hl-fn">read</span>(<span class="hl-str">"/mnt/delta/orders_gold"</span>, <span class="hl-num">file_type</span>=<span class="hl-cls">FileType</span>.DELTA, <span class="hl-num">use_spark</span>=<span class="hl-kw">True</span>)
+
+<span class="hl-cm"># 4. Ingest REST API response directly into DataFrame</span>
+<span class="hl-num">api_data</span> = <span class="hl-cls">Data</span>.<span class="hl-fn">read</span>(<span class="hl-str">"https://api.github.com/repos/rravicha/PyDataShred"</span>, <span class="hl-num">api_type</span>=<span class="hl-cls">ApiType</span>.DEFAULT_API)
+
+<span class="hl-cm"># 5. Read from Snowflake Snowpark Session</span>
+<span class="hl-num">df_snow</span> = <span class="hl-cls">Data</span>.<span class="hl-fn">read</span>(
+    <span class="hl-str">"ANALYTICS.PROD_CUSTOMERS"</span>,
+    <span class="hl-num">file_type</span>=<span class="hl-cls">FileType</span>.SNOWFLAKE,
+    <span class="hl-num">use_spark</span>=<span class="hl-kw">True</span>,
+    <span class="hl-num">snowpark_options</span>={<span class="hl-str">"account"</span>: <span class="hl-str">"my_org"</span>, <span class="hl-str">"user"</span>: <span class="hl-str">"ETL_USER"</span>, <span class="hl-str">"warehouse"</span>: <span class="hl-str">"COMPUTE_WH"</span>}
+)</pre>
+            </div>
+          </div>
+        </section>
+
+        <!-- ====================================================================
+             5. PYSPARK & SINGLETON SPARK SESSION
+             ==================================================================== -->
+        <section id="spark-engine" class="doc-section">
+          <div class="section-header">
+            <span class="section-tag">Spark Management</span>
+            <h2 class="section-title">PySpark Session Management (<code>SparkSessionOption</code>)</h2>
+            <p class="section-subtitle">Robust singleton & factory management for local, cluster, and Snowflake-connected Spark jobs.</p>
+          </div>
+
+          <p>
+            In distributed applications, creating multiple <code>SparkSession</code> instances leads to JVM thread leaks and driver memory exhaustion. PyDataShred implements a thread-safe Singleton in <code>datashredpy.utilities.init_spark.SparkSessionOption</code>.
+          </p>
+
+          <div class="code-container">
+            <div class="code-header">
+              <span class="code-title"><span class="code-lang-tag">Python</span> spark_session_usage.py</span>
+              <button class="copy-code-btn">Copy Code</button>
+            </div>
+            <div class="code-body">
+<pre><span class="hl-kw">from</span> <span class="hl-cls">datashredpy.utilities.init_spark</span> <span class="hl-kw">import</span> <span class="hl-cls">SparkSessionOption</span>
+
+<span class="hl-cm"># 1. Get or create application-wide Singleton Spark instance</span>
+<span class="hl-num">spark</span> = <span class="hl-cls">SparkSessionOption</span>.<span class="hl-fn">get_spark_instance</span>(
+    <span class="hl-num">app_name</span>=<span class="hl-str">"PyDataShred_Production"</span>,
+    <span class="hl-num">master</span>=<span class="hl-str">"local[*]"</span>,
+    <span class="hl-num">config_options</span>={
+        <span class="hl-str">"spark.executor.memory"</span>: <span class="hl-str">"4g"</span>,
+        <span class="hl-str">"spark.driver.memory"</span>: <span class="hl-str">"2g"</span>,
+        <span class="hl-str">"spark.sql.shuffle.partitions"</span>: <span class="hl-str">"8"</span>
+    }
+)
+
+<span class="hl-cm"># 2. Get Spark instance with automatic Snowflake Spark Connector JARs</span>
+<span class="hl-num">spark_snow</span> = <span class="hl-cls">SparkSessionOption</span>.<span class="hl-fn">get_spark_instance</span>(
+    <span class="hl-num">app_name</span>=<span class="hl-str">"Snowflake_Spark_Job"</span>,
+    <span class="hl-num">snow_spark</span>=<span class="hl-kw">True</span>  <span class="hl-cm"># Injects net.snowflake:spark-snowflake_2.12:2.9.0 package</span>
+)</pre>
+            </div>
+          </div>
+        </section>
+
+        <!-- ====================================================================
+             6. SLOWLY CHANGING DIMENSIONS (SCD2)
+             ==================================================================== -->
+        <section id="scd-transformation" class="doc-section">
+          <div class="section-header">
+            <span class="section-tag">Transformation</span>
+            <h2 class="section-title">Automated SCD Type 2 Engine (<code>ETL.apply_scd2</code>)</h2>
+            <p class="section-subtitle">Track historical record state changes, manage active/expired lifecycles, and maintain audit integrity.</p>
+          </div>
+
+          <p>
+            Slowly Changing Dimensions (Type 2) preserves history by creating a new record whenever attributes change, rather than overwriting existing rows. PyDataShred's <code>ETL</code> class automates this with zero boilerplate.
+          </p>
+
+          <h3>Audit Columns Injected Automatically</h3>
+          <div class="data-table-wrapper">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Audit Column</th>
+                  <th>Data Type</th>
+                  <th>Behavior on New Insert</th>
+                  <th>Behavior on Changed/Updated Row</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>start_date</code></td>
+                  <td><code>Timestamp</code></td>
+                  <td>Set to <code>current_timestamp()</code></td>
+                  <td>New version gets <code>current_timestamp()</code></td>
+                </tr>
+                <tr>
+                  <td><code>end_date</code></td>
+                  <td><code>Timestamp</code></td>
+                  <td><code>NULL</code> (signifying active row)</td>
+                  <td>Previous version updated to <code>current_timestamp()</code></td>
+                </tr>
+                <tr>
+                  <td><code>etl_flag</code></td>
+                  <td><code>String</code></td>
+                  <td>Set to <code>'current'</code></td>
+                  <td>Previous version marked as <code>'expired'</code></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3>SCD2 State Transition Lifecycle Diagram</h3>
+          <div class="diagram-card">
+            <svg viewBox="0 0 840 240" width="100%" height="auto">
+              <rect x="20" y="20" width="240" height="190" rx="10" fill="#1f2937" stroke="#374151" stroke-width="1.5"/>
+              <text x="140" y="45" fill="#f3f4f6" font-family="Outfit" font-size="14" font-weight="700" text-anchor="middle">Initial Load</text>
+              <text x="35" y="80" fill="#9ca3af" font-family="JetBrains Mono" font-size="11">id: 101, dept: "Eng"</text>
+              <text x="35" y="105" fill="#10b981" font-family="JetBrains Mono" font-size="11">start_date: 2026-01-01</text>
+              <text x="35" y="130" fill="#60a5fa" font-family="JetBrains Mono" font-size="11">end_date: NULL</text>
+              <text x="35" y="155" fill="#06b6d4" font-family="JetBrains Mono" font-size="11">etl_flag: "current"</text>
+
+              <path d="M260 115 L320 115" stroke="#06b6d4" stroke-width="2" marker-end="url(#arrow)"/>
+              <text x="290" y="105" fill="#06b6d4" font-family="Inter" font-size="10" text-anchor="middle">Delta In</text>
+
+              <!-- Inbound Change -->
+              <rect x="320" y="70" width="180" height="90" rx="10" fill="#111827" stroke="#f59e0b" stroke-width="1.5"/>
+              <text x="410" y="95" fill="#f59e0b" font-family="Outfit" font-size="13" font-weight="700" text-anchor="middle">Inbound Update</text>
+              <text x="335" y="125" fill="#e2e8f0" font-family="JetBrains Mono" font-size="11">id: 101, dept: "Product"</text>
+
+              <path d="M500 115 L560 115" stroke="#8b5cf6" stroke-width="2" marker-end="url(#arrow)"/>
+              <text x="530" y="105" fill="#8b5cf6" font-family="Inter" font-size="10" text-anchor="middle">SCD2 Join</text>
+
+              <!-- Resulting Target -->
+              <rect x="560" y="20" width="260" height="190" rx="10" fill="#1f2937" stroke="#8b5cf6" stroke-width="1.5"/>
+              <text x="690" y="45" fill="#f3f4f6" font-family="Outfit" font-size="14" font-weight="700" text-anchor="middle">Updated SCD2 Target</text>
+              
+              <text x="575" y="75" fill="#f43f5e" font-family="JetBrains Mono" font-size="10">id: 101, dept: "Eng"</text>
+              <text x="575" y="92" fill="#f43f5e" font-family="JetBrains Mono" font-size="10">end_date: 2026-08-23 | etl_flag: "expired"</text>
+
+              <line x1="575" y1="108" x2="805" y2="108" stroke="#374151" stroke-dasharray="2 2"/>
+
+              <text x="575" y="130" fill="#10b981" font-family="JetBrains Mono" font-size="10">id: 101, dept: "Product" (NEW)</text>
+              <text x="575" y="148" fill="#10b981" font-family="JetBrains Mono" font-size="10">start_date: 2026-08-23 | etl_flag: "current"</text>
+              <text x="575" y="165" fill="#60a5fa" font-family="JetBrains Mono" font-size="10">end_date: NULL</text>
+            </svg>
+          </div>
+
+          <h3>Single Key vs Composite Business Keys</h3>
+          <div class="code-container">
+            <div class="code-header">
+              <span class="code-title"><span class="code-lang-tag">Python</span> composite_scd2.py</span>
+              <button class="copy-code-btn">Copy Code</button>
+            </div>
+            <div class="code-body">
+<pre><span class="hl-kw">from</span> <span class="hl-cls">datashredpy.helper.transform</span> <span class="hl-kw">import</span> <span class="hl-cls">ETL</span>
+
+<span class="hl-cm"># Composite key tracking (e.g. store_id + product_sku)</span>
+<span class="hl-num">etl_composite</span> = <span class="hl-cls">ETL</span>(
+    <span class="hl-num">source_df</span>=df_inventory_source,
+    <span class="hl-num">target_df</span>=df_inventory_target,
+    <span class="hl-num">key_columns</span>=[<span class="hl-str">"store_id"</span>, <span class="hl-str">"product_sku"</span>]
+)
+
+<span class="hl-num">df_inventory_scd2</span> = <span class="hl-num">etl_composite</span>.<span class="hl-fn">apply_scd2</span>()</pre>
+            </div>
+          </div>
+        </section>
+
+        <!-- ====================================================================
+             7. DATAMESH & CONTRACTS
+             ==================================================================== -->
+        <section id="datamesh-concepts" class="doc-section">
+          <div class="section-header">
+            <span class="section-tag">DataMesh Layer</span>
+            <h2 class="section-title">Data Product & Contract Specification</h2>
+            <p class="section-subtitle">Transform raw tables into self-serve, discoverable, and governed Data Products.</p>
+          </div>
+
+          <p>
+            In a DataMesh architecture, datasets are treated as first-class <strong>Data Products</strong> with strict ownership, versioned schemas, enforceable SLAs, and quality guarantees.
+          </p>
+
+          <div class="code-container">
+            <div class="code-header">
+              <span class="code-title"><span class="code-lang-tag">Python</span> full_data_product_contract.py</span>
+              <button class="copy-code-btn">Copy Code</button>
+            </div>
+            <div class="code-body">
+<pre><span class="hl-kw">from</span> <span class="hl-cls">datashredpy.datamesh</span> <span class="hl-kw">import</span> (
+    <span class="hl-cls">DataProduct</span>, <span class="hl-cls">DataProductContract</span>, <span class="hl-cls">Schema</span>, <span class="hl-cls">SchemaField</span>,
+    <span class="hl-cls">DataType</span>, <span class="hl-cls">DataQualityRule</span>, <span class="hl-cls">SLA</span>, <span class="hl-cls">ComplianceLevel</span>, <span class="hl-cls">VersioningStrategy</span>
+)
+<span class="hl-kw">from</span> <span class="hl-cls">datashredpy.api.models</span> <span class="hl-kw">import</span> <span class="hl-cls">Domain</span>, <span class="hl-cls">App</span>, <span class="hl-cls">Resources</span>
+
+<span class="hl-cm"># 1. Define Versioned Schema with Type Constraints</span>
+<span class="hl-num">fields</span> = [
+    <span class="hl-cls">SchemaField</span>(
+        <span class="hl-num">name</span>=<span class="hl-str">"transaction_id"</span>,
+        <span class="hl-num">data_type</span>=<span class="hl-cls">DataType</span>.STRING,
+        <span class="hl-num">nullable</span>=<span class="hl-kw">False</span>,
+        <span class="hl-num">description</span>=<span class="hl-str">"Globally unique transaction UUID"</span>
+    ),
+    <span class="hl-cls">SchemaField</span>(
+        <span class="hl-num">name</span>=<span class="hl-str">"amount"</span>,
+        <span class="hl-num">data_type</span>=<span class="hl-cls">DataType</span>.DECIMAL,
+        <span class="hl-num">nullable</span>=<span class="hl-kw">False</span>,
+        <span class="hl-num">constraints</span>={<span class="hl-str">"min"</span>: <span class="hl-num">0.01</span>, <span class="hl-str">"max"</span>: <span class="hl-num">1000000.00</span>}
+    ),
+    <span class="hl-cls">SchemaField</span>(
+        <span class="hl-num">name</span>=<span class="hl-str">"customer_email"</span>,
+        <span class="hl-num">data_type</span>=<span class="hl-cls">DataType</span>.STRING,
+        <span class="hl-num">nullable</span>=<span class="hl-kw">False</span>,
+        <span class="hl-num">constraints</span>={<span class="hl-str">"pattern"</span>: <span class="hl-str">r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"</span>}
+    )
+]
+
+<span class="hl-num">schema</span> = <span class="hl-cls">Schema</span>(
+    <span class="hl-num">version</span>=<span class="hl-str">"1.0.0"</span>,
+    <span class="hl-num">fields</span>=<span class="hl-num">fields</span>,
+    <span class="hl-num">versioning_strategy</span>=<span class="hl-cls">VersioningStrategy</span>.SEMANTIC
+)
+
+<span class="hl-cm"># 2. Define Data Quality Rules</span>
+<span class="hl-num">quality_rules</span> = [
+    <span class="hl-cls">DataQualityRule</span>(
+        <span class="hl-num">rule_id</span>=<span class="hl-str">"unique_txn"</span>,
+        <span class="hl-num">name</span>=<span class="hl-str">"Transaction Uniqueness"</span>,
+        <span class="hl-num">rule_type</span>=<span class="hl-str">"uniqueness"</span>,
+        <span class="hl-num">applies_to</span>=[<span class="hl-str">"transaction_id"</span>],
+        <span class="hl-num">threshold</span>=<span class="hl-num">1.0</span>
+    ),
+    <span class="hl-cls">DataQualityRule</span>(
+        <span class="hl-num">rule_id</span>=<span class="hl-str">"non_null_email"</span>,
+        <span class="hl-num">name</span>=<span class="hl-str">"Email Completeness"</span>,
+        <span class="hl-num">rule_type</span>=<span class="hl-str">"null_check"</span>,
+        <span class="hl-num">applies_to</span>=[<span class="hl-str">"customer_email"</span>],
+        <span class="hl-num">threshold</span>=<span class="hl-num">1.0</span>
+    )
+]
+
+<span class="hl-cm"># 3. Define Service Level Agreement</span>
+<span class="hl-num">sla</span> = <span class="hl-cls">SLA</span>(
+    <span class="hl-num">freshness_hours</span>=<span class="hl-num">1</span>,
+    <span class="hl-num">availability_percent</span>=<span class="hl-num">99.99</span>,
+    <span class="hl-num">max_latency_seconds</span>=<span class="hl-num">300</span>,
+    <span class="hl-num">recovery_time_objective_minutes</span>=<span class="hl-num">15</span>
+)
+
+<span class="hl-cm"># 4. Construct Contract & Data Product</span>
+<span class="hl-num">contract</span> = <span class="hl-cls">DataProductContract</span>(
+    <span class="hl-num">contract_id</span>=<span class="hl-str">"retail-txn-v1.0.0"</span>,
+    <span class="hl-num">product_id</span>=<span class="hl-str">"retail-transactions"</span>,
+    <span class="hl-num">schema</span>=<span class="hl-num">schema</span>,
+    <span class="hl-num">quality_rules</span>=<span class="hl-num">quality_rules</span>,
+    <span class="hl-num">sla</span>=<span class="hl-num">sla</span>,
+    <span class="hl-num">compliance_level</span>=<span class="hl-cls">ComplianceLevel</span>.CONFIDENTIAL,
+    <span class="hl-num">retention_days</span>=<span class="hl-num">365</span>,
+    <span class="hl-num">pii_fields</span>=[<span class="hl-str">"customer_email"</span>]
+)</pre>
+            </div>
+          </div>
+        </section>
+
+        <!-- ====================================================================
+             8. POLICY-AS-CODE GOVERNANCE
+             ==================================================================== -->
+        <section id="governance-policies" class="doc-section">
+          <div class="section-header">
+            <span class="section-tag">Governance</span>
+            <h2 class="section-title">Federated Governance (Policy-as-Code)</h2>
+            <p class="section-subtitle">Automated compliance enforcement at Ingestion, Transformation, and Publication phases.</p>
+          </div>
+
+          <div class="data-table-wrapper">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Built-in Policy</th>
+                  <th>Enforcement Points</th>
+                  <th>Default Severity</th>
+                  <th>Enforcement Rules & Logic</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong><code>PIIDetectionPolicy</code></strong></td>
+                  <td><code>INGESTION</code>, <code>PUBLICATION</code></td>
+                  <td><span class="sim-badge deny">ERROR (Deny)</span></td>
+                  <td>Scans schema field names & regex patterns for email, SSN, phone, card numbers. Ensures PII fields are listed in <code>contract.pii_fields</code> and forbids <code>PUBLIC</code> compliance classification.</td>
+                </tr>
+                <tr>
+                  <td><strong><code>SchemaDriftPolicy</code></strong></td>
+                  <td><code>INGESTION</code>, <code>TRANSFORMATION</code></td>
+                  <td><span class="sim-badge deny">ERROR (Deny)</span></td>
+                  <td>Prevents breaking schema changes, missing data types, and undeclared column removals during pipeline execution.</td>
+                </tr>
+                <tr>
+                  <td><strong><code>NullThresholdPolicy</code></strong></td>
+                  <td><code>PUBLICATION</code></td>
+                  <td><span class="sim-badge warn">WARN (Non-blocking)</span></td>
+                  <td>Validates that required fields have &lt;1% nulls and optional fields have &lt;10% nulls before publication.</td>
+                </tr>
+                <tr>
+                  <td><strong><code>DataRetentionPolicy</code></strong></td>
+                  <td><code>PUBLICATION</code></td>
+                  <td><span class="sim-badge warn">WARN / APPROVAL</span></td>
+                  <td>Enforces statutory retention caps: <code>PUBLIC</code> (30d), <code>INTERNAL</code> (90d), <code>CONFIDENTIAL</code> (365d), <code>RESTRICTED</code> (Mandates Board Approval).</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3>Writing a Custom Governance Policy</h3>
+          <div class="code-container">
+            <div class="code-header">
+              <span class="code-title"><span class="code-lang-tag">Python</span> custom_policy.py</span>
+              <button class="copy-code-btn">Copy Code</button>
+            </div>
+            <div class="code-body">
+<pre><span class="hl-kw">from</span> <span class="hl-cls">datashredpy.datamesh.governance</span> <span class="hl-kw">import</span> (
+    <span class="hl-cls">GovernancePolicy</span>, <span class="hl-cls">PolicyContext</span>, <span class="hl-cls">PolicyEvaluation</span>,
+    <span class="hl-cls">PolicyDecision</span>, <span class="hl-cls">EnforcementPoint</span>, <span class="hl-cls">GovernanceEngine</span>
+)
+
+<span class="hl-kw">class</span> <span class="hl-cls">GDPRConsentPolicy</span>(<span class="hl-cls">GovernancePolicy</span>):
+    <span class="hl-kw">def</span> <span class="hl-fn">__init__</span>(<span class="hl-num">self</span>):
+        <span class="hl-fn">super</span>().<span class="hl-fn">__init__</span>(
+            <span class="hl-num">policy_id</span>=<span class="hl-str">"gdpr-consent-policy"</span>,
+            <span class="hl-num">policy_name</span>=<span class="hl-str">"GDPR Explicit Consent Enforcement"</span>,
+            <span class="hl-num">description</span>=<span class="hl-str">"Ensures consent_flag column is present whenever PII is ingested"</span>,
+            <span class="hl-num">enforcement_points</span>=[<span class="hl-cls">EnforcementPoint</span>.INGESTION],
+            <span class="hl-num">severity</span>=<span class="hl-str">"error"</span>
+        )
+
+    <span class="hl-kw">def</span> <span class="hl-fn">evaluate</span>(<span class="hl-num">self</span>, <span class="hl-num">context</span>: <span class="hl-cls">PolicyContext</span>) -> <span class="hl-cls">PolicyEvaluation</span>:
+        <span class="hl-kw">if</span> <span class="hl-num">context</span>.<span class="hl-num">contract</span>.<span class="hl-num">pii_fields</span>:
+            <span class="hl-num">field_names</span> = [f.<span class="hl-num">name</span> <span class="hl-kw">for</span> f <span class="hl-kw">in</span> <span class="hl-num">context</span>.<span class="hl-num">contract</span>.<span class="hl-num">schema</span>.<span class="hl-num">fields</span>]
+            <span class="hl-kw">if</span> <span class="hl-str">"consent_flag"</span> <span class="hl-kw">not in</span> <span class="hl-num">field_names</span>:
+                <span class="hl-kw">return</span> <span class="hl-cls">PolicyEvaluation</span>(
+                    <span class="hl-num">policy_id</span>=<span class="hl-num">self</span>.<span class="hl-num">policy_id</span>,
+                    <span class="hl-num">policy_name</span>=<span class="hl-num">self</span>.<span class="hl-num">policy_name</span>,
+                    <span class="hl-num">decision</span>=<span class="hl-cls">PolicyDecision</span>.DENY,
+                    <span class="hl-num">is_enforced</span>=<span class="hl-kw">True</span>,
+                    <span class="hl-num">message</span>=<span class="hl-str">"Dataset contains PII but lacks required 'consent_flag' schema field."</span>,
+                    <span class="hl-num">violations</span>=[<span class="hl-str">"Missing consent_flag in schema"</span>],
+                    <span class="hl-num">remediation_actions</span>=[<span class="hl-str">"Add boolean field 'consent_flag' to Schema definition."</span>]
+                )
+        <span class="hl-kw">return</span> <span class="hl-cls">PolicyEvaluation</span>(
+            <span class="hl-num">policy_id</span>=<span class="hl-num">self</span>.<span class="hl-num">policy_id</span>,
+            <span class="hl-num">policy_name</span>=<span class="hl-num">self</span>.<span class="hl-num">policy_name</span>,
+            <span class="hl-num">decision</span>=<span class="hl-cls">PolicyDecision</span>.ALLOW,
+            <span class="hl-num">is_enforced</span>=<span class="hl-kw">False</span>,
+            <span class="hl-num">message</span>=<span class="hl-str">"GDPR consent requirements satisfied."</span>
+        )
+
+<span class="hl-cm"># Register into Governance Engine</span>
+<span class="hl-num">engine</span> = <span class="hl-cls">GovernanceEngine</span>()
+<span class="hl-num">engine</span>.<span class="hl-fn">register_policy</span>(<span class="hl-cls">GDPRConsentPolicy</span>())</pre>
+            </div>
+          </div>
+        </section>
+
+        <!-- ====================================================================
+             9. INTERACTIVE SIMULATOR (LIVE STUDIO)
+             ==================================================================== -->
+        <section id="playground" class="doc-section">
+          <div class="section-header">
+            <span class="section-tag">Interactive Tool</span>
+            <h2 class="section-title">Live DataMesh Governance Simulator</h2>
+            <p class="section-subtitle">Test contract evaluation, PII detection, retention rules, and quality thresholds in your browser.</p>
+          </div>
+
+          <div class="interactive-playground">
+            <div class="playground-header">
+              <div class="playground-title">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
+                Governance Policy Engine Simulator
+              </div>
+              <button id="btn-run-sim" class="btn-action">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                Execute Governance Evaluation
+              </button>
+            </div>
+
+            <div class="playground-grid">
+              <!-- Left Input Config -->
+              <div class="playground-panel">
+                <div class="playground-panel-title">Contract & Record Parameters</div>
+                
+                <div class="form-group">
+                  <label class="form-label">Compliance Level</label>
+                  <select id="sim-compliance-select" class="form-select">
+                    <option value="PUBLIC">PUBLIC (Max 30 days retention, NO PII allowed)</option>
+                    <option value="INTERNAL">INTERNAL (Max 90 days retention)</option>
+                    <option value="CONFIDENTIAL" selected>CONFIDENTIAL (Max 365 days retention, PII Allowed)</option>
+                    <option value="RESTRICTED">RESTRICTED (Requires Board Approval)</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label">Retention Period (Days)</label>
+                  <input type="number" id="sim-retention-input" class="form-input" value="180">
+                </div>
+
+                <div class="form-group">
+                  <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; color: var(--text-primary); font-size: 0.85rem;">
+                    <input type="checkbox" id="sim-pii-marked" checked>
+                    Declared in <code>contract.pii_fields</code>
+                  </label>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label">Inbound Sample Record (JSON)</label>
+                  <textarea id="sim-record-json" class="form-textarea">
+{
+  "customer_id": "CUST-98214",
+  "name": "Sarah Connor",
+  "email": "sarah.connor@cyberdyne.com",
+  "phone": "+1-555-0199",
+  "revenue": 45000.00,
+  "signup_date": "2026-08-23T12:00:00Z"
+}</textarea>
+                </div>
+              </div>
+
+              <!-- Right Output Evaluation -->
+              <div class="playground-panel">
+                <div class="playground-panel-title">Engine Audit Evaluation Output</div>
+                <div id="sim-output" class="sim-output-box">
+                  <span style="color: var(--text-muted);">Click "Execute Governance Evaluation" to simulate policy rules...</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ====================================================================
+             10. INTERACTIVE CODE GENERATOR
+             ==================================================================== -->
+        <section id="code-generator" class="doc-section">
+          <div class="section-header">
+            <span class="section-tag">Interactive Tool</span>
+            <h2 class="section-title">Interactive Pipeline Code Generator</h2>
+            <p class="section-subtitle">Generate production-ready Python pipelines with Ingestion, SCD2, and DataMesh governance.</p>
+          </div>
+
+          <div class="interactive-playground">
+            <div class="playground-header">
+              <div class="playground-title">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+                Pipeline Builder Studio
+              </div>
+              <button id="btn-gen-code" class="btn-action">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+                Generate Pipeline Code
+              </button>
+            </div>
+
+            <div class="playground-grid">
+              <div class="playground-panel">
+                <div class="playground-panel-title">Configuration Options</div>
+
+                <div class="form-group">
+                  <label class="form-label">Source Format</label>
+                  <select id="gen-source-format" class="form-select">
+                    <option value="CSV">CSV File</option>
+                    <option value="PARQUET" selected>Parquet Table</option>
+                    <option value="DELTA">Delta Lake Table</option>
+                    <option value="JSON">JSON File</option>
+                    <option value="SNOWFLAKE">Snowflake Table (Snowpark)</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label">Processing Backend</label>
+                  <select id="gen-engine" class="form-select">
+                    <option value="PySpark" selected>PySpark (Distributed Big Data)</option>
+                    <option value="Pandas">Pandas (In-Memory Microservice)</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label">Target Warehouse</label>
+                  <select id="gen-target" class="form-select">
+                    <option value="Snowflake" selected>Snowflake</option>
+                    <option value="AWS_RDS">AWS RDS (PostgreSQL / MySQL)</option>
+                    <option value="S3_DELTA">AWS S3 (Delta Lake)</option>
+                    <option value="DYNAMODB">AWS DynamoDB</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label style="display: flex; align-items: center; gap: 0.5rem; color: var(--text-primary); font-size: 0.85rem;">
+                    <input type="checkbox" id="gen-scd2" checked>
+                    Enable Automated SCD Type 2 History Tracking
+                  </label>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label">Business Key Column</label>
+                  <input type="text" id="gen-key-col" class="form-input" value="transaction_id">
+                </div>
+
+                <div class="form-group">
+                  <label style="display: flex; align-items: center; gap: 0.5rem; color: var(--text-primary); font-size: 0.85rem;">
+                    <input type="checkbox" id="gen-mesh" checked>
+                    Enforce DataMesh Contract & Governance (3-Phase)
+                  </label>
+                </div>
+              </div>
+
+              <div class="playground-panel">
+                <div class="playground-panel-title">Generated Python Pipeline Code</div>
+                <div class="code-container" style="margin: 0;">
+                  <div class="code-header">
+                    <span class="code-title"><span class="code-lang-tag">Python</span> pydatashred_job.py</span>
+                    <button class="copy-code-btn">Copy</button>
+                  </div>
+                  <div class="code-body" style="max-height: 320px;">
+                    <pre><code id="gen-code-output"></code></pre>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ====================================================================
+             11. REST API EXPLORER
+             ==================================================================== -->
+        <section id="api-explorer" class="doc-section">
+          <div class="section-header">
+            <span class="section-tag">API Portal</span>
+            <h2 class="section-title">Discovery Portal REST API Explorer</h2>
+            <p class="section-subtitle">Explore endpoints for self-serve product registration, contract publishing, and compliance audit queries.</p>
+          </div>
+
+          <div class="interactive-playground">
+            <div class="playground-header">
+              <div class="playground-title">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 17l6-6-6-6M12 19h8"/></svg>
+                FastAPI Discovery Explorer
+              </div>
+              <button id="btn-api-send" class="btn-action">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                Send Request
+              </button>
+            </div>
+
+            <div class="playground-grid">
+              <div class="playground-panel">
+                <div class="playground-panel-title">Endpoint Selector</div>
+                
+                <div class="form-group">
+                  <label class="form-label">HTTP Method & Path</label>
+                  <select id="api-endpoint-select" class="form-select">
+                    <option value="/api/v1/datamesh/products/search">POST /api/v1/datamesh/products/search</option>
+                    <option value="/api/v1/datamesh/governance/policies">GET /api/v1/datamesh/governance/policies</option>
+                    <option value="/api/v1/datamesh/governance/audit-trail">GET /api/v1/datamesh/governance/audit-trail</option>
+                  </select>
+                </div>
+
+                <div class="callout tip" style="margin-top: 1rem;">
+                  <div class="callout-content">
+                    <div class="callout-title">FastAPI OpenAPI Interactive Docs</div>
+                    <div class="callout-text">When running the API service via <code>uvicorn datashredpy.api.app:app</code>, full Swagger UI is automatically served at <code>http://localhost:8000/docs</code>.</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="playground-panel">
+                <div class="playground-panel-title">Live Response Payload</div>
+                <div id="api-response-output" class="sim-output-box">
+                  <span style="color: var(--text-muted);">Select an endpoint and click "Send Request" to preview response...</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ====================================================================
+             12. 5 ENTERPRISE USE CASES & BLUEPRINTS
+             ==================================================================== -->
+        <section id="use-case-retail" class="doc-section">
+          <div class="section-header">
+            <span class="section-tag">Enterprise Blueprint 1</span>
+            <h2 class="section-title">Retail POS Real-Time Transaction Ingestion</h2>
+            <p class="section-subtitle">High-throughput ingestion from POS terminals, credit card & email PII enforcement, and sub-second SLA validation.</p>
+          </div>
+
+          <p>
+            <strong>Scenario:</strong> A national retail chain streams 20 million daily point-of-sale transactions into an AWS S3 data lake. The data contains customer payment details requiring strict PCI/GDPR compliance and hourly freshness SLAs.
+          </p>
+
+          <div class="code-container">
+            <div class="code-header">
+              <span class="code-title"><span class="code-lang-tag">Python</span> blueprint_retail_pos.py</span>
+              <button class="copy-code-btn">Copy Code</button>
+            </div>
+            <div class="code-body">
+<pre><span class="hl-kw">from</span> <span class="hl-cls">datashredpy.helper.data</span> <span class="hl-kw">import</span> <span class="hl-cls">Data</span>
+<span class="hl-kw">from</span> <span class="hl-cls">datashredpy.helper.enums</span> <span class="hl-kw">import</span> <span class="hl-cls">FileType</span>
+<span class="hl-kw">from</span> <span class="hl-cls">datashredpy.datamesh</span> <span class="hl-kw">import</span> (
+    <span class="hl-cls">DataProduct</span>, <span class="hl-cls">DataProductContract</span>, <span class="hl-cls">Schema</span>, <span class="hl-cls">SchemaField</span>,
+    <span class="hl-cls">DataType</span>, <span class="hl-cls">DataQualityRule</span>, <span class="hl-cls">SLA</span>, <span class="hl-cls">ComplianceLevel</span>, <span class="hl-cls">DataProductPipeline</span>
+)
+<span class="hl-kw">from</span> <span class="hl-cls">datashredpy.api.models</span> <span class="hl-kw">import</span> <span class="hl-cls">Domain</span>, <span class="hl-cls">App</span>, <span class="hl-cls">Resources</span>
+
+<span class="hl-cm"># 1. Ingest Raw Hourly POS Dump from S3</span>
+<span class="hl-num">df_pos_raw</span> = <span class="hl-cls">Data</span>.<span class="hl-fn">read</span>(<span class="hl-str">"s3://retail-lake/raw/pos/2026/08/23/hourly_dump.parquet"</span>, <span class="hl-num">file_type</span>=<span class="hl-cls">FileType</span>.PARQUET, <span class="hl-num">use_spark</span>=<span class="hl-kw">True</span>)
+
+<span class="hl-cm"># 2. Build Enforceable Contract</span>
+<span class="hl-num">contract</span> = <span class="hl-cls">DataProductContract</span>(
+    <span class="hl-num">contract_id</span>=<span class="hl-str">"pos-txn-v1.0.0"</span>,
+    <span class="hl-num">product_id</span>=<span class="hl-str">"retail-pos-transactions"</span>,
+    <span class="hl-num">schema</span>=<span class="hl-cls">Schema</span>(<span class="hl-num">version</span>=<span class="hl-str">"1.0.0"</span>, <span class="hl-num">fields</span>=[
+        <span class="hl-cls">SchemaField</span>(<span class="hl-num">name</span>=<span class="hl-str">"transaction_id"</span>, <span class="hl-num">data_type</span>=<span class="hl-cls">DataType</span>.STRING, <span class="hl-num">nullable</span>=<span class="hl-kw">False</span>),
+        <span class="hl-cls">SchemaField</span>(<span class="hl-num">name</span>=<span class="hl-str">"store_id"</span>, <span class="hl-num">data_type</span>=<span class="hl-cls">DataType</span>.INTEGER, <span class="hl-num">nullable</span>=<span class="hl-kw">False</span>),
+        <span class="hl-cls">SchemaField</span>(<span class="hl-num">name</span>=<span class="hl-str">"amount"</span>, <span class="hl-num">data_type</span>=<span class="hl-cls">DataType</span>.DECIMAL, <span class="hl-num">nullable</span>=<span class="hl-kw">False</span>, <span class="hl-num">constraints</span>={<span class="hl-str">"min"</span>: <span class="hl-num">0.01</span>}),
+        <span class="hl-cls">SchemaField</span>(<span class="hl-num">name</span>=<span class="hl-str">"customer_email"</span>, <span class="hl-num">data_type</span>=<span class="hl-cls">DataType</span>.STRING, <span class="hl-num">nullable</span>=<span class="hl-kw">True</span>)
+    ]),
+    <span class="hl-num">quality_rules</span>=[
+        <span class="hl-cls">DataQualityRule</span>(<span class="hl-num">rule_id</span>=<span class="hl-str">"r1"</span>, <span class="hl-num">name</span>=<span class="hl-str">"Unique Txn"</span>, <span class="hl-num">rule_type</span>=<span class="hl-str">"uniqueness"</span>, <span class="hl-num">applies_to</span>=[<span class="hl-str">"transaction_id"</span>], <span class="hl-num">threshold</span>=<span class="hl-num">1.0</span>)
+    ],
+    <span class="hl-num">sla</span>=<span class="hl-cls">SLA</span>(<span class="hl-num">freshness_hours</span>=<span class="hl-num">1</span>, <span class="hl-num">availability_percent</span>=<span class="hl-num">99.99</span>, <span class="hl-num">max_latency_seconds</span>=<span class="hl-num">300</span>),
+    <span class="hl-num">compliance_level</span>=<span class="hl-cls">ComplianceLevel</span>.CONFIDENTIAL,
+    <span class="hl-num">retention_days</span>=<span class="hl-num">365</span>,
+    <span class="hl-num">pii_fields</span>=[<span class="hl-str">"customer_email"</span>]
+)
+
+<span class="hl-cm"># 3. Execute Governed Pipeline</span>
+<span class="hl-num">product</span> = <span class="hl-cls">DataProduct</span>(
+    <span class="hl-num">product_id</span>=<span class="hl-str">"retail-pos-transactions"</span>,
+    <span class="hl-num">product_name</span>=<span class="hl-str">"Retail POS Transactions"</span>,
+    <span class="hl-num">description</span>=<span class="hl-str">"Real-time point of sale streaming data"</span>,
+    <span class="hl-num">owner_email</span>=<span class="hl-str">"pos-eng@retail.com"</span>,
+    <span class="hl-num">domain</span>=<span class="hl-cls">Domain</span>(<span class="hl-num">domain_name</span>=<span class="hl-str">"StoreOperations"</span>),
+    <span class="hl-num">app</span>=<span class="hl-cls">App</span>(<span class="hl-num">app_id</span>=<span class="hl-num">101</span>, <span class="hl-num">app_name</span>=<span class="hl-str">"POSIngestApp"</span>, <span class="hl-num">resources</span>=<span class="hl-cls">Resources</span>(<span class="hl-num">source</span>=<span class="hl-kw">None</span>, <span class="hl-num">target</span>=<span class="hl-kw">None</span>)),
+    <span class="hl-num">contract</span>=<span class="hl-num">contract</span>
+)
+
+<span class="hl-num">pipeline</span> = <span class="hl-cls">DataProductPipeline</span>(<span class="hl-num">data_product</span>=<span class="hl-num">product</span>, <span class="hl-num">contract</span>=<span class="hl-num">contract</span>)
+<span class="hl-num">ingest</span> = <span class="hl-num">pipeline</span>.<span class="hl-fn">ingestion_phase</span>(<span class="hl-num">df_pos_raw</span>, <span class="hl-num">source_name</span>=<span class="hl-str">"S3_POS_Bucket"</span>)
+<span class="hl-num">transform</span> = <span class="hl-num">pipeline</span>.<span class="hl-fn">transformation_phase</span>(<span class="hl-num">df_pos_raw</span>)
+<span class="hl-num">publish</span> = <span class="hl-num">pipeline</span>.<span class="hl-fn">publication_phase</span>(<span class="hl-num">transform</span>[<span class="hl-str">"output_df"</span>], <span class="hl-num">target_name</span>=<span class="hl-str">"Snowflake_Gold"</span>)
+<span class="hl-fn">print</span>(<span class="hl-str">f"Published {publish['record_count']} records with Governance Decision: {publish['governance']['overall_decision'].value}"</span>)</pre>
+            </div>
+          </div>
+        </section>
+
+        <!-- Use Case 2: Airlines -->
+        <section id="use-case-airlines" class="doc-section">
+          <div class="section-header">
+            <span class="section-tag">Enterprise Blueprint 2</span>
+            <h2 class="section-title">Airline Fleet Maintenance & Telemetry Ingestion</h2>
+            <p class="section-subtitle">Multi-cloud routing from AWS S3 raw mechanic logs into AWS RDS PostgreSQL with automated schema drift defense.</p>
+          </div>
+
+          <p>
+            <strong>Scenario:</strong> Aircraft engineers upload mechanic logs and flight telemetry from airport terminals. The system parses logs, ensures compatibility across sensor firmware revisions, and routes data into operational RDS tables.
+          </p>
+
+          <div class="code-container">
+            <div class="code-header">
+              <span class="code-title"><span class="code-lang-tag">Python</span> blueprint_airline_fleet.py</span>
+              <button class="copy-code-btn">Copy Code</button>
+            </div>
+            <div class="code-body">
+<pre><span class="hl-kw">from</span> <span class="hl-cls">datashredpy.api.models</span> <span class="hl-kw">import</span> <span class="hl-cls">Client</span>, <span class="hl-cls">Domain</span>, <span class="hl-cls">App</span>, <span class="hl-cls">Resources</span>, <span class="hl-cls">Aws</span>, <span class="hl-cls">S3</span>, <span class="hl-cls">Rds</span>, <span class="hl-cls">Bucket</span>
+<span class="hl-kw">from</span> <span class="hl-cls">datashredpy.helper.data</span> <span class="hl-kw">import</span> <span class="hl-cls">Data</span>
+<span class="hl-kw">from</span> <span class="hl-cls">datashredpy.helper.enums</span> <span class="hl-kw">import</span> <span class="hl-cls">FileType</span>
+
+<span class="hl-cm"># 1. Define Multi-Cloud Resource Topology</span>
+<span class="hl-num">airline_meta</span> = <span class="hl-cls">Domain</span>(
+    <span class="hl-num">domain_id</span>=<span class="hl-str">"airline-domain-01"</span>,
+    <span class="hl-num">domain_name</span>=<span class="hl-str">"AvionicsMaintenance"</span>,
+    <span class="hl-num">app</span>=<span class="hl-cls">App</span>(
+        <span class="hl-num">app_id</span>=<span class="hl-num">404</span>,
+        <span class="hl-num">app_name</span>=<span class="hl-str">"MechanicLogIngestion"</span>,
+        <span class="hl-num">resources</span>=<span class="hl-cls">Resources</span>(
+            <span class="hl-num">source</span>=<span class="hl-cls">Aws</span>(
+                <span class="hl-num">url</span>=<span class="hl-str">"s3.amazonaws.com"</span>,
+                <span class="hl-num">region</span>=<span class="hl-str">"us-east-1"</span>,
+                <span class="hl-num">s3</span>=<span class="hl-cls">S3</span>(<span class="hl-num">bucket</span>=<span class="hl-cls">Bucket</span>(<span class="hl-num">name</span>=<span class="hl-str">"indigo-avionics"</span>, <span class="hl-num">prefix</span>=<span class="hl-str">"raw/mechanic/"</span>, <span class="hl-num">file_name</span>=<span class="hl-str">"flight_602_engine.csv"</span>))
+            ),
+            <span class="hl-num">target</span>=<span class="hl-cls">Aws</span>(
+                <span class="hl-num">url</span>=<span class="hl-str">"rds.amazonaws.com"</span>,
+                <span class="hl-num">region</span>=<span class="hl-str">"us-west-2"</span>,
+                <span class="hl-num">rds</span>=<span class="hl-cls">Rds</span>(<span class="hl-num">database</span>=<span class="hl-str">"fleet_operational"</span>, <span class="hl-num">schema</span>=<span class="hl-str">"avionics"</span>, <span class="hl-num">tablename</span>=<span class="hl-str">"maintenance_history"</span>)
+            )
+        )
+    )
+)
+
+<span class="hl-num">client</span> = <span class="hl-cls">Client</span>(<span class="hl-num">client_id</span>=<span class="hl-num">1</span>, <span class="hl-num">client_name</span>=<span class="hl-str">"IndigoAirlines"</span>, <span class="hl-num">domain</span>=<span class="hl-num">airline_meta</span>)
+<span class="hl-fn">print</span>(<span class="hl-str">f"Initialized Airline client topology for {client.client_name}"</span>)</pre>
+            </div>
+          </div>
+        </section>
+
+        <!-- Use Case 3: Customer 360 SCD2 -->
+        <section id="use-case-customer360" class="doc-section">
+          <div class="section-header">
+            <span class="section-tag">Enterprise Blueprint 3</span>
+            <h2 class="section-title">Customer 360 Master Data with SCD2 History</h2>
+            <p class="section-subtitle">Maintain complete audit trail of customer demographic and address updates using PySpark SCD2.</p>
+          </div>
+
+          <p>
+            <strong>Scenario:</strong> Customer profile changes (e.g. tier upgrades, address changes) arrive daily. The CRM master table must preserve historical state without losing past context.
+          </p>
+
+          <div class="code-container">
+            <div class="code-header">
+              <span class="code-title"><span class="code-lang-tag">Python</span> blueprint_customer360_scd2.py</span>
+              <button class="copy-code-btn">Copy Code</button>
+            </div>
+            <div class="code-body">
+<pre><span class="hl-kw">from</span> <span class="hl-cls">datashredpy.helper.data</span> <span class="hl-kw">import</span> <span class="hl-cls">Data</span>
+<span class="hl-kw">from</span> <span class="hl-cls">datashredpy.helper.transform</span> <span class="hl-kw">import</span> <span class="hl-cls">ETL</span>
+<span class="hl-kw">from</span> <span class="hl-cls">datashredpy.helper.enums</span> <span class="hl-kw">import</span> <span class="hl-cls">FileType</span>
+
+<span class="hl-cm"># Load today's delta and existing dimension table</span>
+<span class="hl-num">df_today</span> = <span class="hl-cls">Data</span>.<span class="hl-fn">read</span>(<span class="hl-str">"data/customer_delta_20260823.parquet"</span>, <span class="hl-num">file_type</span>=<span class="hl-cls">FileType</span>.PARQUET, <span class="hl-num">use_spark</span>=<span class="hl-kw">True</span>)
+<span class="hl-num">df_dim</span> = <span class="hl-cls">Data</span>.<span class="hl-fn">read</span>(<span class="hl-str">"data/dim_customer_master.parquet"</span>, <span class="hl-num">file_type</span>=<span class="hl-cls">FileType</span>.PARQUET, <span class="hl-num">use_spark</span>=<span class="hl-kw">True</span>)
+
+<span class="hl-cm"># Apply SCD Type 2 merge</span>
+<span class="hl-num">scd_transformer</span> = <span class="hl-cls">ETL</span>(<span class="hl-num">source_df</span>=<span class="hl-num">df_today</span>, <span class="hl-num">target_df</span>=<span class="hl-num">df_dim</span>, <span class="hl-num">key_columns</span>=<span class="hl-str">"customer_id"</span>)
+<span class="hl-num">df_updated_dim</span> = <span class="hl-num">scd_transformer</span>.<span class="hl-fn">apply_scd2</span>()
+
+<span class="hl-cm"># Query active vs expired records</span>
+<span class="hl-num">active_customers</span> = <span class="hl-num">df_updated_dim</span>.<span class="hl-fn">filter</span>(<span class="hl-str">"etl_flag = 'current'"</span>)
+<span class="hl-num">historical_audits</span> = <span class="hl-num">df_updated_dim</span>.<span class="hl-fn">filter</span>(<span class="hl-str">"etl_flag = 'expired'"</span>)
+<span class="hl-fn">print</span>(<span class="hl-str">f"Active: {active_customers.count()}, History: {historical_audits.count()}"</span>)</pre>
+            </div>
+          </div>
+        </section>
+
+        <!-- Use Case 4: Financial Ledger -->
+        <section id="use-case-finance" class="doc-section">
+          <div class="section-header">
+            <span class="section-tag">Enterprise Blueprint 4</span>
+            <h2 class="section-title">Financial Ledger Ingestion with Snowflake Snowpark</h2>
+            <p class="section-subtitle">Zero-copy cloning, Delta lake integration, and numerical range quality rule validation.</p>
+          </div>
+
+          <div class="code-container">
+            <div class="code-header">
+              <span class="code-title"><span class="code-lang-tag">Python</span> blueprint_finance_snowpark.py</span>
+              <button class="copy-code-btn">Copy Code</button>
+            </div>
+            <div class="code-body">
+<pre><span class="hl-kw">from</span> <span class="hl-cls">datashredpy.helper.data</span> <span class="hl-kw">import</span> <span class="hl-cls">Data</span>
+<span class="hl-kw">from</span> <span class="hl-cls">datashredpy.helper.enums</span> <span class="hl-kw">import</span> <span class="hl-cls">FileType</span>
+<span class="hl-kw">from</span> <span class="hl-cls">datashredpy.utilities.init_spark</span> <span class="hl-kw">import</span> <span class="hl-cls">SparkSessionOption</span>
+
+<span class="hl-num">spark</span> = <span class="hl-cls">SparkSessionOption</span>.<span class="hl-fn">get_spark_instance</span>(<span class="hl-num">app_name</span>=<span class="hl-str">"LedgerIngestion"</span>, <span class="hl-num">snow_spark</span>=<span class="hl-kw">True</span>)
+
+<span class="hl-num">df_ledger</span> = <span class="hl-cls">Data</span>.<span class="hl-fn">read</span>(
+    <span class="hl-str">"FINANCE.GL_TRANSACTIONS_DAILY"</span>,
+    <span class="hl-num">file_type</span>=<span class="hl-cls">FileType</span>.SNOWFLAKE,
+    <span class="hl-num">use_spark</span>=<span class="hl-kw">True</span>,
+    <span class="hl-num">snowpark_options</span>={
+        <span class="hl-str">"account"</span>: <span class="hl-str">"fin_prod"</span>,
+        <span class="hl-str">"user"</span>: <span class="hl-str">"SVC_FIN_LAKE"</span>,
+        <span class="hl-str">"warehouse"</span>: <span class="hl-str">"FIN_ETL_WH"</span>
+    }
+)</pre>
+            </div>
+          </div>
+        </section>
+
+        <!-- Use Case 5: Compliance Audit Trail -->
+        <section id="use-case-compliance" class="doc-section">
+          <div class="section-header">
+            <span class="section-tag">Enterprise Blueprint 5</span>
+            <h2 class="section-title">Federated Governance & Compliance Audit Workflow</h2>
+            <p class="section-subtitle">Automate regulatory reporting, record policy decisions, and enforce data retention limits.</p>
+          </div>
+
+          <div class="code-container">
+            <div class="code-header">
+              <span class="code-title"><span class="code-lang-tag">Python</span> blueprint_compliance_audit.py</span>
+              <button class="copy-code-btn">Copy Code</button>
+            </div>
+            <div class="code-body">
+<pre><span class="hl-kw">from</span> <span class="hl-cls">datashredpy.datamesh.governance</span> <span class="hl-kw">import</span> <span class="hl-cls">GovernanceEngine</span>
+
+<span class="hl-num">engine</span> = <span class="hl-cls">GovernanceEngine</span>()
+<span class="hl-num">audit_trail</span> = <span class="hl-num">engine</span>.<span class="hl-fn">get_audit_trail</span>(<span class="hl-num">product_id</span>=<span class="hl-str">"retail-pos-transactions"</span>, <span class="hl-num">limit</span>=<span class="hl-num">50</span>)
+
+<span class="hl-kw">for</span> <span class="hl-num">entry</span> <span class="hl-kw">in</span> <span class="hl-num">audit_trail</span>:
+    <span class="hl-fn">print</span>(<span class="hl-str">f"[{entry['timestamp']}] Decision: {entry['overall_decision']} | Violations: {len(entry['violations'])}"</span>)</pre>
+            </div>
+          </div>
+        </section>
+
+        <!-- ====================================================================
+             13. FULL API REFERENCE
+             ==================================================================== -->
+        <section id="api-reference" class="doc-section">
+          <div class="section-header">
+            <span class="section-tag">API Reference</span>
+            <h2 class="section-title">Complete Class & Function Catalog</h2>
+            <p class="section-subtitle">Detailed signatures, parameters, and return types for all PyDataShred modules.</p>
+          </div>
+
+          <div class="data-table-wrapper">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Class / Function</th>
+                  <th>Module</th>
+                  <th>Key Methods / Attributes</th>
+                  <th>Description</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong><code>Data</code></strong></td>
+                  <td><code>datashredpy.helper.data</code></td>
+                  <td><code>read(rel_path, file_type, api_type, use_pandas, use_spark, **opts)</code></td>
+                  <td>Multi-format polyglot reader for CSV, JSON, Parquet, Delta, Excel, XML, Snowflake, and REST APIs.</td>
+                </tr>
+                <tr>
+                  <td><strong><code>ETL</code></strong></td>
+                  <td><code>datashredpy.helper.transform</code></td>
+                  <td><code>apply_scd2() -> DataFrame</code></td>
+                  <td>Executes Slowly Changing Dimension Type 2 outer-join logic, managing start/end dates and active/expired flags.</td>
+                </tr>
+                <tr>
+                  <td><strong><code>SparkSessionOption</code></strong></td>
+                  <td><code>datashredpy.utilities.init_spark</code></td>
+                  <td><code>get_spark_instance(app_name, master, config_options, snow_spark)</code></td>
+                  <td>Thread-safe Singleton and Factory for PySpark sessions with Delta Lake and Snowflake connector JAR injection.</td>
+                </tr>
+                <tr>
+                  <td><strong><code>CreateEntity</code></strong></td>
+                  <td><code>datashredpy.core.delegator</code></td>
+                  <td><code>__post_init__() -> Domain | App</code></td>
+                  <td>Dynamic factory delegator for domain and application entity instantiation.</td>
+                </tr>
+                <tr>
+                  <td><strong><code>DataProduct</code></strong></td>
+                  <td><code>datashredpy.datamesh.models</code></td>
+                  <td><code>to_dict()</code>, <code>contract</code>, <code>domain</code>, <code>app</code></td>
+                  <td>DataMesh abstraction wrapping Domain/App with contract, ownership, SLAs, and discovery metadata.</td>
+                </tr>
+                <tr>
+                  <td><strong><code>DataProductContract</code></strong></td>
+                  <td><code>datashredpy.datamesh.models</code></td>
+                  <td><code>schema</code>, <code>quality_rules</code>, <code>sla</code>, <code>compliance_level</code></td>
+                  <td>Machine-enforceable specification defining schemas, quality rules, and retention limits.</td>
+                </tr>
+                <tr>
+                  <td><strong><code>GovernanceEngine</code></strong></td>
+                  <td><code>datashredpy.datamesh.governance</code></td>
+                  <td><code>evaluate(context)</code>, <code>register_policy(p)</code>, <code>get_audit_trail()</code></td>
+                  <td>Policy-as-code orchestrator managing PII, drift, null, and retention policy evaluations.</td>
+                </tr>
+                <tr>
+                  <td><strong><code>DataProductPipeline</code></strong></td>
+                  <td><code>datashredpy.datamesh.pipeline_integration</code></td>
+                  <td><code>ingestion_phase()</code>, <code>transformation_phase()</code>, <code>publication_phase()</code></td>
+                  <td>3-phase execution wrapper enforcing contracts, governance, and audit logging.</td>
+                </tr>
+                <tr>
+                  <td><strong><code>ContractValidator</code></strong></td>
+                  <td><code>datashredpy.datamesh.contract_validation</code></td>
+                  <td><code>validate_data(df)</code>, <code>check_backward_compatibility()</code></td>
+                  <td>Runtime validator checking data against schema constraints, quality rules, and schema version compatibility.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- ====================================================================
+             14. TROUBLESHOOTING & FAQ
+             ==================================================================== -->
+        <section id="troubleshooting" class="doc-section">
+          <div class="section-header">
+            <span class="section-tag">Support</span>
+            <h2 class="section-title">Frequently Asked Questions & Troubleshooting</h2>
+            <p class="section-subtitle">Common questions, gotchas, and performance optimization tips.</p>
+          </div>
+
+          <h3>Q: Why am I getting <code>JavaPackage / Py4JJavaError</code> when reading Delta Lake files?</h3>
+          <p>
+            <strong>A:</strong> When reading Delta tables in Spark, ensure the Delta Lake SQL extension and package are configured. PyDataShred automatically configures <code>"spark.sql.extensions": "io.delta.sql.DeltaSparkSessionExtension"</code> when <code>file_type=FileType.DELTA</code> is passed.
+          </p>
+
+          <h3>Q: How does PyDataShred handle schema evolution without breaking downstream consumers?</h3>
+          <p>
+            <strong>A:</strong> The <code>ContractValidator.check_backward_compatibility()</code> method evaluates new schema versions against previous ones. Adding optional (nullable) fields is backward compatible; changing data types or removing required fields is marked as breaking, prompting a major semantic version bump (e.g. <code>v1.0.0</code> &rarr; <code>v2.0.0</code>).
+          </p>
+
+          <h3>Q: Can I use PyDataShred in AWS Lambda without large PySpark dependencies?</h3>
+          <p>
+            <strong>A:</strong> Yes! Use <code>pip install "pydatashred[pandas,aws]"</code> and set <code>use_pandas=True</code>. This provides full CSV, JSON, Parquet, and Excel ingestion in lightweight serverless containers with cold starts under 200ms.
+          </p>
+
+        </section>
+
+        <!-- ====================================================================
+             FOOTER
+             ==================================================================== -->
+        <footer class="footer">
+          <div class="footer-links" style="margin-bottom: 1rem;">
+            <a href="#overview">Overview</a> &bull;
+            <a href="#quickstart">Quick Start</a> &bull;
+            <a href="#playground">Interactive Studio</a> &bull;
+            <a href="#api-reference">API Reference</a> &bull;
+            <a href="https://github.com/rravicha/PyDataShred" target="_blank" rel="noopener">GitHub</a>
+          </div>
+          <p>
+            PyDataShred &copy; 2026. Released under the Apache 2.0 License. Designed for Modern Data Engineering & DataMesh Governance.
+          </p>
+        </footer>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- JavaScript Engine -->
+  <script src="app.js"></script>
+</body>
+</html>
