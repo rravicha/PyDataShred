@@ -4,8 +4,10 @@ from aenum import Enum as AEnum, MultiValueEnum
 
 class DbType(MultiValueEnum):
     """Supported database types."""
-    pass
-    
+    POSTGRESQL = 'postgresql'
+    MYSQL = 'mysql'
+    MONGODB = 'mongodb'
+
 class FileType(MultiValueEnum):
     """Supported file formats."""
     CSV = 'csv'
